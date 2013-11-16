@@ -1,10 +1,25 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Dictionary;
 import java.util.Stack;
 import java.util.Random;
 
 public class TestplayModule {
+	
+	///////////////////// 실제로 들고 있는 데이터 /////////////////////
+	// 플레이어 자리
+	private ArrayList<Integer> player_seats;
+	// 전역변수의 변수명, 인덱스 값.
+	private Dictionary<String,Integer> global_variable_index;
+	// 플레이어별 변수의 변수명, 인덱스 값.
+	private Dictionary<String,Integer> player_variable_index;
+	// 변수의 실제 값 목록. 첫 번째 인덱스는 플레이어 번호(0이면 전역), 두 번째 인덱스는 dictionary에서 찾은 변수의 인덱스 값.
+	// 정수, 문자열, 또는 Node (Deck의 경우)를 들고있다.
+	private Object[][] variables;
+	/////////////////////////////////////////////////////////////
+	
+	
 	private Node def;
 	private Stack<Integer> playerStack;
 	private Stack<Node> cardStack;
@@ -15,6 +30,8 @@ public class TestplayModule {
 	
 	public TestplayModule()
 	{
+		// Def
+		//variables=new Object[1][1];
 		playerStack=new Stack<Integer>();
 		cardStack=new Stack<Node>();
 		logging=false;
@@ -109,57 +126,45 @@ public class TestplayModule {
 	}
 	
 	// crit이 지정하는 조건에 따라 deck_raw가 지정하는 덱의 카드를 섞는다.
-	public void action_order(Node deck_raw, Node[] crit)
+	public void action_order(Node deck_raw, final Node[] crit)
 	{
-		Node deck_ = deck(deck_raw);
-		ArrayList<Node> cards=deck_.getAllNode();
-		int cardloop,critloop;
-		int cardnum=deck_.numChildren();
-		int critnum=crit.length;
-		for (cardloop=0;cardloop<cardnum;cardloop++)
-		{
-			cards.get(cardloop).addChildNode(new Node());
-		}
-		
-		// 알고리즘 개선 필요. 현재는 우선순위가 낮은 요소부터 정렬을 반복.
-		// 우선순위가 높은 것만 해서 값이 같은 경우 우선순위가 낮은 정렬을 수행하도록 하면 더 빨리 수행할 수 있음.
-		for(critloop=critnum-1;critloop>=0;critloop--)
-		{
-			// Value Calculation
-			for(cardloop=0;cardloop<cardnum;cardloop++)
-			{
-				cardStack.push(cards.get(cardloop));
-				cards.get(cardloop).getLastChildNode().setData(num(crit[critloop].getChildNode(1)));
-				cardStack.pop();
-			}
-			// Bubble Sorting
-			int loop1,loop2,value;
-			Node temp;
-			for (loop1=cardloop-1;loop1>=0;loop1--)
-			{
-				for(loop2=0;loop2<loop1-1;loop2++)
-				{
-					value=(Integer)cards.get(loop2).getLastChildNode().getData()-(Integer)cards.get(loop2+1).getLastChildNode().getData();
-					if((value>0 && ((String)crit[critloop].getChildNode(0).getData()).equals("Low")) ||
-							(value<0 && ((String)crit[critloop].getChildNode(0).getData()).equals("High")))
-					{
-						temp=cards.get(loop2);
-						cards.set(loop2, cards.get(loop2+1));
-						cards.set(loop2+1, temp);
-					}
-				}
-			}
-		}
+		Node d=deck(deck_raw);
+		// TODO: 의심가는 부분.
+		Collections.sort(d.getAllNode(), new Comparator<Node>() {
+		    public int compare(Node a, Node b) {
+		    	int loop;
+		    	int a_value, b_value;
+		    	for(loop=0;loop<crit.length;loop++)
+		    	{
+		    		// 비교할 수치를 구한다.
+		    		cardStack.push(a);
+		    		a_value=num(crit[loop].getChildNode(0));
+		    		cardStack.pop();
+		    		cardStack.push(b);
+		    		b_value=num(crit[loop].getChildNode(0));
+		    		cardStack.pop();
+		    		
+		    		// 같으면, 다음 조건에서 비교한다.
+		    		if(a_value==b_value) continue;
+		    		// 크면서 high, 작으면서 low이면 1
+		    		if(a_value>b_value && ((String)crit[loop].getData()).equals("High")) return 1;
+		    		if(a_value<b_value && ((String)crit[loop].getData()).equals("Low")) return 1;
+		    		return -1;
+		    	}
+		    	// 완전히 같음.
+		    	return 0;
+		    }
+		});
 	}
 	
 	// player_raw가 지정하는 플레이어별로 action_raw의 액션을 수행한다.
 	public void action_act(Node players_raw, Node action_raw)
 	{
-		int[] players_=players(players_raw);
+		ArrayList<Integer> players_=players(players_raw);
 		int loop;
-		for(loop=0;loop<players_.length;loop++)
+		for(loop=0;loop<players_.size();loop++)
 		{
-			playerStack.push(players_[loop]);
+			playerStack.push(players_.get(loop));
 			action(action_raw);
 			playerStack.pop();
 		}
@@ -255,9 +260,10 @@ public class TestplayModule {
 		return l;
 	}
 	
-	// player_all : 전체 플레이어의 목록을 돌려준다.
+	// player_all : 전체 플레이어의 목록을 자리 순서대로 돌려준다.
 	public ArrayList<Integer> player_all()
 	{
+		return player_seats;
 	}
 	
 	// player_exclude : domain_raw의 플레이어에서 excluded_raw의 플레이어를 제외한 결과를 돌려준다.
@@ -271,14 +277,51 @@ public class TestplayModule {
 		return domain;
 	}
 	
-	// TODO: implement
+	// 플레이어 인덱스값 조정하는 함수.
+	public int player_index_arrange(int i)
+	{
+		int n=player_seats.size();
+		if(i>n) return i%n;
+		if(i<0) return (i%n)+n;
+		return i;
+	}
+
+	// player_raw 왼쪽의 n_raw 번째 사람들(all=false), 또는 n_raw명의 사람들(all=true)
 	public ArrayList<Integer> player_left(boolean all, Node n_raw, Node player_raw)
 	{
-		return null;
+		ArrayList<Integer> p = players(player_raw);
+		int n = num(n_raw);
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		int loop,loop2,index;
+		Integer player2insert;
+		for(loop=0;loop<p.size();loop++)
+		{
+			index=player_seats.indexOf(p.get(loop));
+			player2insert=player_seats.get(player_index_arrange(index-n));
+			if(result.contains(player2insert))
+				result.add(player2insert);
+			if (all)
+				for(loop2=index-1;loop2>0;loop2--)
+					result.add(player_seats.get(player_index_arrange(index-loop2)));
+		}
+		return result;
 	}
+	// player_raw 오른쪽의 n_raw 번째 사람들(all=false), 또는 n_raw명의 사람들(all=true)
 	public ArrayList<Integer> player_right(boolean all, Node n_raw, Node player_raw)
 	{
-		return null;
+		ArrayList<Integer> p = players(player_raw);
+		int n = num(n_raw);
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		int loop,loop2,index;
+		for(loop=0;loop<p.size();loop++)
+		{
+			index=player_seats.indexOf(p.get(loop));
+			result.add(player_seats.get(player_index_arrange(index+n)));
+			if(all)
+				for(loop2=index-1;loop2>0;loop2--)
+					result.add(player_seats.get(player_index_arrange(index+loop2)));
+		}
+		return result;
 	}
 	
 	// players_raw 중에서 condition_raw 조건을 만족하는 플레이어의 목록을 돌려준다.
@@ -339,6 +382,8 @@ public class TestplayModule {
 	public ArrayList<Integer> select_player(int n, Node players_raw)
 	{
 	}
+	
+	public Node deck_get(name:String, player:Integer)
 	
 	
 }
