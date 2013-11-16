@@ -19,6 +19,8 @@ public class TestplayModule {
 	private Object[][] variables;
 	/////////////////////////////////////////////////////////////
 	
+	private Node def_;
+	
 	
 	private Node def;
 	private Stack<Integer> playerStack;
