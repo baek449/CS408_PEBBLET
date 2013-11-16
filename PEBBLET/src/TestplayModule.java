@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Stack;
 import java.util.Random;
 
@@ -41,7 +43,7 @@ public class TestplayModule {
 	public void action(Node n)
 	{
 	}
-	public int[] players(Node n)
+	public ArrayList<Integer> players(Node n)
 	{
 		return null;
 	}
@@ -217,108 +219,126 @@ public class TestplayModule {
 		// TODO: Ask action selection
 	}
 	
+	
+	
+	
+	///////////////////////// PLAYER EVALUATION FUNCTIONS ///////////////////////
+	// Node를 계산하여 플레이어를 돌려준다.
+	// 리턴 : ArrayList<Integer>
+	
 	// player_multiple : 여러 플레이어의 목록을 합성하여 돌려준다.
-	public int[] player_multiple(Node players)
+	public ArrayList<Integer> player_multiple(Node players)
 	{
 		ArrayList<Node> p=players.getAllNode();
 		ArrayList<Integer> a=new ArrayList<Integer>();
 		int loop,loop2;
 		for(loop=0;loop<p.size();loop++)
 		{
-			int[] tmplist=players(p.get(loop));
-			for(loop2=0;loop2<tmplist.length;loop2++)
-				if(!a.contains(tmplist[loop2]))
-					a.add(tmplist[loop2]);
+			// child 각각을 evaluate한다.
+			ArrayList<Integer> tmplist=players(p.get(loop));
+			
+			// evaluate한 child에서 중복이 아닌 원소만 누적시킨다.
+			for(loop2=0;loop2<tmplist.size();loop2++)
+			{
+				int elem = tmplist.get(loop2);
+				if(!a.contains(elem))
+					a.add(elem);
+			}
 		}
-		
-		// Converting to integer array
-		int[] result = new int[a.size()];
-		for(loop=0;loop<a.size();loop++)
-			result[loop]=a.get(loop);
-		return result;
+		return a;
 	}
 	// player_all : 현재 플레이어를 돌려준다.
-	public int[] player_current()
+	public ArrayList<Integer> player_current()
 	{
-		int[] l=new int[1];
-		l[0]=playerStack.lastElement();
+		ArrayList<Integer> l=new ArrayList<Integer>();
+		l.add(playerStack.lastElement());
 		return l;
 	}
 	
 	// player_all : 전체 플레이어의 목록을 돌려준다.
-	public int[] player_all()
+	public ArrayList<Integer> player_all()
 	{
-		int[] l=new int[total_players];
-		int loop;
-		for(loop=0;loop<total_players;loop++)
-			l[loop]=loop;
-		return l;
 	}
 	
 	// player_exclude : domain_raw의 플레이어에서 excluded_raw의 플레이어를 제외한 결과를 돌려준다.
-	public int[] player_exclude(Node excluded_raw, Node domain_raw)
+	public ArrayList<Integer> player_exclude(Node excluded_raw, Node domain_raw)
 	{
-		int[] excluded = players(excluded_raw);
-		int[] domain = players(domain_raw);
-		int[] result_raw = new int[domain.length];
-		int hit=0;
-		int loop,loop2;
-		boolean found;
-		for(loop=0;loop<domain.length;loop++)
-		{
-			found=false;
-			for(loop2=0;loop2<excluded.length;loop2++)
-			{
-				if(excluded[loop2]==domain[loop])
-				{
-					found=true;
-					break;
-				}
-			}
-			if(!found)
-			{
-				result_raw[hit]=domain[loop];
-				hit++;
-			}
-		}
-		int[] result = new int[hit];
-		for(loop=0;loop<hit;loop++)
-			result[loop]=result_raw[loop];
-		return result;
+		ArrayList<Integer> excluded = players(excluded_raw);
+		ArrayList<Integer> domain = players(domain_raw);
+		int loop;
+		for(loop=0;loop<excluded.size();loop++)
+			domain.remove(excluded.get(loop));
+		return domain;
 	}
 	
 	// TODO: implement
-	public int[] player_left(boolean all, Node n_raw, Node player_raw)
+	public ArrayList<Integer> player_left(boolean all, Node n_raw, Node player_raw)
 	{
 		return null;
 	}
-	public int[] player_right(boolean all, Node n_raw, Node player_raw)
+	public ArrayList<Integer> player_right(boolean all, Node n_raw, Node player_raw)
 	{
 		return null;
 	}
 	
 	// players_raw 중에서 condition_raw 조건을 만족하는 플레이어의 목록을 돌려준다.
-	public int[] player_condition (Node condition_raw, Node players_raw)
+	public ArrayList<Integer> player_condition (Node condition_raw, Node players_raw)
 	{
-		int[] p = players(players_raw);
-		int[] result_ = new int[p.length];
-		int hit=0;
+		ArrayList<Integer> p = players(players_raw);
 		int loop;
 		boolean b;
-		for(loop=0;loop<p.length;loop++)
+		for(loop=0;loop<p.size();loop++)
 		{
-			playerStack.push(p[loop]);
+			playerStack.push(p.get(loop));
 			b=cond(condition_raw);
 			playerStack.pop();
-			if (b)
+			if (!b)
 			{
-				result_[hit]=p[loop];
-				hit++;
+				p.remove(loop);
+				loop--;
 			}
 		}
-		int[] result = new int[hit];
-		for(loop=0;loop<hit;loop++)
-			result[loop]=result_[loop];
-		return result;
+		return p;
 	}
+	
+	// players_raw를 order 조건에 따라 정렬한다
+	public ArrayList<Integer> player_most(final Node[] order,Node players_raw)
+	{
+		ArrayList<Integer> p=players(players_raw);
+		Collections.sort(p, new Comparator<Integer>() {
+		    public int compare(Integer a, Integer b) {
+		    	int loop;
+		    	int a_value, b_value;
+		    	for(loop=0;loop<order.length;loop++)
+		    	{
+		    		// 비교할 수치를 구한다.
+		    		playerStack.push(a);
+		    		a_value=num(order[loop].getChildNode(0));
+		    		playerStack.pop();
+		    		playerStack.push(b);
+		    		b_value=num(order[loop].getChildNode(0));
+		    		playerStack.pop();
+		    		
+		    		// 같으면, 다음 조건에서 비교한다.
+		    		if(a_value==b_value) continue;
+		    		// 크면서 high, 작으면서 low이면 1
+		    		if(a_value>b_value && ((String)order[loop].getData()).equals("High")) return 1;
+		    		if(a_value<b_value && ((String)order[loop].getData()).equals("Low")) return 1;
+		    		return -1;
+		    	}
+		    	// 완전히 같음.
+		    	return 0;
+		    }
+		});
+		return p;
+	}
+	public ArrayList<Integer> player_owner(Node[] cards)
+	{
+	}
+	
+	public ArrayList<Integer> select_player(int n, Node players_raw)
+	{
+	}
+	
+	
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #################
 ## Eclipse
 #################
@@ -213,3 +214,11 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+=======
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+>>>>>>> b9c05fd34dbd3785a364d6b38dcdcb2d176a94e0
