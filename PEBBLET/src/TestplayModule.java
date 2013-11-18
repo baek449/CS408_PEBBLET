@@ -528,5 +528,98 @@ public class TestplayModule {
 		return null;
 	}
 	
+	///////////////////////// NUMBER EVALUATION FUNCTIONS ///////////////////////
+	// Node를 계산하여 해당하는 int값을  돌려준다.
+	// 리턴 :int
+
+	//플레이어 수
+	public int num_size_player(Node players_raw)
+	{
+		ArrayList<Integer> p = players(players_raw);
+		return p.size();
+	}
+	//덱 크기 
+	public int num_size_deck(Node deck_raw)
+	{
+		Node d = deck(deck_raw);
+		return d.numChildren();
+	}
+	//카드 수 
+	public int num_size_cards(Node cards_raw)
+	{
+		ArrayList<Node> c = cards(cards_raw);
+		return c.size();
+	}
+	//플레이어의 특정 변수(숫자)
+	public int num_get_player(String name, Node player_raw)
+	{
+		// 플레이어를 계산한다.
+				ArrayList<Integer> p = players(player_raw);
+				// TODO: 1명이 아니면 에러를 띄운다.
+				// 플레이어의 해당하는 값을 불러온다.
+				return (Integer)variables[p.get(0)][player_variable_index.get(name)];
+	}
+	//카드의 특정 변수(숫자)
+	public int num_get_card(String name, Node card_raw)
+	{
+		// 카드를 계산한다.
+		ArrayList<Node> c = cards(card_raw);
+		// TODO: 1장이 아니면 에러를 띄운다.
+		Node temp_card = c.get(0);
+		int loop;
+		for(loop = 0; loop<temp_card.numChildren(); loop++)
+		{
+			if(name.equals(temp_card.getChildNode(loop).getData()))
+			{
+				return (Integer)(temp_card.getChildNode(loop).getChildNode(0).getData());
+			}
+		}
+		
+		// TODO: 카드의 특정 attribute를 가져온다.
+		
+		return 0;
+	}
+	//숫자 간의 계산(사칙연산)
+	public int num_operation(Node num1, String op, Node num2)
+	{
+		//TODO: 사칙연산.
+		return 0;
+	}
+	//플레이어가 숫자 선택
+	public int call_num(Node min, Node max)
+	{
+		// TODO: 플레이어에게 min과 max사이의 수 중 선택하도록 하는 UI를 띄운다.
+		return 0;
+	}
 	
+	///////////////////////// STRING EVALUATION FUNCTIONS ///////////////////////
+	// Node를 계산하여 해당하는 String값을  돌려준다.
+	// 리턴 :String
+
+	//플레이어의 특정 값
+	public String string_get_player(String name, Node player_raw)
+	{
+		// 플레이어를 계산한다.
+		ArrayList<Integer> p = players(player_raw);
+		// TODO: 1명이 아니면 에러를 띄운다.
+		// 플레이어의 해당하는 값을 불러온다.
+		return (String)variables[p.get(0)][player_variable_index.get(name)];
+	}
+	
+	public String string_get_card(String name, Node card_raw)
+	{
+		// 카드를 계산한다.
+		ArrayList<Node> c = cards(card_raw);
+		// TODO: 1장이 아니면 에러를 띄운다.
+		// TODO: 카드의 특정 attribute를 가져온다. : 위의 num_get_card과 같음.
+		c.get(0).numChildren();
+		return null;
+	}
+	
+	public String call_string(String[] range)
+	{
+		// TODO: 플레이어에게 range 중 하나를 선택하도록 하는 UI를 띄운다.
+		return null;
+	}
+
 }
