@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Stack;
 import java.util.Random;
 
@@ -11,9 +11,9 @@ public class TestplayModule {
 	// 플레이어 자리
 	private ArrayList<Integer> player_seats;
 	// 전역변수의 변수명, 인덱스 값.
-	private Dictionary<String,Integer> global_variable_index;
+	private HashMap<String,Integer> global_variable_index;
 	// 플레이어별 변수의 변수명, 인덱스 값.
-	private Dictionary<String,Integer> player_variable_index;
+	private HashMap<String,Integer> player_variable_index;
 	// 변수의 실제 값 목록. 첫 번째 인덱스는 플레이어 번호(0이면 전역), 두 번째 인덱스는 dictionary에서 찾은 변수의 인덱스 값.
 	// 정수, 문자열, 또는 Node (Deck의 경우)를 들고있다.
 	private Object[][] variables;
@@ -42,11 +42,49 @@ public class TestplayModule {
 		playerStack=new Stack<Integer>();
 		cardStack=new Stack<Node>();
 		logging=false;
-		// 1. Definition을 로드한다. 또는 인자로 들고온다.
+	}
+	public TestplayModule(Definition d)
+	{
+		r=new Random(System.currentTimeMillis());
+		playerStack=new Stack<Integer>();
+		cardStack=new Stack<Node>();
+		logging=false;
+		
+		// 1. 플레이어 명수에 따라 player_seats를 초기화한다.
+		int n=(Integer)d.getRoot().getChildNode(1).getData();
 		
 		// 2. Definition에 따라 variable index dictionary를 구성하고 variables를 초기화한다.
+		ArrayList<Node> global_var=d.getRoot().getChildNode(0).getAllNode();
+		ArrayList<Node> player_var=d.getRoot().getChildNode(1).getAllNode();
 		
-		// 3. 플레이어 명수에 따라 player_seats를 초기화한다.
+		// dictionary 구성
+		global_variable_index = new HashMap<String,Integer>();
+		player_variable_index = new HashMap<String,Integer>();
+		
+		// variables 초기화
+		int index,player_loop;
+		variables=new Object[n+1][];
+		variables[0]=new Object[global_var.size()];
+		for(index=1;index<=n;index++)
+			variables[index]=new Object[player_var.size()];
+		
+		for(index=0;index<global_var.size();index++)
+		{
+			global_variable_index.put((String)global_var.get(index).getData(), index);
+			switch(global_var.get(index).t)
+			{
+			case nd_num:
+				
+			}
+			variables[0][index]=new 
+		}
+		for(index=0;index<player_var.size();index++)
+		{
+			player_variable_index.put((String)player_var.get(index).getData(), index);
+			for(player_loop=1;player_loop<=n;player_loop++)
+				d
+		}
+		System.out.println("b");
 	}
 	
 	// ***
@@ -73,23 +111,54 @@ public class TestplayModule {
 	// 액션 규칙을 수행한다.
 	public void action(Node n)
 	{
+		switch(n.t_sub)
+		{
+		case 0:
+			action_multiple(n);
+			return;
+		case 1:
+			action_move(n.getChildNode(0),n.getChildNode(1));
+			return;
+		case 2:
+			action_load((String)n.getChildNode(0).getData(),n.getChildNode(1));
+			return;
+		case 3:
+			action_shuffle(n.getChildNode(0));
+			return;
+		case 5:
+			action_act(n.getChildNode(0), n.getChildNode(1));
+			return;
+			
+		}
+		System.out.println("Action Error");
 	}
 	
 	// 플레이어의 목록을 계산한다.
 	public ArrayList<Integer> players(Node n)
 	{
+		System.out.println("Player Error");
 		return null;
 	}
 	
 	// Deck을 계산한다.
 	public Node deck(Node n)
 	{
+		switch(n.t_sub)
+		{
+		case 0:
+			return deck_predefined((String)n.getData());
+		case 1:
+			return deck_get((String)n.getData(),n.getChildNode(0));
+		}
+		// TODO: Error
+		System.out.println("Deck Error");
 		return null;
 	}
 	
 	// 카드의 목록을 계산한다.
 	public ArrayList<Node> cards(Node n)
 	{
+		System.out.println("Card Error");
 		return null;
 	}
 	
@@ -119,19 +188,23 @@ public class TestplayModule {
 	// card_raw가 지정하는 카드를 deck_raw로 움직인다.
 	public void action_move(Node card_raw, Node deck_raw)
 	{
-		Node[] card_=cards(card_raw);
+		ArrayList<Node> card_=cards(card_raw);
 		Node deck_=deck(deck_raw);
 		int loop;
-		for(loop=0;loop<card_.length;loop++)
+		for(loop=0;loop<card_.size();loop++)
 		{
-			card_[loop].setParent(deck_);
+			card_.get(loop).setParent(deck_);
 		}
 	}
 	
 	// 주어진 파일에서 카드를 불러와 deck_raw에 넣는다.
 	public void action_load(String file, Node deck_raw)
 	{
+		// TODO: 현재는 dummy card 10장을 집어넣어 테스트하는 상태
 		Node deck_=deck(deck_raw);
+		Node temp;
+		for(int loop=0;loop<10;loop++)
+			temp=new Node(null,loop,deck_);
 	}
 	
 	// deck_raw가 지정하는 덱을 섞는다.
@@ -527,6 +600,4 @@ public class TestplayModule {
 		// TODO: UI를 띄워 선택을 요구한다.
 		return null;
 	}
-	
-	
 }
