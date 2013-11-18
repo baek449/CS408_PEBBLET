@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 
 public class Node {
-	public NodeType t;
-	public int t_sub;
 	private Object data;
 	private int numChildren;
 	private Node parent;
@@ -11,22 +9,6 @@ public class Node {
 	public Node()
 	{
 		children=new ArrayList<Node>();
-	}
-	public Node(NodeType t_, Node parent_)
-	{
-		t_sub=-1;
-		t=t_;
-		parent=parent_;
-		children=new ArrayList<Node>();
-		if (parent_!=null) parent_.addChildNode(this);
-	}
-	public Node(NodeType t_, int subtype, Node parent_)
-	{
-		t_sub=subtype;
-		t=t_;
-		parent=parent_;
-		children=new ArrayList<Node>();
-		if (parent_!=null) parent_.addChildNode(this);
 	}
 	// 원래 변수였으나, 함수로 바꿈.
 	public int numChildren()

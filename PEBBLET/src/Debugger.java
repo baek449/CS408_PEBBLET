@@ -1,8 +1,7 @@
 
 public class Debugger {
-	
-	public boolean execute(){
-		
+	public boolean execute()
+	{
 		if (!checkSyntaxError()) return false;
 		if (!checkArithmeticError()) return false;
 		if (!checkLogicalError()) return false;
@@ -13,13 +12,6 @@ public class Debugger {
 		
 		///// Logic for Syntax Error Checking
 		return true;
-		
-		///// Syntax empty
-		
-		///// Syntax duplicate
-		
-		///// Syntax type error
-		
 	}
 	
 	public boolean checkArithmeticError(){
