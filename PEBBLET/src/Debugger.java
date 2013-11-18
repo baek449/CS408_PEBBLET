@@ -1,14 +1,16 @@
 
 public class Debugger {
-	public boolean execute()
-	{
+	
+	public boolean execute(){
+		
 		if (!checkSyntaxError()) return false;
 		if (!checkArithmeticError()) return false;
 		if (!checkLogicalError()) return false;
 		return true;
 	}
-	public boolean checkSyntaxError()
-	{
+	
+	public boolean checkSyntaxError(){
+		
 		///// Logic for Syntax Error Checking
 		return true;
 		
@@ -19,20 +21,27 @@ public class Debugger {
 		///// Syntax type error
 		
 	}
-	public boolean checkArithmeticError()
-	{
+	
+	public boolean checkArithmeticError(){
+		
 		///// Logic for Arithmetic Error Checking
 		return true;
 		///// NAN divide by 0
 		
 		///// No implementation 
 		
-		///// out of boundary
+		///// Out of boundary
 		
 	}
-	public boolean checkLogicalError()
-	{
+	
+	public boolean checkLogicalError(){
+		
 		///// Logic for Logical Error Checking
 		return true;
+		
+		///// Tree travel 3 case over 3 case (definition , rule , component) last step
+		
+		///// rule case -> case by case hard coding
+		
 	}
 }
