@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
-import com.sun.tools.javah.MainDoclet;
+//import com.sun.tools.javah.MainDoclet;
 
 
 public class mainUI extends JFrame{
