@@ -89,6 +89,10 @@ public class Node {
 		children.set(index_,n);
 	}
 	// New end
+	public void deleteChildNode(int n)
+	{
+		children.remove(n);
+	}
 	public void deleteChildNode(Node n)
 	{
 		children.remove(n);
