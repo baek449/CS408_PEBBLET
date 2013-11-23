@@ -92,7 +92,6 @@ public class testclassfordebug {
 		Definition d = new Definition();
 		d.setRoot(def_root);
 		TestplayModule tpm=new TestplayModule(d);
-		System.out.println("2");
 		// Ω√¿€
 		tpm.action(rul_root.getChildNode(0));
 		

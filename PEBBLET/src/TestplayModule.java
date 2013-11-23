@@ -120,7 +120,6 @@ public class TestplayModule {
 				}
 			}
 		}
-		System.out.println("b");
 	}
 	
 	// ***
