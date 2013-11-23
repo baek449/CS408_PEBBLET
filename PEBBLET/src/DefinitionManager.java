@@ -1,4 +1,4 @@
-//this is test line to check git status
+
 public class DefinitionManager {
 	private Definition definition;
 	public Node search(int[] location)

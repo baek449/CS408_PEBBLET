@@ -18,19 +18,37 @@ public class mainUI extends JFrame{
 		JMenu file = new JMenu("File");
 		file.setMnemonic(KeyEvent.VK_F);
 		
-		JMenuItem eMenuItem= new JMenuItem("Exit");
-		eMenuItem.setMnemonic(KeyEvent.VK_E);
-	    eMenuItem.setToolTipText("Exit application");
-        eMenuItem.addActionListener(new ActionListener() {
+		JMenuItem file_exit_MenuItem= new JMenuItem("Exit");
+		file_exit_MenuItem.setMnemonic(KeyEvent.VK_E);
+		file_exit_MenuItem.setToolTipText("Exit application");
+	    file_exit_MenuItem.addActionListener(new ActionListener() {
         	@Override
         	public void actionPerformed(ActionEvent event) {
                 System.exit(0);
             }
-
-
         });
+        
+        file.add(file_exit_MenuItem);
+        menubar.add(file);
+        
+        JMenu edit = new JMenu("Edit");
+        edit.setMnemonic(KeyEvent.VK_E);
+        
+        JMenuItem edit_view_MenuItem = new JMenuItem("View"); 
+        
+        //edit.add(eMenuItem);
+        menubar.add(edit);
+        
+        
+        JMenu help = new JMenu("Help");
+        help.setMnemonic(KeyEvent.VK_H);
 		
+		//help.add(eMenuItem);
+		menubar.add(help);
+
 		
+		setJMenuBar(menubar);
+        
 		setTitle("PEBBLET");
 		setSize(1400,1024);
 		setLocationRelativeTo(null);

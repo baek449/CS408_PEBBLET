@@ -51,11 +51,15 @@ public class TestplayModule {
 		logging=false;
 		
 		// 1. 플레이어 명수에 따라 player_seats를 초기화한다.
-		int n=(Integer)d.getRoot().getChildNode(1).getData();
+		int n=(Integer)d.getRoot().getChildNode(0).getChildNode(0).getData();
+		player_seats=new ArrayList<Integer>();
+		int loop;
+		for(loop=0;loop<n;loop++)
+			player_seats.add((Integer)loop+1);
 		
 		// 2. Definition에 따라 variable index dictionary를 구성하고 variables를 초기화한다.
-		ArrayList<Node> global_var=d.getRoot().getChildNode(0).getAllNode();
-		ArrayList<Node> player_var=d.getRoot().getChildNode(1).getAllNode();
+		ArrayList<Node> global_var=d.getRoot().getChildNode(1).getAllNode();
+		ArrayList<Node> player_var=d.getRoot().getChildNode(2).getAllNode();
 		
 		// dictionary 구성
 		global_variable_index = new HashMap<String,Integer>();
@@ -71,18 +75,50 @@ public class TestplayModule {
 		for(index=0;index<global_var.size();index++)
 		{
 			global_variable_index.put((String)global_var.get(index).getData(), index);
-			switch(global_var.get(index).t)
+			switch(global_var.get(index).get_node_type())
 			{
 			case nd_num:
-				
+				variables[0][index]=new Integer(0);
+				break;
+			case nd_str:
+				variables[0][index]=new String();
+				break;
+			case nd_deck:
+				variables[0][index]=new Node();
+				break;
+			case nd_player:
+				variables[0][index]=new Integer(-1);
+				break;
+			default:
+				// TODO: Error
+				break;
 			}
-			variables[0][index]=new 
+			
 		}
 		for(index=0;index<player_var.size();index++)
 		{
 			player_variable_index.put((String)player_var.get(index).getData(), index);
 			for(player_loop=1;player_loop<=n;player_loop++)
-				d
+			{
+				switch(global_var.get(index).get_node_type())
+				{
+				case nd_num:
+					variables[player_loop][index]=new Integer(0);
+					break;
+				case nd_str:
+					variables[player_loop][index]=new String();
+					break;
+				case nd_deck:
+					variables[player_loop][index]=new Node(NodeType.nd_deck,null);
+					break;
+				case nd_player:
+					variables[player_loop][index]=new Integer(-1);
+					break;
+				default:
+					// TODO: Error
+					break;
+				}
+			}
 		}
 		System.out.println("b");
 	}
@@ -111,31 +147,97 @@ public class TestplayModule {
 	// 액션 규칙을 수행한다.
 	public void action(Node n)
 	{
-		switch(n.t_sub)
+		switch((RuleCase)n.getData())
 		{
-		case 0:
+		case action_multiple:
 			action_multiple(n);
 			return;
-		case 1:
+		case action_move:
 			action_move(n.getChildNode(0),n.getChildNode(1));
 			return;
-		case 2:
-			action_load((String)n.getChildNode(0).getData(),n.getChildNode(1));
+		case action_load:
+			action_load((String)n.getChildNode(0).getChildNode(0).getData(),n.getChildNode(1));
 			return;
-		case 3:
+		case action_shuffle:
 			action_shuffle(n.getChildNode(0));
 			return;
-		case 5:
+		case action_order:
+			action_order(n.getChildNode(0),(Node[])n.getAllNode().subList(1,n.numChildren()).toArray());
+			return;
+		case action_act:
 			action_act(n.getChildNode(0), n.getChildNode(1));
 			return;
-			
+		case action_choose:
+			System.err.println("Unimplemented action_choose");
+			return;
+		case action_card:
+			action_card(n.getChildNode(0), (String)n.getChildNode(1).getData());
+			return;
+		case action_if:
+			action_if(n.getChildNode(0), n.getChildNode(1));
+			return;
+		case action_ifelse:
+			action_ifelse(n.getChildNode(0), n.getChildNode(1), n.getChildNode(2));
+			return;
+		case action_repeat:
+			action_repeat(n.getChildNode(0), n.getChildNode(1));
+			return;
+		case action_endgame:
+			System.err.println("Unimplemented action_endgame");
+			return;
+		case action_endgame_draw:
+			System.err.println("Unimplemented action_endgame_draw");
+			return;
+		case action_endgame_order:
+			System.err.println("Unimplemented action_endgame_order");
+			return;
+		case action_show:
+			System.err.println("Unimplemented action_show");
+			return;
 		}
-		System.out.println("Action Error");
+		System.err.println("Action Error");
 	}
 	
 	// 플레이어의 목록을 계산한다.
 	public ArrayList<Integer> players(Node n)
 	{
+		if(n.getData().getClass()==RuleCase.class)
+		{
+			switch((RuleCase)n.getData())
+			{
+			case player_multiple:
+				return player_multiple(n.getAllNode());
+			case player_current:
+				return player_current();
+			case player_all:
+				return player_all();
+			case player_exclude:
+				return player_exclude(n.getChildNode(0),n.getChildNode(1));
+			case player_left:
+				return player_left(false, n.getChildNode(0),n.getChildNode(1));
+			case player_right:
+				return player_right(false, n.getChildNode(0),n.getChildNode(1));
+			case player_left_all:
+				return player_left(true, n.getChildNode(0),n.getChildNode(1));
+			case player_right_all:
+				return player_right(true, n.getChildNode(0),n.getChildNode(1));
+			case player_satisfy:
+				return player_satisfy(n.getChildNode(0),n.getChildNode(1));
+			case player_most:
+				return player_most(n.getChildNode(0),(Node[])n.getAllNode().subList(1,n.numChildren()).toArray());
+			case player_select:
+				System.err.println("Unimplemented player_select");
+				return null;
+			}
+		}
+		else if (n.getData().getClass()==String.class)
+		{
+			Integer result = (Integer)predefined((String)n.getData());
+			ArrayList<Integer> result_=new ArrayList<Integer>();
+			result_.add(result);
+			return result_;
+		}
+		
 		System.out.println("Player Error");
 		return null;
 	}
@@ -143,13 +245,22 @@ public class TestplayModule {
 	// Deck을 계산한다.
 	public Node deck(Node n)
 	{
-		switch(n.t_sub)
+		if(n.getData().getClass()==RuleCase.class)
 		{
-		case 0:
-			return deck_predefined((String)n.getData());
-		case 1:
-			return deck_get((String)n.getData(),n.getChildNode(0));
+			switch((RuleCase)n.getData())
+			{
+			case deck_player:
+				ArrayList<Integer> p=players(n.getChildNode(1));
+				// TODO: Error Checking: p.size() must be 1.
+				return (Node)player_variable_get((String)n.getChildNode(0).getData(),p.get(0));
+			case deck_select:
+				System.err.println("Unimplemented deck_select");
+				return null;
+			}
 		}
+		else if (n.getData().getClass()==String.class)
+			return deck_predefined((String)n.getData());
+		
 		// TODO: Error
 		System.out.println("Deck Error");
 		return null;
@@ -158,25 +269,115 @@ public class TestplayModule {
 	// 카드의 목록을 계산한다.
 	public ArrayList<Node> cards(Node n)
 	{
+		if(n.getData().getClass()==RuleCase.class)
+		{
+			switch((RuleCase)n.getData())
+			{
+			case card_all:
+				return cards_all(n.getChildNode(0));
+			case card_top:
+				return cards_top(n.getChildNode(0),n.getChildNode(1));
+			case card_bottom:
+				return cards_bottom(n.getChildNode(0),n.getChildNode(1));
+			case card_satisfy:
+				return cards_satisfy(n.getChildNode(0),n.getChildNode(1));
+			case card_select:
+				System.err.println("Unimplemented card_select");
+				return null;
+			}
+		}
 		System.out.println("Card Error");
 		return null;
 	}
 	
 	// 조건을 계산한다.
 	public boolean cond(Node n)
-	{
-		return true;
+	{	
+		if(n.getData().getClass()==RuleCase.class)
+		{
+			switch((RuleCase)n.getData())
+			{
+			case cond_numcompare:
+				return cond_numcompare(n.getChildNode(0),(String)n.getChildNode(1).getData(),n.getChildNode(2));
+			case cond_samecard:
+				return cond_samecard(n.getChildNode(0));
+			case cond_sameplayer:
+				return cond_sameplayer(n.getChildNode(0));
+			case cond_samestring:
+				return cond_samestring(n.getChildNode(0), n.getChildNode(1));
+			case cond_typeequal:
+				return cond_typeequal(n.getChildNode(0));
+			case cond_istype:
+				return cond_istype(n.getChildNode(0),n.getChildNode(1));
+			case cond_and:
+				return cond_and(n.getChildNode(0),n.getChildNode(1));
+			case cond_or:
+				return cond_or(n.getChildNode(0),n.getChildNode(1));
+			case cond_not:
+				return cond_not(n.getChildNode(0));
+			case cond_emptydeck:
+				return cond_emptydeck(n.getChildNode(0));
+			}
+		}
+		System.out.println("Cond Error");
+		return false;
 	}
 	
 	// 수치를 계산한다.
 	public int num(Node n)
 	{
+		if(n.getData().getClass()==RuleCase.class)
+		{
+			switch((RuleCase)n.getData())
+			{
+			case num_size_player:
+				return num_size_player(n.getChildNode(0));
+			case num_size_deck:
+				return num_size_deck(n.getChildNode(0));
+			case num_size_card:
+				return num_size_cards(n.getChildNode(0));
+			case num_operation:
+				return num_operation(n.getChildNode(0),(String)n.getChildNode(1).getData(),n.getChildNode(2));
+			case num_call:
+				System.err.println("Unimplemented num_call");
+				return 0;
+			}
+		}
+		else if (n.getData().getClass()==String.class)
+		{
+			Integer i=(Integer)predefined((String)n.getData());
+			if (i!=null) return i;
+			return (Integer)card_predefined((String)n.getData());
+		}
+		else if (n.getData().getClass()==Integer.class)
+			return (Integer)n.getData();
+		
+		System.out.println("num Error");
 		return 0;
 	}
 	
 	// 문자를 계산한다.
 	public String str(Node n)
 	{
+		if(n.getData().getClass()==RuleCase.class)
+		{
+			switch((RuleCase)n.getData())
+			{
+			case string_raw:
+				return (String)n.getChildNode(0).getData();
+			case string_call:
+				System.err.println("Unimplemented string_call");
+				return null;
+			}
+		}
+		else if (n.getData().getClass()==String.class)
+		{
+			String i=(String)predefined((String)n.getData());
+			if (i!=null) return i;
+			return (String)card_predefined((String)n.getData());
+		}
+		
+		System.out.println("String Error");
 		return null;
 	}
 	
@@ -204,7 +405,10 @@ public class TestplayModule {
 		Node deck_=deck(deck_raw);
 		Node temp;
 		for(int loop=0;loop<10;loop++)
-			temp=new Node(null,loop,deck_);
+		{
+			temp=new Node(NodeType.nd_card,deck_);
+			temp.setData(loop);
+		}
 	}
 	
 	// deck_raw가 지정하는 덱을 섞는다.
@@ -305,6 +509,18 @@ public class TestplayModule {
 			action(action_raw);
 	}
 	
+	public void action_card(Node c_raw, String varname)
+	{
+		ArrayList<Node> c=cards(c_raw);
+		Node target;
+		for(int loop=0;loop<c.size();loop++)
+		{
+			target=(Node)card_variable_get(varname,c.get(loop));
+			cardStack.push(c.get(loop));
+			action(target);
+			cardStack.pop();
+		}
+	}
 	// 미리 지정한 액션을 수행한다.
 	public void action_func(String name, String[] args)
 	{
@@ -335,9 +551,8 @@ public class TestplayModule {
 	// 리턴 : ArrayList<Integer>
 	
 	// player_multiple : 여러 플레이어의 목록을 합성하여 돌려준다.
-	public ArrayList<Integer> player_multiple(Node players)
+	public ArrayList<Integer> player_multiple(ArrayList<Node> p)
 	{
-		ArrayList<Node> p=players.getAllNode();
 		ArrayList<Integer> a=new ArrayList<Integer>();
 		int loop,loop2;
 		for(loop=0;loop<p.size();loop++)
@@ -436,7 +651,7 @@ public class TestplayModule {
 	}
 	
 	// players_raw 중에서 condition_raw 조건을 만족하는 플레이어의 목록을 돌려준다.
-	public ArrayList<Integer> player_condition (Node condition_raw, Node players_raw)
+	public ArrayList<Integer> player_satisfy (Node condition_raw, Node players_raw)
 	{
 		ArrayList<Integer> p = players(players_raw);
 		int loop;
@@ -459,7 +674,7 @@ public class TestplayModule {
 	}
 	
 	// players_raw를 order 조건에 따라 정렬한다
-	public ArrayList<Integer> player_most(final Node[] order,Node players_raw)
+	public ArrayList<Integer> player_most(Node players_raw, final Node[] order)
 	{
 		ArrayList<Integer> p=players(players_raw);
 		Collections.sort(p, new Comparator<Integer>() {
@@ -545,7 +760,7 @@ public class TestplayModule {
 	// 리턴 : ArrayList<Node>
 	
 	// 특정 덱의 카드
-	public ArrayList<Node> cards_alldeck(Node deck_raw)
+	public ArrayList<Node> cards_all(Node deck_raw)
 	{
 		return deck(deck_raw).getAllNode();
 	}
@@ -556,7 +771,7 @@ public class TestplayModule {
 		int n=num(n_raw);
 		ArrayList<Node> total=deck(deck_raw).getAllNode();
 		// TODO: 덱이 n장보다 크면 오류 처리
-		return (ArrayList<Node>) total.subList(total.size()-n, total.size());
+		return new ArrayList<Node>(total.subList(total.size()-n, total.size()));
 	}
 	// 덱 아래쪽 n장
 	public ArrayList<Node> cards_bottom(Node n_raw, Node deck_raw)
@@ -564,7 +779,7 @@ public class TestplayModule {
 		int n=num(n_raw);
 		ArrayList<Node> total=deck(deck_raw).getAllNode();
 		// TODO: 덱이 n장보다 크면 오류 처리
-		return (ArrayList<Node>) total.subList(0, n);
+		return new ArrayList<Node>(total.subList(0, n));
 	}
 	// 덱 랜덤 n장
 	public ArrayList<Node> cards_random(Node n_raw, Node deck_raw)
@@ -572,7 +787,8 @@ public class TestplayModule {
 		int n=num(n_raw);
 		ArrayList<Node> total=deck(deck_raw).getAllNode();
 		// TODO: 덱이 n장보다 크면 오류 처리
-		return (ArrayList<Node>) total.subList(0, n);
+		// TODO: Not Implemented.
+		return null;
 	}
 	
 	public ArrayList<Node> cards_satisfy(Node condition_raw, Node cards_raw)
@@ -599,6 +815,107 @@ public class TestplayModule {
 	{
 		// TODO: UI를 띄워 선택을 요구한다.
 		return null;
+	}
+
+	
+	///////////////////////// CONDITION EVALUATION FUNCTIONS ///////////////////////
+	// Node를 계산하여 해당하는 bool값을  돌려준다.
+	// 리턴 :boolean
+
+	public boolean cond_numcompare(Node n1_raw, String comparator, Node n2_raw)
+	{
+		if(comparator.equals("=="))
+			return num(n1_raw)==num(n2_raw);
+		else if(comparator.equals("!="))
+			return num(n1_raw)!=num(n2_raw);
+		else if(comparator.equals(">"))
+			return num(n1_raw)>num(n2_raw);
+		else if(comparator.equals("<"))
+			return num(n1_raw)<num(n2_raw);
+		else if(comparator.equals(">="))
+			return num(n1_raw)>=num(n2_raw);
+		else if(comparator.equals("<="))
+			return num(n1_raw)<=num(n2_raw);
+		
+		// TODO: 잘못된 비교 연산자 오류 처리
+		return false;
+	}
+	public boolean cond_samecard(Node card_raw)
+	{
+		ArrayList<Node> card=cards(card_raw);
+		if(card.size()==0)
+			// TODO: 카드가 없는 경우 같다고 보아야 하는가?
+			return true;
+		int loop;
+		String cardname=(String)card.get(0).getData();
+		for(loop=1;loop<card.size();loop++)
+			if(!cardname.equals((String)card.get(loop).getData()))
+				return false;
+		return true;
+	}
+	
+	public boolean cond_sameplayer(Node player_raw)
+	{
+		ArrayList<Integer> player=players(player_raw);
+		if(player.size()==0)
+			// TODO: 플레이어가 없는 경우 같다고 보아야 하는가?
+			return true;
+		int loop;
+		Integer playername=player.get(0);
+		for(loop=1;loop<player.size();loop++)
+			if(!playername.equals(player.get(loop)))
+				return false;
+		return true;
+	}
+	
+	public boolean cond_samestring(Node s1_raw, Node s2_raw)
+	{
+		return str(s1_raw).equals(str(s2_raw));
+	}
+	
+	public boolean cond_typeequal(Node card_raw)
+	{
+		ArrayList<Node> card = cards(card_raw);
+		if(card.size()==0)
+			// TODO: 카드가 없는 경우 같다고 보아야 하는가?
+			return true;
+		int loop;
+		// TODO: _type은 무조건 0번 인덱스라고 가정.
+		String cardname=(String)card.get(0).getChildNode(0).getChildNode(0).getData();
+		for(loop=1;loop<card.size();loop++)
+			if(!cardname.equals((String)card.get(loop).getChildNode(0).getChildNode(0).getData()))
+				return false;
+		return true;
+	}
+	
+	public boolean cond_istype(Node card_raw, Node type_raw)
+	{
+		ArrayList<Node> card = cards(card_raw);
+		String t=str(type_raw);
+		int loop;
+		// TODO: _type은 무조건 0번 인덱스라고 가정.
+		for(loop=0;loop<card.size();loop++)
+			if(!t.equals((String)card.get(loop).getChildNode(0).getChildNode(0).getData()))
+				return false;
+		return true;
+	}
+	
+	public boolean cond_and(Node c1_raw, Node c2_raw)
+	{
+		return cond(c1_raw) && cond(c2_raw);
+	}
+	public boolean cond_or(Node c1_raw, Node c2_raw)
+	{
+		return cond(c1_raw) || cond(c2_raw);
+	}
+	public boolean cond_not(Node c1_raw)
+	{
+		return !cond(c1_raw);
+	}
+	public boolean cond_emptydeck(Node d_raw)
+	{
+		Node d=deck(d_raw);
+		return d.numChildren()==0;
 	}
 	
 	///////////////////////// NUMBER EVALUATION FUNCTIONS ///////////////////////
@@ -694,5 +1011,42 @@ public class TestplayModule {
 		// TODO: 플레이어에게 range 중 하나를 선택하도록 하는 UI를 띄운다.
 		return null;
 	}
-
+	
+	
+	////////////////////// PREDEFINED VARIABLES AND VARIABLE GET ////////////////////////
+	// global과 현재 player에서 찾는 함수
+	public Object predefined(String variable_name)
+	{
+		Integer index=global_variable_index.get(variable_name);
+		if(index!=null) return variables[0][index];
+		index=player_variable_index.get(variable_name);
+		if(index!=null) return variables[playerStack.peek()][index];
+		// Search Fail
+		return null;
+	}
+	public Object card_predefined(String variable_name)
+	{
+		Node c=cardStack.peek();
+		for(int loop=1;loop<c.numChildren();loop++)
+		{
+			if(variable_name.equals((String)c.getChildNode(loop).getData()))
+				return c.getChildNode(loop).getChildNode(0).getData();
+		}
+		// Search Fail
+		return null;
+	}
+	public Object player_variable_get(String variable_name, Integer player_num)
+	{
+		playerStack.push(player_num);
+		Object result=predefined(variable_name);
+		playerStack.pop();
+		return result;
+	}
+	public Object card_variable_get(String variable_name, Node card_actual)
+	{
+		cardStack.push(card_actual);
+		Object result=card_predefined(variable_name);
+		cardStack.pop();
+		return result;
+	}
 }

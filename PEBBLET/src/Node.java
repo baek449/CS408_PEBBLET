@@ -1,15 +1,49 @@
 import java.util.ArrayList;
 
 public class Node {
+	private NodeType node_type;
 	private Object data;
-	private int numChildren;
 	private Node parent;
 	private ArrayList<Node> children;
+	private boolean scope_player;
+	private boolean scope_card;
+
+	public boolean get_scope_player() {
+		return scope_player;
+	}
+	public void set_scope_player(boolean scope_player) {
+		this.scope_player = scope_player;
+	}
+	public boolean get_scope_card() {
+		return scope_card;
+	}
+	public void set_scope_card(boolean scope_card) {
+		this.scope_card = scope_card;
+	}
+	public NodeType get_node_type() {
+		return node_type;
+	}
+	public void set_node_type(NodeType node_type) {
+		this.node_type = node_type;
+	}
 	
 	public Node()
 	{
+		scope_player=false;
+		scope_card=false;
 		children=new ArrayList<Node>();
 	}
+	public Node(NodeType node_type_, Node parent_)
+	{
+		scope_player=false;
+		scope_card=false;
+		node_type=node_type_;
+		parent=parent_;
+		children=new ArrayList<Node>();
+		if (parent_!=null) parent_.addChildNode(this);
+	}
+	
+	
 	// 원래 변수였으나, 함수로 바꿈.
 	public int numChildren()
 	{
