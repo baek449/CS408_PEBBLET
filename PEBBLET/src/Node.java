@@ -79,16 +79,20 @@ public class Node {
 	{
 		children.add(n);
 	}
-	// New
 	public Node getLastChildNode()
 	{
 		return children.get(children.size()-1);
 	}
 	public void setChildNode(int index_, Node n)
 	{
+		n.setParent(this);
 		children.set(index_,n);
 	}
-	// New end
+	// 현 node가 leaf인지 판별하는 함수. 후에 변수 형태로 바뀔 수도 있음.
+	public boolean isLeaf()
+	{
+		return numChildren()==0;
+	}
 	public void deleteChildNode(int n)
 	{
 		children.remove(n);
