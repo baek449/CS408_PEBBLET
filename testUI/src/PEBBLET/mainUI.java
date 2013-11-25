@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 //import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 //import javax.swing.UIManager;
 
 //import com.sun.corba.se.spi.ior.MakeImmutable;
@@ -27,9 +29,16 @@ import javax.swing.SwingUtilities;
 public class mainUI extends JFrame{
 	public mainUI(){
 		
+//		
+//		JFrame frame = new JFrame("Menu");
+		
 		JMenuBar menubar= new JMenuBar();
 		//ImageIcon exit_icon = new ImageIcon(getClass().getResource("exit.png")); 
 		
+//		frame.setJMenuBar(menubar);
+//		
+//		menubar.setBorder(new BevelBorder(BevelBorder.RAISED));
+//		frame.getContentPane().add(menubar, BorderLayout.SOUTH);
 		
 		//file menu
 		JMenu file = new JMenu("File");
@@ -68,6 +77,7 @@ public class mainUI extends JFrame{
         file.add(file_load_MenuItem);
         file.add(file_save_MenuItem);
         file.add(file_save_as_MenuItem);
+        file.addSeparator();
         file.add(file_exit_MenuItem);
         menubar.add(file);
         
@@ -90,20 +100,16 @@ public class mainUI extends JFrame{
         //edit.add(eMenuItem);
         menubar.add(edit);
         
-        
-        //format
-        /*JMenu format = new JMenu("Format");
-        format.setMnemonic(KeyEvent.VK_O);
-        JMenuItem format_text_MenuItem = new JMenuItem("text");
-        format.add(format_text_MenuItem);
-        menubar.add(format);*/
-        
         //view
         JMenu view = new JMenu("View");
         view.setMnemonic(KeyEvent.VK_V);
         JMenuItem view_comment_MenuItem = new JMenuItem("Comment");
         view.add(view_comment_MenuItem);
-        JMenuItem view_viewtab_MenuItem = new JMenuItem("View Tab");
+        view.addSeparator();
+        
+        JMenu view_viewtab_MenuItem = new JMenu("View Tab");
+        view.add(view_viewtab_MenuItem);
+        menubar.add(view);
         
         //view tab submenu
         JMenuItem viewtab_Def = new JMenuItem("Definition");
@@ -115,14 +121,42 @@ public class mainUI extends JFrame{
         JMenuItem viewtab_debug = new JMenuItem("Debug");
         view_viewtab_MenuItem.add(viewtab_debug);
         
+      //debug/testplay
+        JMenu debug_test = new JMenu("Debug / Testplay");
+        debug_test.setMnemonic(KeyEvent.VK_O);
+        JMenuItem debug_startdebug_MenuItem = new JMenuItem("Start Debug");
+        debug_test.add(debug_startdebug_MenuItem);
+        JMenuItem debug_starttestplay_MenuItem = new JMenuItem("Start Testplay");
+        debug_test.add(debug_starttestplay_MenuItem);
+        JMenuItem debug_startboth_MenuItem = new JMenuItem("Start Both");
+        debug_test.add(debug_startboth_MenuItem);
         
-        view.add(view_viewtab_MenuItem);
-        menubar.add(view);
+        menubar.add(debug_test);
         
         //help
         JMenu help = new JMenu("Help");
         help.setMnemonic(KeyEvent.VK_H);
 		
+        JMenuItem help_helpcontents_MenuItem = new JMenuItem("Help Contents");
+        help.add(help_helpcontents_MenuItem);
+        
+        JMenu help_langdescript_MenuItem = new JMenu("Language Description");
+        help.add(help_langdescript_MenuItem);
+        
+        //language description submenu
+        JMenuItem langdescript_def = new JMenuItem("Definition");
+        help_langdescript_MenuItem.add(langdescript_def);
+        
+        JMenuItem langdescript_rule = new JMenuItem("Rule");
+        help_langdescript_MenuItem.add(langdescript_rule);
+        
+        JMenuItem help_debugmsg = new JMenuItem("Debug Message");
+        help.add(help_debugmsg);
+        help.addSeparator();
+        
+        JMenuItem help_about = new JMenuItem("About PEBBLET");
+        help.add(help_about);
+        
 		//help.add(eMenuItem);
 		menubar.add(help);
 
