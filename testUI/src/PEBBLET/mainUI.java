@@ -123,7 +123,7 @@ public class mainUI extends JFrame{
         
       //debug/testplay
         JMenu debug_test = new JMenu("Debug / Testplay");
-        debug_test.setMnemonic(KeyEvent.VK_O);
+        debug_test.setMnemonic(KeyEvent.VK_D);
         JMenuItem debug_startdebug_MenuItem = new JMenuItem("Start Debug");
         debug_test.add(debug_startdebug_MenuItem);
         JMenuItem debug_starttestplay_MenuItem = new JMenuItem("Start Testplay");
@@ -193,10 +193,10 @@ public class mainUI extends JFrame{
 				
 				tabbedpane tpane = new tabbedpane();
 				
-				JComponent def = tpane.makeTextPanel("Definition");
-				JComponent rule = tpane.makeTextPanel("Rule");
-				JComponent comp = tpane.makeTextPanel("Component");
-				JComponent debug = tpane.makeTextPanel("Debug"); 
+				JComponent def = tpane.makeTextPanel("");
+				JComponent rule = tpane.makeTextPanel("");
+				JComponent comp = tpane.makeTextPanel("");
+				JComponent debug = tpane.makeTextPanel(""); 
 				
 				
 				pane.addTab("Definition", null, def, "make definition");
