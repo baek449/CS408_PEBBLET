@@ -15,6 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -34,6 +35,25 @@ public class mainUI extends JFrame{
 		JMenu file = new JMenu("File");
 		file.setMnemonic(KeyEvent.VK_F);
 		
+		JMenuItem file_new_MenuItem = new JMenuItem("New");
+		file_new_MenuItem.setMnemonic(KeyEvent.VK_N);
+		file_new_MenuItem.setToolTipText("New application");
+		
+		JMenuItem file_load_MenuItem = new JMenuItem("Load");
+		file_load_MenuItem.setMnemonic(KeyEvent.VK_L);
+		file_load_MenuItem.setToolTipText("Load application");
+		
+		JMenuItem file_save_MenuItem = new JMenuItem("Save");
+		file_save_MenuItem.setMnemonic(KeyEvent.VK_S);
+		file_save_MenuItem.setToolTipText("Save application");
+		
+		JMenuItem file_save_as_MenuItem = new JMenuItem("Save As");
+		file_save_as_MenuItem.setMnemonic(KeyEvent.VK_A);
+		//file_save_as_MenuItem.setMnemonic(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+		//										java.awt.event.InputEvent.CTRL_DOWN_MASK));
+		file_new_MenuItem.setToolTipText("Save application as different name");
+		
+		
 		JMenuItem file_exit_MenuItem= new JMenuItem("Exit");
 		file_exit_MenuItem.setMnemonic(KeyEvent.VK_E);
 		file_exit_MenuItem.setToolTipText("Exit application");
@@ -45,6 +65,10 @@ public class mainUI extends JFrame{
         });
         
         file.add(file_exit_MenuItem);
+        file.add(file_new_MenuItem);
+        file.add(file_load_MenuItem);
+        file.add(file_save_MenuItem);
+        file.add(file_save_as_MenuItem);
         menubar.add(file);
         
         
