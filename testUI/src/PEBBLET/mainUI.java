@@ -15,11 +15,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
+//import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+//import javax.swing.UIManager;
 
-import com.sun.corba.se.spi.ior.MakeImmutable;
+//import com.sun.corba.se.spi.ior.MakeImmutable;
 
 //import com.sun.tools.javah.MainDoclet;
 
@@ -64,37 +64,60 @@ public class mainUI extends JFrame{
             }
         });
         
-        file.add(file_exit_MenuItem);
         file.add(file_new_MenuItem);
         file.add(file_load_MenuItem);
         file.add(file_save_MenuItem);
         file.add(file_save_as_MenuItem);
+        file.add(file_exit_MenuItem);
         menubar.add(file);
         
         
         //edit
         JMenu edit = new JMenu("Edit");
         edit.setMnemonic(KeyEvent.VK_E);
-        JMenuItem edit_find_MenuItem = new JMenuItem("find"); 
+        JMenuItem edit_undo_MenuItem = new JMenuItem("Undo"); 
+        edit.add(edit_undo_MenuItem);
+        JMenuItem edit_redo_MenuItem = new JMenuItem("Redo");
+        edit.add(edit_redo_MenuItem);
+        JMenuItem edit_cut_MenuItem = new JMenuItem("Cut");
+        edit.add(edit_cut_MenuItem);
+        JMenuItem edit_copy_MenuItem = new JMenuItem("Copy");
+        edit.add(edit_copy_MenuItem);
+        JMenuItem edit_paste_MenuItem = new JMenuItem("Paste");
+        edit.add(edit_paste_MenuItem);
+        JMenuItem edit_find_MenuItem = new JMenuItem("Find");
         edit.add(edit_find_MenuItem);
         //edit.add(eMenuItem);
         menubar.add(edit);
         
         
         //format
-        JMenu format = new JMenu("Format");
+        /*JMenu format = new JMenu("Format");
         format.setMnemonic(KeyEvent.VK_O);
         JMenuItem format_text_MenuItem = new JMenuItem("text");
         format.add(format_text_MenuItem);
-        menubar.add(format);
+        menubar.add(format);*/
         
         //view
         JMenu view = new JMenu("View");
         view.setMnemonic(KeyEvent.VK_V);
-        JMenuItem view_window_MenuItem = new JMenuItem("window");
-        view.add(view_window_MenuItem);
-        menubar.add(view);
+        JMenuItem view_comment_MenuItem = new JMenuItem("Comment");
+        view.add(view_comment_MenuItem);
+        JMenuItem view_viewtab_MenuItem = new JMenuItem("View Tab");
         
+        //view tab submenu
+        JMenuItem viewtab_Def = new JMenuItem("Definition");
+        view_viewtab_MenuItem.add(viewtab_Def);
+        JMenuItem viewtab_rule = new JMenuItem("Rule");
+        view_viewtab_MenuItem.add(viewtab_rule);
+        JMenuItem viewtab_comp = new JMenuItem("Component");
+        view_viewtab_MenuItem.add(viewtab_comp);
+        JMenuItem viewtab_debug = new JMenuItem("Debug");
+        view_viewtab_MenuItem.add(viewtab_debug);
+        
+        
+        view.add(view_viewtab_MenuItem);
+        menubar.add(view);
         
         //help
         JMenu help = new JMenu("Help");
