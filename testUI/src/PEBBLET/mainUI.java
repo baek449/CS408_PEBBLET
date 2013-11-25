@@ -5,8 +5,11 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.Container;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,6 +22,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+
+import sun.util.EmptyListResourceBundle;
 //import javax.swing.UIManager;
 
 //import com.sun.corba.se.spi.ior.MakeImmutable;
@@ -103,7 +108,77 @@ public class mainUI extends JFrame{
         //view
         JMenu view = new JMenu("View");
         view.setMnemonic(KeyEvent.VK_V);
-        JMenuItem view_comment_MenuItem = new JMenuItem("Comment");
+        final JCheckBoxMenuItem view_comment_MenuItem = new JCheckBoxMenuItem("Comment");
+        view_comment_MenuItem.setState(false);
+        final JFrame comment_frame = new JFrame("Comment");
+        comment_frame.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				view_comment_MenuItem.setState(false);
+				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});;
+        JLabel comment_label = new JLabel();
+//        comment_label.setSize(100, 100);
+        comment_frame.getContentPane().add(comment_label, BorderLayout.CENTER);
+        comment_frame.setSize(100, 100);;
+        view_comment_MenuItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(comment_frame.isVisible()){
+					comment_frame.setVisible(false);
+					view_comment_MenuItem.setState(false);
+				} else{
+					comment_frame.setVisible(true);
+					view_comment_MenuItem.setState(true);
+					
+				}
+				
+				
+			}
+		});
+        	
+        
         view.add(view_comment_MenuItem);
         view.addSeparator();
         
