@@ -3,6 +3,7 @@ package PEBBLET;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
+import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,8 +33,10 @@ public class tabbedpane extends JPanel{
 	protected JComponent makeTextPanel(String text) {
         JPanel panel = new JPanel(false);
         JLabel filler = new JLabel(text);
+//        filler.setBounds(1, 1, 100, 100);
         filler.setHorizontalAlignment(JLabel.CENTER);
-        panel.setLayout(new GridLayout(1, 1));
+//        panel.setLayout(new GridLayout(1, 1));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         panel.add(filler);
         return panel;
     }
