@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 
 public class tabbedpane extends JPanel{
 	public tabbedpane(){
@@ -40,8 +42,10 @@ public class tabbedpane extends JPanel{
         filler.setHorizontalAlignment(JLabel.CENTER);
 //        panel.setLayout(new GridLayout(1, 1));
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-        panel.add(Box.createRigidArea(new Dimension(0, 500)));//default 650
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel.add(Box.createRigidArea(new Dimension(0, 650)));//default 650
+        Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+        panel.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
         panel.add(filler);
         
         return panel;
