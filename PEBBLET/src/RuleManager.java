@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 
 public class RuleManager {
 	private Rule rule;
@@ -167,5 +171,28 @@ public class RuleManager {
 	public void setRule(Rule rule_)
 	{
 		rule=rule_;
+	}
+	public boolean save(ObjectOutputStream out)
+	{
+		try {
+			out.writeObject(rule);
+			return true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
+	}
+	public boolean load(ObjectInputStream in)
+	{
+		try {
+			rule=(Rule)in.readObject();
+			return true;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			return false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
 	}
 }

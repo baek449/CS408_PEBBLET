@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class Definition {
+
+public class Definition implements Serializable{
 	private Node root;
 	public Definition()
 	{

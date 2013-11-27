@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class Rule {
+
+public class Rule implements Serializable{
 	private Node root;
 	public Rule()
 	{

@@ -1,3 +1,10 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 
 public class testclassfordebug {
 		//just for test
@@ -88,12 +95,31 @@ public class testclassfordebug {
 		deck_3_2_2.setData("hand");
 		
 		
-		////////////////////// 테스트플레이 ///////////////////
 		Definition d = new Definition();
 		d.setRoot(def_root);
+		/*
+		////////////////////// 테스트플레이 ///////////////////
 		TestplayModule tpm=new TestplayModule(d);
 		// 시작
 		tpm.action(rul_root.getChildNode(0));
+		*/
+		
+		try {
+		DefinitionManager dm=new DefinitionManager();
+		dm.setDefinition(d);
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("test.dat"));
+		dm.save(out);
+		
+		DefinitionManager dm2=new DefinitionManager();
+		ObjectInputStream in;
+		in = new ObjectInputStream(new FileInputStream("test.dat"));
+		dm2.load(in);
+		System.out.print("Done");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.print("ERR");
+		}
 		
 		// 결과 보기
 		System.out.print("Done");

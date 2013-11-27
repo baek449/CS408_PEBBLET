@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 
 public class ComponentManager {
 	private Component[] component;
@@ -28,4 +32,28 @@ public class ComponentManager {
 	{
 		component[index]=component_;
 	}
+	public boolean save(ObjectOutputStream out)
+	{
+		try {
+			out.writeObject(component);
+			return true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
+	}
+	public boolean load(ObjectInputStream in)
+	{
+		try {
+			component=(Component[])in.readObject();
+			return true;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			return false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
+	}
+
 }

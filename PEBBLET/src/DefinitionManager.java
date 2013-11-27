@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 /*
  * DefinitionManager가 호출하는 UI 함수들
  * String UI_input_string(); // Textbox에 입력된 string을 받아온다.
@@ -214,5 +218,29 @@ public class DefinitionManager {
 	public void setDefinition(Definition definition_)
 	{
 		definition=definition_;
+	}
+	
+	public boolean save(ObjectOutputStream out)
+	{
+		try {
+			out.writeObject(definition);
+			return true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
+	}
+	public boolean load(ObjectInputStream in)
+	{
+		try {
+			definition=(Definition)in.readObject();
+			return true;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			return false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
 	}
 }
