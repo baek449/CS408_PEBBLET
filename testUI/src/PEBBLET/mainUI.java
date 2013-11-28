@@ -1,6 +1,7 @@
 package PEBBLET;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +10,9 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.Container;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JApplet;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -159,7 +163,7 @@ public class mainUI extends JFrame{
         JLabel comment_label = new JLabel();
 //        comment_label.setSize(100, 100);
         comment_frame.getContentPane().add(comment_label, BorderLayout.CENTER);
-        comment_frame.setSize(100, 100);;
+        comment_frame.setSize(400, 400);;
         view_comment_MenuItem.addActionListener(new ActionListener() {
 			
 			@Override
@@ -248,16 +252,18 @@ public class mainUI extends JFrame{
 		
 	}
 	
-	protected JComponent makeTextPanel(String text) {
-        JPanel panel = new JPanel(false);
-        JLabel filler = new JLabel(text);
-        filler.setHorizontalAlignment(JLabel.CENTER);
-        panel.setLayout(new GridLayout(1, 1));
-        panel.add(filler);
-        return panel;
-    }
+	public static void addbox(JComponent comp){
+		JPanel box = new JPanel(false);
+		BoxLayout boxlayout = new BoxLayout(box, BoxLayout.PAGE_AXIS);
+		
+		box.setLayout(boxlayout);
+		box.add(Box.createRigidArea(new Dimension(20, 20)));
+		box.setLocation(100, 100);
+		
+		comp.add(box);
+		
+	}
 	
-
 	public static void main(String[] args){
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
@@ -269,6 +275,9 @@ public class mainUI extends JFrame{
 				tabbedpane tpane = new tabbedpane();
 				
 				JComponent def = tpane.makeTextPanel("");
+				addbox(def);
+				
+				
 				JComponent rule = tpane.makeTextPanel("");
 				JComponent comp = tpane.makeTextPanel("");
 				JComponent debug = tpane.makeTextPanel(""); 

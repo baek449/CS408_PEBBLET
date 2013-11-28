@@ -38,10 +38,13 @@ public class tabbedpane extends JPanel{
 	protected JComponent makeTextPanel(String text) {
         JPanel panel = new JPanel(false);
         JLabel filler = new JLabel(text);
+        
+        BoxLayout box = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
+        
 //        filler.setBounds(1, 1, 100, 100);
         filler.setHorizontalAlignment(JLabel.CENTER);
 //        panel.setLayout(new GridLayout(1, 1));
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.setLayout(box);
         panel.add(Box.createRigidArea(new Dimension(0, 650)));//default 650
         Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
         Border loweredbevel = BorderFactory.createLoweredBevelBorder();
@@ -50,6 +53,10 @@ public class tabbedpane extends JPanel{
         
         return panel;
     }
+	
+	
+	
+	
 	
 	public static void createAndShowGUI() {
         //Create and set up the window.
