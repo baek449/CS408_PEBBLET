@@ -13,7 +13,7 @@ public class custominputbox extends JComponent{
 	private JComboBox<String> name = new JComboBox<String>();
 	private JTextField detail = new JTextField();
 	
-	public custominputbox(){
+	public custominputbox(int x, int y){
 		JPanel inputbox = new JPanel();
 		inputbox.setLayout(null);
 		inputbox.setSize(80,30);
@@ -22,8 +22,10 @@ public class custominputbox extends JComponent{
         inputbox.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
 //		JComboBox name = new JComboBox();
 		name.setBounds(5,5,30,20);
+        name.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
 //		JTextField detail = new JTextField();
 		detail.setBounds(40, 5, 35, 20);
+        detail.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
 		
 		inputbox.add(name);
 		inputbox.add(detail);

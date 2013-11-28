@@ -15,6 +15,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -255,26 +256,36 @@ public class mainUI extends JFrame{
 		
 	}
 	
-//	public static JTextField addbox(JComponent comp, int x, int y){
-//		JTextField box = new JTextField();
-//		comp.setLayout(null);
-//		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-//        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-//        box.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
-//        box.setBounds(x, y, 40, 20);
-//		comp.add(box);
+	public static JPanel addbox(JComponent comp, int x, int y){
+		JPanel inputbox = new JPanel();
+		JTextField detail = new JTextField();
+		JComboBox<String> name = new JComboBox<String>();
+		inputbox.setLayout(null);
+		name.setBounds(5,5,100,20);
+		inputbox.add(name);
+		detail.setBounds(110,5,80,20);
+		inputbox.add(detail);
+		name.addItem("text1");
+		name.addItem("test2");
+		
+		comp.setLayout(null);
+		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+        inputbox.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
+        inputbox.setBounds(x, y, 200, 30);
+		comp.add(inputbox);
+		return inputbox;
+	}
+//	public static custominputbox addbox(JComponent comp, int x, int y){
+//		custominputbox box = new custominputbox();
+//		comp.setLayout(null); 
+//		
+//		box.setLocation(x, y);
+//		
+//        comp.add(box);
+//		
 //		return box;
 //	}
-	public static custominputbox addbox(JComponent comp, int x, int y){
-		custominputbox box = new custominputbox();
-		comp.setLayout(null); 
-		
-		box.setLocation(x, y);
-		
-        comp.add(box);
-		
-		return box;
-	}
 	
 	public static void addsubbox(JComponent comp, JTextField main){
 		JTextField subbox = new JTextField();
