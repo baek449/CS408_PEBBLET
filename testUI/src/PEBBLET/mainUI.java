@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.Container;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
@@ -26,6 +27,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 
 import sun.util.EmptyListResourceBundle;
 //import javax.swing.UIManager;
@@ -258,7 +260,10 @@ public class mainUI extends JFrame{
 		
 		box.setLayout(boxlayout);
 		box.add(Box.createRigidArea(new Dimension(20, 20)));
-		box.setLocation(100, 100);
+		box.setLocation(0, 0);
+		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+        box.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
 		
 		comp.add(box);
 		
@@ -274,22 +279,22 @@ public class mainUI extends JFrame{
 				
 				tabbedpane tpane = new tabbedpane();
 				
-				JComponent def = tpane.makeTextPanel("");
-				addbox(def);
-				
-				
+				JComponent def = tpane.makeTextPanel("def");
 				JComponent rule = tpane.makeTextPanel("");
 				JComponent comp = tpane.makeTextPanel("");
-				JComponent debug = tpane.makeTextPanel(""); 
+				JComponent debug = tpane.makeTextPanel(""); 				
 				
+				addbox(def);
 				
 				pane.addTab("Definition", null, def, "make definition");
 				pane.addTab("Rule", null, rule, "make rule");
 				pane.addTab("Component", null, comp, "make component");
 				pane.addTab("Debugging", null, debug, "start debugging");
 				
+				
 				Container contentpane = ex.getContentPane();
 				contentpane.add(pane, BorderLayout.NORTH);
+				
 				
 				ex.setVisible(true);
 				

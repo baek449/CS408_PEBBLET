@@ -39,17 +39,29 @@ public class tabbedpane extends JPanel{
         JPanel panel = new JPanel(false);
         JLabel filler = new JLabel(text);
         
-        BoxLayout box = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
+        JPanel box = new JPanel();
+        BoxLayout boxlay = new BoxLayout(box, BoxLayout.PAGE_AXIS);
+        box.add(Box.createRigidArea(new Dimension(30,30)));
+        
+        box.setLayout(boxlay);
+        
+        panel.add(box);
         
 //        filler.setBounds(1, 1, 100, 100);
-        filler.setHorizontalAlignment(JLabel.CENTER);
+//        filler.setHorizontalAlignment(JLabel.CENTER);
+        panel.add(filler);
 //        panel.setLayout(new GridLayout(1, 1));
-        panel.setLayout(box);
-        panel.add(Box.createRigidArea(new Dimension(0, 650)));//default 650
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.setPreferredSize(new Dimension(0,650));
+//        panel.add(Box.createRigidArea(new Dimension(0, 650)));//default 650
         Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
         Border loweredbevel = BorderFactory.createLoweredBevelBorder();
         panel.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
-        panel.add(filler);
+        box.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
+
+//        panel.add(filler);
+        
+        
         
         return panel;
     }
