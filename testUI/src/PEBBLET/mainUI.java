@@ -23,6 +23,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 //import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
@@ -254,19 +255,36 @@ public class mainUI extends JFrame{
 		
 	}
 	
-	public static void addbox(JComponent comp){
-		JPanel box = new JPanel(false);
-		BoxLayout boxlayout = new BoxLayout(box, BoxLayout.X_AXIS);
+//	public static JTextField addbox(JComponent comp, int x, int y){
+//		JTextField box = new JTextField();
+//		comp.setLayout(null);
+//		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+//        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+//        box.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
+//        box.setBounds(x, y, 40, 20);
+//		comp.add(box);
+//		return box;
+//	}
+	public static custominputbox addbox(JComponent comp, int x, int y){
+		custominputbox box = new custominputbox();
+		comp.setLayout(null); 
 		
-		box.setLayout(boxlayout);
-		box.add(Box.createRigidArea(new Dimension(20, 20)));
-		box.setLocation(0, 0);
+		box.setLocation(x, y);
+		
+        comp.add(box);
+		
+		return box;
+	}
+	
+	public static void addsubbox(JComponent comp, JTextField main){
+		JTextField subbox = new JTextField();
+		comp.setLayout(null);
 		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
         Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-        box.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
-		
-		comp.add(box);
-		
+        subbox.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
+        subbox.setBounds(main.getBounds().x+10, main.getBounds().y+25, 40, 20);
+		comp.add(subbox);
+        
 	}
 	
 	public static void main(String[] args){
@@ -284,7 +302,10 @@ public class mainUI extends JFrame{
 				JComponent comp = tpane.makeTextPanel("");
 				JComponent debug = tpane.makeTextPanel(""); 				
 				
-				addbox(def);
+				addbox(def,10,10);
+				
+//				JTextField mainbox = addbox(def,0,0);
+//				addsubbox(def, mainbox);
 				
 				pane.addTab("Definition", null, def, "make definition");
 				pane.addTab("Rule", null, rule, "make rule");
