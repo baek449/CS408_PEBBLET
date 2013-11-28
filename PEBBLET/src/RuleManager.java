@@ -10,14 +10,14 @@ public class RuleManager {
 	private static final String[] selection_action =
 		{"(Cancel)", "Multiple Actions", "Move [card] to [deck]", "Load [file] to [deck]", "Shuffle [deck]", "Order [deck] [order]*",
 		"Act [player] [action]", "If [cond] [action]", "If [cond] [action] else [action]", "Repeat [num] [action]", "Endgame Win [player]",
-		"Endgame Draw", "Endgame Order [order]*", "Show [card] to [player]"};
+		"Endgame Draw", "Endgame Order [order]*", "Show [card] to [player]", "[card].[action]"};
 	private static final String[] selection_action_pscope = {"Choose from [namedAction]*"};
 	private static final String[] selection_player =
 		{"(Cancel)", "Multiple Players", "All Players", "Exclude [player] from [player]", "Left [num]th player from [player]",
 		"Right [num]th player from [player]", "Left [num] players from [player]", "Right [num] players from [player]",
-		"Satisfying [cond] from [player]", "Most [order]* among [player]"};
+		"Satisfying [cond] from [player]", "Most [order]* among [player]","[player].[player]"};
 	private static final String[] selection_player_pscope = {"Select [num] Players in [player]"};
-	private static final String[] selection_deck = {"(Cancel)"};
+	private static final String[] selection_deck = {"(Cancel)","[player].[deck]"};
 	private static final String[] selection_deck_pscope = {"Select Deck in [deck]*"};
 	private static final String[] selection_card =
 		{"(Cancel)", "All cards in [deck]", "Top [num] cards in [deck]", "Bottom [num] cards in [deck]",
@@ -27,13 +27,14 @@ public class RuleManager {
 		{"(Cancel)", "[num] [operation] [num]", "Identical? [card] [card]", "Identical [player] [player]",
 		"[string] == [string]", "Typeequal? [card] [card]", "Type? [string] [card]",
 		"[cond] and [cond]", "[cond] or [cond]", "Not [cond]", "Empty? [deck]"};
+	private static final String[] selection_order = {"(Cancel)", "High [num]", "Low [num]"};
 	private static final String[] selection_num =
 		{"(Cancel)", "Insert Integer...", "Size [player]", "Size [deck]", "Size [card]",
-		"[num] [operation] [num]"};
+		"[num] [operation] [num]","[player].[num]","[card].[num]"};
 	private static final String[] selection_num_pscope = {"Call from [num] to [num]"};
-	private static final String[] selection_str = 		{"(Cancel)", "Insert String..."};
+	private static final String[] selection_str = 		{"(Cancel)", "Insert String...", "[player].[string]","[card].[string]"};
 	private static final String[] selection_str_pscope = {"Call from [string]*"};
-
+	private static final String[] selection_namedAction = {"(Cancel)","[string]:[action]"};
 	
 	
 	
@@ -150,6 +151,7 @@ public class RuleManager {
 			o.setData(RuleCase.action_act);
 			newnode=new Node(NodeType.nd_player,o);
 			newnode=new Node(NodeType.nd_action,o);
+			newnode.set_scope_player(true);
 			return o;
 		case 7: //	"If [cond] [action]"
 			o.setData(RuleCase.action_if);
@@ -182,7 +184,13 @@ public class RuleManager {
 			newnode=new Node(NodeType.nd_card,o);
 			newnode=new Node(NodeType.nd_player,o);
 			return o;
-		case 14: // "Choose from [namedAction]*"
+		case 14: // "[card].[action]"
+			o.setData(RuleCase.action_card);
+			newnode=new Node(NodeType.nd_card,o);
+			newnode=new Node(NodeType.nd_action,o);
+			newnode.set_scope_card(true);
+			return o;
+		case 15: // "Choose from [namedAction]*"
 			if(ps)
 			{
 				o.setData(RuleCase.action_choose);
@@ -226,7 +234,7 @@ public class RuleManager {
 		
 		// 3. Making a node
 		Node newnode;
-		Node o=new Node(NodeType.nd_action,null);
+		Node o=new Node(NodeType.nd_player,null);
 		switch(input)
 		{
 		case -1:
@@ -266,13 +274,20 @@ public class RuleManager {
 		case 8: //"Satisfying [cond] from [player]"
 			o.setData(RuleCase.player_satisfy);
 			newnode=new Node(NodeType.nd_cond,o);
+			newnode.set_scope_player(true);
 			newnode=new Node(NodeType.nd_player,o);
 			return o;
 		case 9: //"Most [order]* among [player]"
 			o.setData(RuleCase.player_most);
 			newnode=new Node(NodeType.nd_player,o);
 			return o;
-		case 10: //"Select [num] Players in [player]"
+		case 10: //"[player].[player]"
+			o.setData(RuleCase.player_player);
+			newnode=new Node(NodeType.nd_player,o);
+			newnode=new Node(NodeType.nd_player,o);
+			newnode.set_scope_player(true);
+			return o;
+		case 11: //"Select [num] Players in [player]"
 			if(ps)
 			{
 				o.setData(RuleCase.player_select);
@@ -291,6 +306,432 @@ public class RuleManager {
 		return o;
 	}
 	
+	public Node processDeckSelection(boolean ps, boolean cs, boolean delete)
+	{
+		//// Start: Ask UI for selection
+		
+		// 1. Making Selection Options.
+		ArrayList<String> options = new ArrayList<String>();
+		int loop;
+		for(loop=0;loop<selection_deck.length;loop++)
+			options.add(selection_deck[loop]);
+		if (ps)
+			for(loop=0;loop<selection_deck_pscope.length;loop++)
+				options.add(selection_deck_pscope[loop]);
+		for(loop=0;loop<varList[0][2].length;loop++)
+			options.add(varList[0][2][loop]);
+		if (ps)
+			for(loop=0;loop<varList[1][2].length;loop++)
+				options.add(varList[1][2][loop]);
+		if (cs)
+			for(loop=0;loop<varList[2][2].length;loop++)
+				options.add(varList[2][2][loop]);
+		if(delete) options.add("Delete");
+		// 2. Getting an input
+		int input = UI_input_selection((String[])options.toArray());
+		
+		// 3. Making a node
+		Node newnode;
+		Node o=new Node(NodeType.nd_deck,null);
+		switch(input)
+		{
+		case -1:
+		case 0:
+			return null;
+		case 1: //"[player].[deck]"
+			o.setData(RuleCase.deck_player);
+			newnode=new Node(NodeType.nd_player,o);
+			newnode=new Node(NodeType.nd_deck,o);
+			newnode.set_scope_player(true);
+			return o;
+		case 2: //"Select Deck in [deck]*"
+			if(ps)
+			{
+				o.setData(RuleCase.deck_select);
+				return o;
+			}
+			break;
+		}
+		if(delete && input==(options.size()-1))
+		{
+			o.set_node_type(NodeType.nd_special_delete);
+			return o;
+		}
+		o.setData(options.get(input));
+		return o;
+	}
+	
+	public Node processCardSelection(boolean ps, boolean cs, boolean delete)
+	{
+		//// Start: Ask UI for selection
+		
+		// 1. Making Selection Options.
+		ArrayList<String> options = new ArrayList<String>();
+		int loop;
+		for(loop=0;loop<selection_card.length;loop++)
+			options.add(selection_card[loop]);
+		if (ps)
+			for(loop=0;loop<selection_card_pscope.length;loop++)
+				options.add(selection_card_pscope[loop]);
+		if(delete) options.add("Delete");
+		// 2. Getting an input
+		int input = UI_input_selection((String[])options.toArray());
+		
+		// 3. Making a node
+		Node newnode;
+		Node o=new Node(NodeType.nd_card,null);
+		switch(input)
+		{
+		case -1:
+		case 0:
+			return null;
+		case 1: // "All cards in [deck]"
+			o.setData(RuleCase.card_all);
+			newnode=new Node(NodeType.nd_deck,o);
+			return o;
+		case 2: // "Top [num] cards in [deck]"
+			o.setData(RuleCase.card_top);
+			newnode=new Node(NodeType.nd_num,o);
+			newnode=new Node(NodeType.nd_deck,o);
+			return o;
+		case 3: // "Bottom [num] cards in [deck]"
+			o.setData(RuleCase.card_bottom);
+			newnode=new Node(NodeType.nd_num,o);
+			newnode=new Node(NodeType.nd_deck,o);
+			return o;
+		case 4: // "Satisfying [cond] from [card]"
+			o.setData(RuleCase.card_satisfy);
+			newnode=new Node(NodeType.nd_cond,o);
+			newnode.set_scope_card(true);
+			newnode=new Node(NodeType.nd_card,o);
+			return o;
+
+		case 5: //"Select [num] Cards in [card]"
+			if(ps)
+			{
+				o.setData(RuleCase.card_select);
+				newnode=new Node(NodeType.nd_num,o);
+				newnode=new Node(NodeType.nd_card,o);
+				return o;
+			}
+			break;
+		}
+		if(delete && input==(options.size()-1))
+		{
+			o.set_node_type(NodeType.nd_special_delete);
+			return o;
+		}
+		o.setData(options.get(input));
+		return o;
+	}
+	
+	
+	public Node processCondSelection(boolean ps, boolean cs, boolean delete)
+	{
+		//// Start: Ask UI for selection
+		
+		// 1. Making Selection Options.
+		ArrayList<String> options = new ArrayList<String>();
+		int loop;
+		for(loop=0;loop<selection_cond.length;loop++)
+			options.add(selection_cond[loop]);
+		if(delete) options.add("Delete");
+		// 2. Getting an input
+		int input = UI_input_selection((String[])options.toArray());
+		
+		// 3. Making a node
+		Node newnode;
+		Node o=new Node(NodeType.nd_cond,null);
+		switch(input)
+		{
+		case -1:
+		case 0:
+			return null;
+		case 1: // "[num] [operation] [num]"
+			o.setData(RuleCase.cond_numcompare);
+			newnode=new Node(NodeType.nd_num,o);
+			newnode=new Node(NodeType.nd_str,o);
+			newnode=new Node(NodeType.nd_num,o);
+			return o;
+		case 2: // "Identical? [card] [card]"
+			o.setData(RuleCase.cond_samecard);
+			newnode=new Node(NodeType.nd_card,o);
+			newnode=new Node(NodeType.nd_card,o);
+			return o;
+		case 3: // "Identical [player] [player]"
+			o.setData(RuleCase.cond_sameplayer);
+			newnode=new Node(NodeType.nd_player,o);
+			newnode=new Node(NodeType.nd_player,o);
+			return o;
+		case 4: // "[string] == [string]"
+			o.setData(RuleCase.cond_samestring);
+			newnode=new Node(NodeType.nd_str,o);
+			newnode=new Node(NodeType.nd_str,o);
+			return o;
+		case 5: // "Typeequal? [card] [card]"
+			o.setData(RuleCase.cond_typeequal);
+			newnode=new Node(NodeType.nd_card,o);
+			newnode=new Node(NodeType.nd_card,o);
+			return o;
+		case 6: // "Type? [string] [card]"
+			o.setData(RuleCase.cond_istype);
+			newnode=new Node(NodeType.nd_str,o);
+			newnode=new Node(NodeType.nd_card,o);
+			return o;
+		case 7: // "[cond] and [cond]"
+			o.setData(RuleCase.cond_and);
+			newnode=new Node(NodeType.nd_cond,o);
+			newnode=new Node(NodeType.nd_cond,o);
+			return o;
+		case 8: // "[cond] or [cond]"
+			o.setData(RuleCase.cond_or);
+			newnode=new Node(NodeType.nd_cond,o);
+			newnode=new Node(NodeType.nd_cond,o);
+			return o;
+		case 9: // "Not [cond]"
+			o.setData(RuleCase.cond_not);
+			newnode=new Node(NodeType.nd_cond,o);
+			return o;
+		case 10: // "Empty? [deck]"
+			o.setData(RuleCase.cond_emptydeck);
+			newnode=new Node(NodeType.nd_deck,o);
+			return o;
+		}
+		if(delete && input==(options.size()-1))
+		{
+			o.set_node_type(NodeType.nd_special_delete);
+			return o;
+		}
+		o.setData(options.get(input));
+		return o;
+	}
+	
+	public Node processOrderSelection(boolean ps, boolean cs, boolean delete)
+	{
+		//// Start: Ask UI for selection
+		
+		// 1. Making Selection Options.
+		ArrayList<String> options = new ArrayList<String>();
+		int loop;
+		for(loop=0;loop<selection_order.length;loop++)
+			options.add(selection_order[loop]);
+		if(delete) options.add("Delete");
+		// 2. Getting an input
+		int input = UI_input_selection((String[])options.toArray());
+		
+		// 3. Making a node
+		Node newnode;
+		Node o=new Node(NodeType.nd_order,null);
+		switch(input)
+		{
+		case -1:
+		case 0:
+			return null;
+		case 1: //"High [num]"
+			o.setData(RuleCase.order_high);
+			newnode=new Node(NodeType.nd_num,o);
+			return o;
+		case 2: //"Low [num]"
+			o.setData(RuleCase.order_low);
+			newnode=new Node(NodeType.nd_num,o);
+			return o;
+		}
+		if(delete && input==(options.size()-1))
+		{
+			o.set_node_type(NodeType.nd_special_delete);
+			return o;
+		}
+		o.setData(options.get(input));
+		return o;
+	}
+	
+	public Node processNumSelection(boolean ps, boolean cs, boolean delete)
+	{
+		//// Start: Ask UI for selection
+		
+		// 1. Making Selection Options.
+		ArrayList<String> options = new ArrayList<String>();
+		int loop;
+		for(loop=0;loop<selection_num.length;loop++)
+			options.add(selection_num[loop]);
+		if (ps)
+			for(loop=0;loop<selection_num_pscope.length;loop++)
+				options.add(selection_num_pscope[loop]);
+		for(loop=0;loop<varList[0][0].length;loop++)
+			options.add(varList[0][0][loop]);
+		if (ps)
+			for(loop=0;loop<varList[1][0].length;loop++)
+				options.add(varList[1][0][loop]);
+		if (cs)
+			for(loop=0;loop<varList[2][0].length;loop++)
+				options.add(varList[2][0][loop]);
+		if(delete) options.add("Delete");
+		// 2. Getting an input
+		int input = UI_input_selection((String[])options.toArray());
+		
+		// 3. Making a node
+		Node newnode;
+		Node o=new Node(NodeType.nd_num,null);
+		switch(input)
+		{
+		case -1:
+		case 0:
+			return null;
+		case 1: // "Insert Integer..."
+			o.setData(Integer.parseInt(UI_input_string()));
+			return o;
+		case 2: // "Size [player]"
+			o.setData(RuleCase.num_size_player);
+			newnode=new Node(NodeType.nd_player,o);
+			return o;
+		case 3: // "Size [deck]"
+			o.setData(RuleCase.num_size_deck);
+			newnode=new Node(NodeType.nd_deck,o);
+			return o;
+		case 4: // "Size [card]"
+			o.setData(RuleCase.num_size_card);
+			newnode=new Node(NodeType.nd_card,o);
+			return o;
+		case 5: // "[num] [operation] [num]"
+			o.setData(RuleCase.num_operation);
+			newnode=new Node(NodeType.nd_num,o);
+			newnode=new Node(NodeType.nd_str,o);
+			newnode=new Node(NodeType.nd_num,o);
+			return o;
+		case 6: // "[player].[num]"
+			o.setData(RuleCase.num_player);
+			newnode=new Node(NodeType.nd_player,o);
+			newnode=new Node(NodeType.nd_num,o);
+			newnode.set_scope_player(true);
+			return o;
+		case 7: // "[card].[num]"
+			o.setData(RuleCase.num_card);
+			newnode=new Node(NodeType.nd_card,o);
+			newnode=new Node(NodeType.nd_num,o);
+			newnode.set_scope_card(true);
+			return o;
+		case 8: // "Call from [num] to [num]"
+			if (ps)
+			{
+				o.setData(RuleCase.num_call);
+				newnode=new Node(NodeType.nd_num,o);
+				newnode=new Node(NodeType.nd_num,o);
+				return o;
+			}
+			break;
+		}
+		if(delete && input==(options.size()-1))
+		{
+			o.set_node_type(NodeType.nd_special_delete);
+			return o;
+		}
+		o.setData(options.get(input));
+		return o;
+	}
+	
+	public Node processStringSelection(boolean ps, boolean cs, boolean delete)
+	{
+		//// Start: Ask UI for selection
+		
+		// 1. Making Selection Options.
+		ArrayList<String> options = new ArrayList<String>();
+		int loop;
+		for(loop=0;loop<selection_str.length;loop++)
+			options.add(selection_str[loop]);
+		if (ps)
+			for(loop=0;loop<selection_str_pscope.length;loop++)
+				options.add(selection_str_pscope[loop]);
+		for(loop=0;loop<varList[0][1].length;loop++)
+			options.add(varList[0][1][loop]);
+		if (ps)
+			for(loop=0;loop<varList[1][1].length;loop++)
+				options.add(varList[1][1][loop]);
+		if (cs)
+			for(loop=0;loop<varList[2][1].length;loop++)
+				options.add(varList[2][1][loop]);
+		if(delete) options.add("Delete");
+		// 2. Getting an input
+		int input = UI_input_selection((String[])options.toArray());
+		
+		// 3. Making a node
+		Node newnode;
+		Node o=new Node(NodeType.nd_str,null);
+		switch(input)
+		{
+		case -1:
+		case 0:
+			return null;
+		case 1: // "Insert String..."
+			o.setData(RuleCase.string_raw);
+			newnode=new Node(null,o);
+			o.setData(UI_input_string());
+			return o;
+		case 2: // "[player].[string]"
+			o.setData(RuleCase.string_player);
+			newnode=new Node(NodeType.nd_player,o);
+			newnode=new Node(NodeType.nd_str,o);
+			newnode.set_scope_player(true);
+			return o;
+		case 3: // "[card].[string]"
+			o.setData(RuleCase.string_card);
+			newnode=new Node(NodeType.nd_card,o);
+			newnode=new Node(NodeType.nd_str,o);
+			newnode.set_scope_card(true);
+			return o;
+		case 4: // "Call from [string]*"
+			if (ps)
+			{
+				o.setData(RuleCase.string_call);
+				return o;
+			}
+			break;
+		}
+		if(delete && input==(options.size()-1))
+		{
+			o.set_node_type(NodeType.nd_special_delete);
+			return o;
+		}
+		o.setData(options.get(input));
+		return o;
+	}
+	
+	
+	public Node processNamedActionSelection(boolean ps, boolean cs, boolean delete)
+	{
+		//// Start: Ask UI for selection
+		
+		// 1. Making Selection Options.
+		ArrayList<String> options = new ArrayList<String>();
+		int loop;
+		for(loop=0;loop<selection_namedAction.length;loop++)
+			options.add(selection_namedAction[loop]);
+		if(delete) options.add("Delete");
+		// 2. Getting an input
+		int input = UI_input_selection((String[])options.toArray());
+		
+		// 3. Making a node
+		Node newnode;
+		Node o=new Node(NodeType.nd_namedAction,null);
+		switch(input)
+		{
+		case -1:
+		case 0:
+			return null;
+		case 1: //"[string]:[action]"
+			o.setData(RuleCase.namedAction_namedAction);
+			newnode=new Node(NodeType.nd_str,o);
+			newnode=new Node(NodeType.nd_action,o);
+			return o;
+		}
+		if(delete && input==(options.size()-1))
+		{
+			o.set_node_type(NodeType.nd_special_delete);
+			return o;
+		}
+		o.setData(options.get(input));
+		return o;
+	}
+
 	// t type에 대한 선택지를 띄워주고 플레이어에게 선택을 받은 후 적절한 node를 만들어 리턴해주는 함수. 취소시 null.
 	public Node processSelection(NodeType t, boolean ps, boolean cs, boolean delete)
 	{
@@ -302,19 +743,19 @@ public class RuleManager {
 		case nd_player:
 			return processPlayerSelection(ps, cs, delete);
 		case nd_deck:
-			return process_Selection(ps, cs, delete);
+			return processDeckSelection(ps, cs, delete);
 		case nd_card:
-			return process_Selection(ps, cs, delete);
+			return processCardSelection(ps, cs, delete);
 		case nd_cond:
-			return process_Selection(ps, cs, delete);
+			return processCondSelection(ps, cs, delete);
 		case nd_order:
-			return process_Selection(ps, cs, delete);
+			return processOrderSelection(ps, cs, delete);
 		case nd_num:
-			return process_Selection(ps, cs, delete);
+			return processNumSelection(ps, cs, delete);
 		case nd_str:
-			return process_Selection(ps, cs, delete);
+			return processStringSelection(ps, cs, delete);
 		case nd_namedAction:
-			return process_Selection(ps, cs, delete);
+			return processNamedActionSelection(ps, cs, delete);
 		}
 		System.err.println("processSelection: Invalid node type.");
 		return null;
