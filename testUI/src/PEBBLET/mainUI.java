@@ -256,7 +256,7 @@ public class mainUI extends JFrame{
 	
 	public static void addbox(JComponent comp){
 		JPanel box = new JPanel(false);
-		BoxLayout boxlayout = new BoxLayout(box, BoxLayout.PAGE_AXIS);
+		BoxLayout boxlayout = new BoxLayout(box, BoxLayout.X_AXIS);
 		
 		box.setLayout(boxlayout);
 		box.add(Box.createRigidArea(new Dimension(20, 20)));
