@@ -282,7 +282,7 @@ public class mainUI extends JFrame{
 //		return inputbox;
 		
 		custominputbox input = new custominputbox(comp);
-		////adding root index
+		////adding root index***********************************/
 //		input.set_index();
 		
 		
