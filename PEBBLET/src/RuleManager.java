@@ -39,7 +39,7 @@ public class RuleManager {
 	
 	
 	private Rule rule;
-	private String[][][] varList;
+	private static String[][][] varList;
 	
 	public Node search(int[] location)
 	{
@@ -61,7 +61,7 @@ public class RuleManager {
 		varList=dm.getDefinition().getVariableList();
 	}
 	
-	private class NodeTypewithScope
+	private static class NodeTypewithScope
 	{
 		public NodeType nt;
 		public boolean player_scope;
@@ -75,7 +75,7 @@ public class RuleManager {
 		}
 	}
 	
-	public NodeTypewithScope type_multiple_allowed(RuleCase rc)
+	public static NodeTypewithScope type_multiple_allowed(RuleCase rc)
 	{
 		switch(rc)
 		{
@@ -99,7 +99,7 @@ public class RuleManager {
 		}
 	}
 	
-	public Node processActionSelection(boolean ps, boolean cs, boolean delete)
+	public static Node processActionSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -208,7 +208,7 @@ public class RuleManager {
 		return o;
 	}
 	
-	public Node processPlayerSelection(boolean ps, boolean cs, boolean delete)
+	public static Node processPlayerSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -306,7 +306,7 @@ public class RuleManager {
 		return o;
 	}
 	
-	public Node processDeckSelection(boolean ps, boolean cs, boolean delete)
+	public static Node processDeckSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -361,7 +361,7 @@ public class RuleManager {
 		return o;
 	}
 	
-	public Node processCardSelection(boolean ps, boolean cs, boolean delete)
+	public static Node processCardSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -426,7 +426,7 @@ public class RuleManager {
 	}
 	
 	
-	public Node processCondSelection(boolean ps, boolean cs, boolean delete)
+	public static Node processCondSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -506,7 +506,7 @@ public class RuleManager {
 		return o;
 	}
 	
-	public Node processOrderSelection(boolean ps, boolean cs, boolean delete)
+	public static Node processOrderSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -545,7 +545,7 @@ public class RuleManager {
 		return o;
 	}
 	
-	public Node processNumSelection(boolean ps, boolean cs, boolean delete)
+	public static Node processNumSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -629,7 +629,7 @@ public class RuleManager {
 		return o;
 	}
 	
-	public Node processStringSelection(boolean ps, boolean cs, boolean delete)
+	public static Node processStringSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -696,7 +696,7 @@ public class RuleManager {
 	}
 	
 	
-	public Node processNamedActionSelection(boolean ps, boolean cs, boolean delete)
+	public static Node processNamedActionSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -733,7 +733,7 @@ public class RuleManager {
 	}
 
 	// t type에 대한 선택지를 띄워주고 플레이어에게 선택을 받은 후 적절한 node를 만들어 리턴해주는 함수. 취소시 null.
-	public Node processSelection(NodeType t, boolean ps, boolean cs, boolean delete)
+	public static Node processSelection(NodeType t, boolean ps, boolean cs, boolean delete)
 	{
 		// TODO
 		switch(t)
@@ -769,6 +769,11 @@ public class RuleManager {
 		for(loop=0;loop<location_parent.length-1;loop++)
 			location_parent[loop]=location[loop];
 		Node n=search(location_parent);
+		fillupSelection(n,last_location,isName);
+	}
+	
+	public static void fillupSelection(Node n, int last_location, boolean isName)
+	{
 		Node child;
 		Node o;
 		NodeTypewithScope nts;
