@@ -256,25 +256,28 @@ public class mainUI extends JFrame{
 		
 	}
 	
-	public static JPanel addbox(JComponent comp, int x, int y){
-		JPanel inputbox = new JPanel();
-		JTextField detail = new JTextField();
-		JComboBox<String> name = new JComboBox<String>();
-		inputbox.setLayout(null);
-		name.setBounds(5,5,100,20);
-		inputbox.add(name);
-		detail.setBounds(110,5,80,20);
-		inputbox.add(detail);
-		name.addItem("text1");
-		name.addItem("test2");
+	public static custominputbox addbox(JComponent comp, int x, int y){
+//		JPanel inputbox = new JPanel();
+//		JTextField detail = new JTextField();
+//		JComboBox<String> name = new JComboBox<String>();
+//		inputbox.setLayout(null);
+//		name.setBounds(5,5,100,20);
+//		inputbox.add(name);
+//		detail.setBounds(110,5,80,20);
+//		inputbox.add(detail);
+//		name.addItem("text1");
+//		name.addItem("test2");
+//		
+//		comp.setLayout(null);
+//		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+//        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+//        inputbox.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
+//        inputbox.setBounds(x, y, 200, 30);
+//		comp.add(inputbox);
+//		return inputbox;
 		
-		comp.setLayout(null);
-		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-        inputbox.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
-        inputbox.setBounds(x, y, 200, 30);
-		comp.add(inputbox);
-		return inputbox;
+		custominputbox input = new custominputbox(comp, x, y);
+		return input;
 	}
 //	public static custominputbox addbox(JComponent comp, int x, int y){
 //		custominputbox box = new custominputbox();
@@ -313,7 +316,9 @@ public class mainUI extends JFrame{
 				JComponent comp = tpane.makeTextPanel("");
 				JComponent debug = tpane.makeTextPanel(""); 				
 				
-				addbox(def,10,10);
+				custominputbox input = addbox(def,10,10);
+				input.additem(input, "text1");
+				input.additem(input, "text2");
 				
 //				JTextField mainbox = addbox(def,0,0);
 //				addsubbox(def, mainbox);
