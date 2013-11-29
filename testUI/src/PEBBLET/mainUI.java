@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.Container;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -40,8 +41,12 @@ import sun.util.EmptyListResourceBundle;
 
 
 public class mainUI extends JFrame{
-	public mainUI(){
-		
+	
+	private static ArrayList<int[]> def_box_position = new ArrayList<int[]>();
+	private static ArrayList<custominputbox> def_box = new ArrayList<custominputbox>();
+	private static Integer def_root_index = 0;
+	
+	public mainUI(){		
 //		
 //		JFrame frame = new JFrame("Menu");
 		
@@ -256,7 +261,7 @@ public class mainUI extends JFrame{
 		
 	}
 	
-	public static custominputbox addbox(JComponent comp, int x, int y){
+	public static void addbox(JComponent comp, int x, int y){
 //		JPanel inputbox = new JPanel();
 //		JTextField detail = new JTextField();
 //		JComboBox<String> name = new JComboBox<String>();
@@ -276,29 +281,66 @@ public class mainUI extends JFrame{
 //		comp.add(inputbox);
 //		return inputbox;
 		
-		custominputbox input = new custominputbox(comp, x, y);
-		return input;
+		custominputbox input = new custominputbox(comp);
+		////adding root index
+//		input.set_index();
+		
+		
+//		input.addtoPanel(comp, x, y);		
+		int[] position = {x,y};
+		def_box_position.add(position);
+		def_box.add(input);
+		
+//		return input;
 	}
-//	public static custominputbox addbox(JComponent comp, int x, int y){
-//		custominputbox box = new custominputbox();
-//		comp.setLayout(null); 
-//		
-//		box.setLocation(x, y);
-//		
-//        comp.add(box);
-//		
-//		return box;
-//	}
+
 	
-	public static void addsubbox(JComponent comp, JTextField main){
-		JTextField subbox = new JTextField();
-		comp.setLayout(null);
-		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-        subbox.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
-        subbox.setBounds(main.getBounds().x+10, main.getBounds().y+25, 40, 20);
-		comp.add(subbox);
+	public static void addsubbox(JComponent comp, custominputbox target){
+//		JTextField subbox = new JTextField();
+//		comp.setLayout(null);
+//		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+//        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+//        subbox.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
+//        subbox.setBounds(main.getBounds().x+10, main.getBounds().y+25, 40, 20);
+//		comp.add(subbox);
+		
+//		main.increase_level();
+//		int level = main.get_level();
+		
+		custominputbox subinput = new custominputbox(comp);
+//		subinput.addtoPanel(comp, main.getX() + 30, main.getY() + 35*level +10);
+//		subinput.set_parent(main);
+//		main.setlastchild(subinput);
+		
+		//index setting
+		ArrayList<Integer> subinput_index = new ArrayList<Integer>(target.get_index());
+		subinput_index.add(target.get_child_index_no()-1);
+		subinput.set_index(subinput_index);
+		System.out.println(subinput.get_index().toString());
+		
+		subinput.set_level(target.get_level());
+		subinput.increase_level();
+		int target_index = def_box.indexOf(target);
+		int[] position = {target.getX()+30*(subinput.get_level()), target.getY()+35*(target_index+1) +10};
+		def_box_position.add(target_index+1, position);
+		for(int i = target_index+2 ; i<def_box_position.size();i++){
+			def_box_position.get(i)[1]+=35;
+		}
+		def_box.add(target_index+1, subinput);
+		
+//		return subinput;
         
+	}
+	
+	public static void update_panel(JComponent comp){
+		int i = 0;
+		while(i<def_box_position.size()){
+			custominputbox box = def_box.get(i);
+			int x = def_box_position.get(i)[0];
+			int y = def_box_position.get(i)[1];
+			box.addtoPanel(comp, x, y);
+			i++;
+		}
 	}
 	
 	public static void main(String[] args){
@@ -316,9 +358,9 @@ public class mainUI extends JFrame{
 				JComponent comp = tpane.makeTextPanel("");
 				JComponent debug = tpane.makeTextPanel(""); 				
 				
-				custominputbox input = addbox(def,10,10);
-				input.additem(input, "text1");
-				input.additem(input, "text2");
+				addbox(def,10,10);
+
+				update_panel(def);
 				
 //				JTextField mainbox = addbox(def,0,0);
 //				addsubbox(def, mainbox);
