@@ -51,12 +51,12 @@ public class AreaRange {
 	public Position nextRight()
 	{
 		if (sx==ex && sy==ey) return getStart();
-		return new Position(ex+NodeDisplayer.xspace,sy);
+		return new Position(ex+NodeDisplayer.xdist,sy);
 	}
 	public Position nextBottom()
 	{
 		if (sx==ex && sy==ey) return getStart();
-		return new Position(sx,ey+NodeDisplayer.yspace);
+		return new Position(sx,ey+NodeDisplayer.ydist);
 	}
 	public Position getStart()
 	{

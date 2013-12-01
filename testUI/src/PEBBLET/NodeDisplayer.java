@@ -70,6 +70,8 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 	public static int xspace=4;
 	public static int xtab=50;
 	public static int yspace=4;
+	public static int xdist=8;
+	public static int ydist=8;
 	public static int yline=10;
 	public static int xchar=8;
 	//////////////////////////////////////////////////////////

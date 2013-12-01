@@ -242,6 +242,8 @@ public class RuleManager {
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_player,null);
+		o.set_scope_player(ps);
+		o.set_scope_card(cs);
 		switch(input)
 		{
 		case -1:
@@ -340,6 +342,8 @@ public class RuleManager {
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_deck,null);
+		o.set_scope_player(ps);
+		o.set_scope_card(cs);
 		switch(input)
 		{
 		case -1:
@@ -387,6 +391,8 @@ public class RuleManager {
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_card,null);
+		o.set_scope_player(ps);
+		o.set_scope_card(cs);
 		switch(input)
 		{
 		case -1:
@@ -449,6 +455,8 @@ public class RuleManager {
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_cond,null);
+		o.set_scope_player(ps);
+		o.set_scope_card(cs);
 		switch(input)
 		{
 		case -1:
@@ -529,6 +537,8 @@ public class RuleManager {
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_order,null);
+		o.set_scope_player(ps);
+		o.set_scope_card(cs);
 		switch(input)
 		{
 		case -1:
@@ -579,6 +589,8 @@ public class RuleManager {
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_num,null);
+		o.set_scope_player(ps);
+		o.set_scope_card(cs);
 		switch(input)
 		{
 		case -1:
@@ -664,6 +676,8 @@ public class RuleManager {
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_str,null);
+		o.set_scope_player(ps);
+		o.set_scope_card(cs);
 		switch(input)
 		{
 		case -1:
@@ -720,6 +734,8 @@ public class RuleManager {
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_namedAction,null);
+		o.set_scope_player(ps);
+		o.set_scope_card(cs);
 		switch(input)
 		{
 		case -1:
