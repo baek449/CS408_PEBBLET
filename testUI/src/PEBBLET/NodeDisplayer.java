@@ -1,5 +1,6 @@
 package PEBBLET;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,7 +8,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Vector;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -16,12 +19,49 @@ import javax.swing.JTextField;
 import manager.Node;
 
 public abstract class NodeDisplayer extends JComponent implements MouseListener{
+	public class WideComboBox<E> extends JComboBox<E>{ 
+		 
+	    public WideComboBox() { 
+	    } 
+	 
+	    public WideComboBox(final E items[]){ 
+	        super(items); 
+	    } 
+	 
+	    public WideComboBox(Vector<E> items) { 
+	        super(items); 
+	    } 
+	 
+	    public WideComboBox(ComboBoxModel<E> aModel) { 
+	        super(aModel); 
+	    } 
+	 
+	    private boolean layingOut = false; 
+	 
+	    public void doLayout(){ 
+	        try{ 
+	            layingOut = true; 
+	            super.doLayout(); 
+	        }finally{ 
+	            layingOut = false; 
+	        } 
+	    } 
+	 
+	    public Dimension getSize(){ 
+	        Dimension dim = super.getSize(); 
+	        if(!layingOut) 
+	            dim.width = Math.max(dim.width, getPreferredSize().width); 
+	        return dim; 
+	    } 
+	}
+	
+	
 	private Graphics g_;
 	private JTextField input_string;
 	private String textfield_pool;
 	private int selection_pool;
 	private String textfield_original;
-	private JComboBox<String> input_selection;
+	private WideComboBox<String> input_selection;
 
 	// 표시할 목표 노드
 	private Node target;
@@ -93,7 +133,7 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 	public NodeDisplayer()
 	{
 		input_string=new JTextField();
-		input_selection=new JComboBox<String>();
+		input_selection=new WideComboBox<String>();
 		this.setLayout(null);
 		this.add(input_string);
 		this.add(input_selection);
@@ -384,14 +424,14 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 	}
 	
 	//// 해당 index부터 child 그리기 : Higher Level
-	public AreaRange def_vertical_draw(Node n, Position p, int childstartIndex)
+	public AreaRange draw_vertical(Node n, Position p, int childstartIndex)
 	{
 		AreaRange a=new AreaRange(p,p,true);
 		for(int loop=childstartIndex;loop<n.numChildren();loop++)
 			a=draw_bottom(a,n.getChildNode(loop));
 		return a;
 	}
-	public AreaRange def_horizontal_draw(Node n, Position p, int childstartIndex)
+	public AreaRange draw_horizontal(Node n, Position p, int childstartIndex)
 	{
 		AreaRange a=new AreaRange(p,p,true);
 		for(int loop=childstartIndex;loop<n.numChildren();loop++)

@@ -44,7 +44,12 @@ public class Node implements Serializable{
 		node_type=node_type_;
 		parent=parent_;
 		children=new ArrayList<Node>();
-		if (parent_!=null) parent_.addChildNode(this);
+		if (parent_!=null)
+		{
+			parent_.addChildNode(this);
+			scope_player=parent.scope_player;
+			scope_card=parent.scope_card;
+		}
 	}
 	
 	

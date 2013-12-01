@@ -4,6 +4,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import PEBBLET.AreaRange;
+import PEBBLET.DefinitionDisplayer;
+import PEBBLET.RuleDisplayer;
 import oracle.jrockit.jfr.Options;
 
 
@@ -41,6 +44,7 @@ public class RuleManager {
 	
 	private Rule rule;
 	private String[][][] varList;
+	private static RuleDisplayer m;
 	
 	public Node search(int[] location)
 	{
@@ -117,11 +121,13 @@ public class RuleManager {
 				options.add(varList[2][4][loop]);
 		if (delete) options.add("Delete");
 		// 2. Getting an input
-		int input = UI_input_selection((String[])options.toArray());
+		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
 		
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_action,null);
+		o.set_scope_player(ps);
+		o.set_scope_card(cs);
 		switch(input)
 		{
 		case -1:
@@ -137,7 +143,7 @@ public class RuleManager {
 			return o;
 		case 3: // Load [file] to [deck]"
 			o.setData(RuleCase.action_load);
-			newnode=new Node(NodeType.nd_str,o);
+			newnode=new Node(NodeType.nd_raw,o);
 			newnode=new Node(NodeType.nd_deck,o);
 			return o;
 		case 4:	// "Shuffle [deck]"
@@ -231,7 +237,7 @@ public class RuleManager {
 				options.add(varList[2][3][loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = UI_input_selection((String[])options.toArray());
+		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
 		
 		// 3. Making a node
 		Node newnode;
@@ -329,7 +335,7 @@ public class RuleManager {
 				options.add(varList[2][2][loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = UI_input_selection((String[])options.toArray());
+		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
 		
 		// 3. Making a node
 		Node newnode;
@@ -376,7 +382,7 @@ public class RuleManager {
 				options.add(selection_card_pscope[loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = UI_input_selection((String[])options.toArray());
+		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
 		
 		// 3. Making a node
 		Node newnode;
@@ -438,7 +444,7 @@ public class RuleManager {
 			options.add(selection_cond[loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = UI_input_selection((String[])options.toArray());
+		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
 		
 		// 3. Making a node
 		Node newnode;
@@ -451,7 +457,7 @@ public class RuleManager {
 		case 1: // "[num] [operation] [num]"
 			o.setData(RuleCase.cond_numcompare);
 			newnode=new Node(NodeType.nd_num,o);
-			newnode=new Node(NodeType.nd_str,o);
+			newnode=new Node(NodeType.nd_raw,o);
 			newnode=new Node(NodeType.nd_num,o);
 			return o;
 		case 2: // "Identical? [card] [card]"
@@ -476,7 +482,7 @@ public class RuleManager {
 			return o;
 		case 6: // "Type? [string] [card]"
 			o.setData(RuleCase.cond_istype);
-			newnode=new Node(NodeType.nd_str,o);
+			newnode=new Node(NodeType.nd_raw,o);
 			newnode=new Node(NodeType.nd_card,o);
 			return o;
 		case 7: // "[cond] and [cond]"
@@ -518,7 +524,7 @@ public class RuleManager {
 			options.add(selection_order[loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = UI_input_selection((String[])options.toArray());
+		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
 		
 		// 3. Making a node
 		Node newnode;
@@ -568,7 +574,7 @@ public class RuleManager {
 				options.add(varList[2][0][loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = UI_input_selection((String[])options.toArray());
+		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
 		
 		// 3. Making a node
 		Node newnode;
@@ -579,7 +585,8 @@ public class RuleManager {
 		case 0:
 			return null;
 		case 1: // "Insert Integer..."
-			o.setData(Integer.parseInt(UI_input_string()));
+			o.setData(RuleCase.num_raw);
+			newnode=new Node(NodeType.nd_raw,o);
 			return o;
 		case 2: // "Size [player]"
 			o.setData(RuleCase.num_size_player);
@@ -596,7 +603,7 @@ public class RuleManager {
 		case 5: // "[num] [operation] [num]"
 			o.setData(RuleCase.num_operation);
 			newnode=new Node(NodeType.nd_num,o);
-			newnode=new Node(NodeType.nd_str,o);
+			newnode=new Node(NodeType.nd_raw,o);
 			newnode=new Node(NodeType.nd_num,o);
 			return o;
 		case 6: // "[player].[num]"
@@ -652,7 +659,7 @@ public class RuleManager {
 				options.add(varList[2][1][loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = UI_input_selection((String[])options.toArray());
+		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
 		
 		// 3. Making a node
 		Node newnode;
@@ -664,8 +671,8 @@ public class RuleManager {
 			return null;
 		case 1: // "Insert String..."
 			o.setData(RuleCase.string_raw);
-			newnode=new Node(null,o);
-			o.setData(UI_input_string());
+			newnode=new Node(NodeType.nd_raw,o);
+			o.setData("input");
 			return o;
 		case 2: // "[player].[string]"
 			o.setData(RuleCase.string_player);
@@ -708,7 +715,7 @@ public class RuleManager {
 			options.add(selection_namedAction[loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = UI_input_selection((String[])options.toArray());
+		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
 		
 		// 3. Making a node
 		Node newnode;
@@ -720,7 +727,7 @@ public class RuleManager {
 			return null;
 		case 1: //"[string]:[action]"
 			o.setData(RuleCase.namedAction_namedAction);
-			newnode=new Node(NodeType.nd_str,o);
+			newnode=new Node(NodeType.nd_raw,o);
 			newnode=new Node(NodeType.nd_action,o);
 			return o;
 		}
@@ -762,6 +769,7 @@ public class RuleManager {
 		return null;
 	}
 	
+	AreaRange ar;
 	public void fillupSelection(int[] location, boolean isName)
 	{
 		int[] location_parent = new int[location.length-1];
@@ -770,13 +778,17 @@ public class RuleManager {
 		for(loop=0;loop<location_parent.length-1;loop++)
 			location_parent[loop]=location[loop];
 		Node n=search(location_parent);
+		fillupSelection(n,last_location,isName);
+	}
+	public void fillupSelection(Node n, int last_location, boolean isName)
+	{
 		Node child;
 		Node o;
 		NodeTypewithScope nts;
-		
 		if(n.getData().getClass()!=RuleCase.class)
 		{
 			child=n.getChildNode(last_location);
+			ar=child.ar_current;
 			o=processSelection(NodeType.nd_action,n.get_scope_player(), n.get_scope_card(), false);
 			if(o!=null) 
 				n.setChildNode(last_location,o);
@@ -785,9 +797,11 @@ public class RuleManager {
 		
 		nts=type_multiple_allowed((RuleCase)n.getData());
 		
-		if(n.numChildren()>=last_location) // ...生稽 持失
+		if(n.numChildren()<=last_location) // ...生稽 持失
 		{
+			System.out.println(""+n.numChildren()+last_location);
 			// Start: Ask UI for selection
+			ar=n.ar_etc;
 			o=processSelection(nts.nt,n.get_scope_player() || nts.player_scope, n.get_scope_card() || nts.card_scope,false);
 			// End
 			if(o!=null) 
@@ -796,6 +810,15 @@ public class RuleManager {
 		}
 		
 		child=n.getChildNode(last_location);
+		if(child.get_node_type()==NodeType.nd_raw) // Raw Data
+		{
+			String s="0";
+			if(child.getData()!=null) s=child.getData().toString();
+			child.setData(m.UI_input_string(child.ar_name,s));
+			return;
+
+		}
+		ar=child.ar_current;
 		if(nts==null)
 			o=processSelection(child.get_node_type(),child.get_scope_player(),child.get_scope_card(),false);
 		else
@@ -807,6 +830,7 @@ public class RuleManager {
 			else
 				n.setChildNode(last_location,o);
 		}
+		m.repaint();
 	}
 	
 	public Rule getRule()
@@ -839,5 +863,9 @@ public class RuleManager {
 			// TODO Auto-generated catch block
 			return false;
 		}
+	}
+	public void setUI(RuleDisplayer m_)
+	{
+		m=m_;
 	}
 }

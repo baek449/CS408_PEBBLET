@@ -34,7 +34,7 @@ public class DefinitionDisplayer extends NodeDisplayer{
 		if(n.getParent()==null) // Root
 		{
 			// Draw root's children
-			a= def_vertical_draw(n,p_,0);
+			a= draw_vertical(n,p_,0);
 			return enclose(n,a,false).getEnd();
 		}
 		if(n.get_node_type()==null) // Leaf
@@ -49,7 +49,7 @@ public class DefinitionDisplayer extends NodeDisplayer{
 		{
 		case nd_def_global: // Parent of global variables
 			a=draw_bottom_text(a,"Global {");
-			b=def_vertical_draw(n, a.nextBottom().addTab(), 0); // draw all variable nodes
+			b=draw_vertical(n, a.nextBottom().addTab(), 0); // draw all variable nodes
 			b=draw_etc_bottom(n,b);
 			a=a.merge(b);
 			a=draw_bottom_text(a,"}");
@@ -57,7 +57,7 @@ public class DefinitionDisplayer extends NodeDisplayer{
 			return a.getEnd();
 		case nd_def_player:
 			a=draw_bottom_text(a,"Player {");
-			b=def_vertical_draw(n, a.nextBottom().addTab(), 0); // draw all variable nodes
+			b=draw_vertical(n, a.nextBottom().addTab(), 0); // draw all variable nodes
 			b=draw_etc_bottom(n,b);
 			a=a.merge(b);
 			a=draw_bottom_text(a,"}");
@@ -65,7 +65,7 @@ public class DefinitionDisplayer extends NodeDisplayer{
 			return a.getEnd();
 		case nd_def_card:
 			// Draw card list
-			a=def_vertical_draw(n, p_, 0); // draw all card nodes
+			a=draw_vertical(n, p_, 0); // draw all card nodes
 			a=draw_etc_bottom(n,a);
 			a=enclose(n, a, false);
 			return a.getEnd();
@@ -74,7 +74,7 @@ public class DefinitionDisplayer extends NodeDisplayer{
 			a=draw_right_text(a,"Card ");
 			a=draw_name_right(n,a);
 			a=draw_right_text(a,"{ ");
-			b=def_vertical_draw(n, a.nextBottom().addTab(), 0);
+			b=draw_vertical(n, a.nextBottom().addTab(), 0);
 			b=draw_etc_bottom(n,b);
 			a=a.merge(b);
 			a=draw_bottom_text(a,"}");
@@ -90,7 +90,7 @@ public class DefinitionDisplayer extends NodeDisplayer{
 			else
 				a=draw_right_text(a,"# of Players");
 			a=draw_right_text(a,"  :");
-			b=def_horizontal_draw(n, new AreaRange(a).nextRight(), 0);
+			b=draw_horizontal(n, new AreaRange(a).nextRight(), 0);
 			if(b_) b=draw_etc_right(n,b);
 			a=a.merge(b);
 			a=enclose(n, a, b_);
@@ -99,7 +99,7 @@ public class DefinitionDisplayer extends NodeDisplayer{
 			a=draw_right_text(a,"String ");
 			a=draw_name_right(n,a);
 			a=draw_right_text(a,"  :");
-			b=def_horizontal_draw(n, new AreaRange(a).nextRight(), 0);
+			b=draw_horizontal(n, new AreaRange(a).nextRight(), 0);
 			b=draw_etc_right(n,b);
 			a=a.merge(b);
 			a=enclose(n, a, true);

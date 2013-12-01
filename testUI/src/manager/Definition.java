@@ -55,10 +55,10 @@ public class Definition implements Serializable{
 				break;
 			}
 		}
-		result[0][0]=(String[])int_var.toArray();
-		result[0][1]=(String[])str_var.toArray();
-		result[0][2]=(String[])deck_var.toArray();
-		result[0][3]=(String[])player_var.toArray();
+		result[0][0]=int_var.toArray(new String[int_var.size()]);
+		result[0][1]=str_var.toArray(new String[str_var.size()]);
+		result[0][2]=deck_var.toArray(new String[deck_var.size()]);
+		result[0][3]=player_var.toArray(new String[player_var.size()]);
 		result[0][4]=new String[0];
 
 		// Player
@@ -85,10 +85,10 @@ public class Definition implements Serializable{
 				break;
 			}
 		}
-		result[1][0]=(String[])int_var.toArray();
-		result[1][1]=(String[])str_var.toArray();
-		result[1][2]=(String[])deck_var.toArray();
-		result[1][3]=(String[])player_var.toArray();
+		result[1][0]=int_var.toArray(new String[int_var.size()]);
+		result[1][1]=str_var.toArray(new String[str_var.size()]);
+		result[1][2]=deck_var.toArray(new String[deck_var.size()]);
+		result[1][3]=player_var.toArray(new String[player_var.size()]);
 		result[1][4]=new String[0];
 
 		// Card
@@ -118,11 +118,11 @@ public class Definition implements Serializable{
 				}
 			}
 		}
-		result[2][0]=(String[])int_var.toArray();
-		result[2][1]=(String[])str_var.toArray();
+		result[2][0]=int_var.toArray(new String[int_var.size()]);
+		result[2][1]=str_var.toArray(new String[str_var.size()]);
 		result[2][2]=new String[0];
 		result[2][3]=new String[0];
-		result[2][4]=(String[])action_var.toArray();
+		result[2][4]=action_var.toArray(new String[action_var.size()]);
 
 		
 		return result;

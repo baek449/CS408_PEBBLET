@@ -36,7 +36,9 @@ import manager.Definition;
 import manager.DefinitionManager;
 import manager.Node;
 import manager.NodeType;
+import manager.Rule;
 import manager.RuleCase;
+import manager.RuleManager;
 import sun.util.EmptyListResourceBundle;
 //import javax.swing.UIManager;
 
@@ -404,8 +406,6 @@ public class mainUI extends JFrame{
 				Node card_trump_num=new Node(NodeType.nd_num,card_trump);
 				card_trump_num.setData("num");
 				
-				Definition sample_def=new Definition();
-				sample_def.setRoot(def_root);
 				
 				//// 규칙
 				Node rul_root = new Node(null, null);
@@ -416,10 +416,8 @@ public class mainUI extends JFrame{
 				// 카드 불러오기
 				Node act_1_load = new Node(NodeType.nd_action, act_multiple);
 				act_1_load.setData(RuleCase.action_load);
-				Node file_1_1 = new Node(NodeType.nd_str, act_1_load);
-				file_1_1.setData(RuleCase.string_raw);
-				Node file_1_1_1 = new Node(null,file_1_1);
-				file_1_1_1.setData("file");
+				Node file_1_1 = new Node(NodeType.nd_raw,act_1_load);
+				file_1_1.setData("file");
 				Node deck_1_2 = new Node(NodeType.nd_deck, act_1_load);
 				deck_1_2.setData("center");
 				
@@ -436,13 +434,16 @@ public class mainUI extends JFrame{
 				Node player_3_1=new Node(NodeType.nd_player, act_3_perplayer);
 				player_3_1.setData(RuleCase.player_all);
 				Node act_3_2=new Node(NodeType.nd_action, act_3_perplayer);
+				act_3_2.set_scope_player(true);
 				act_3_2.setData(RuleCase.action_move);
 				// top카드
 				Node card_3_2_1=new Node(NodeType.nd_card, act_3_2);
 				card_3_2_1.setData(RuleCase.card_top);
 				// 숫자 2
 				Node num_3_2_1_1=new Node(NodeType.nd_num, card_3_2_1);
-				num_3_2_1_1.setData(2);
+				num_3_2_1_1.setData(RuleCase.num_raw);
+				Node num_3_2_1_1_1=new Node(NodeType.nd_raw, num_3_2_1_1);
+				num_3_2_1_1_1.setData(2);
 				// center 덱
 				Node deck_3_2_1_2=new Node(NodeType.nd_deck, card_3_2_1);
 				deck_3_2_1_2.setData("center");
@@ -451,12 +452,20 @@ public class mainUI extends JFrame{
 				deck_3_2_2.setData("hand");
 				
 				
+				Definition sample_def=new Definition();
+				sample_def.setRoot(def_root);
 				DefinitionManager dm = new DefinitionManager();
 				dm.setDefinition(sample_def);
+				Rule sample_rul=new Rule();
+				sample_rul.setRoot(rul_root);
+				RuleManager rm = new RuleManager();
+				rm.setRule(sample_rul);
+				rm.updateVariableList(dm);
 
 				////////////////////////// TODO: End
 				
-				DefinitionDisplayer test = new DefinitionDisplayer(dm);
+				DefinitionDisplayer test_def = new DefinitionDisplayer(dm);
+				RuleDisplayer test_rul = new RuleDisplayer(rm);
 				
 				
 				
@@ -468,8 +477,8 @@ public class mainUI extends JFrame{
 //				JTextField mainbox = addbox(def,0,0);
 //				addsubbox(def, mainbox);
 				
-				pane.addTab("Definition", null, test, "make definition");
-				pane.addTab("Rule", null, rule, "make rule");
+				pane.addTab("Definition", null, test_def, "make definition");
+				pane.addTab("Rule", null, test_rul, "make rule");
 				pane.addTab("Component", null, comp, "make component");
 				pane.addTab("Debugging", null, debug, "start debugging");
 				
