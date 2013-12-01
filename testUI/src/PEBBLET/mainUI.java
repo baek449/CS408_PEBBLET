@@ -456,7 +456,7 @@ public class mainUI extends JFrame{
 
 				////////////////////////// TODO: End
 				
-				MyCanvas test = new MyCanvas(dm);
+				DefinitionDisplayer test = new DefinitionDisplayer(dm);
 				
 				
 				

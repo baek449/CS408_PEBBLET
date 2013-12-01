@@ -3,8 +3,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import PEBBLET.AreaRange;
-import PEBBLET.MyCanvas;
-import PEBBLET.Position;
 
 public class Node implements Serializable{
 	private NodeType node_type;
@@ -111,16 +109,9 @@ public class Node implements Serializable{
 	}
 	
 	
-	
-	
 	//// For UI
 	public AreaRange ar_current;
 	public AreaRange ar_name;
 	public AreaRange ar_etc;
-	public static int xspace=4;
-	public static int xtab=50;
-	public static int yspace=4;
-	public static int yline=10;
-	public static int xchar=8;
 
 }

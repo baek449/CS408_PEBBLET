@@ -1,7 +1,5 @@
 package PEBBLET;
 
-import manager.Node;
-
 public class Position {
 	public int x;
 	public int y;
@@ -16,15 +14,15 @@ public class Position {
 	}
 	public Position addSpace()
 	{
-		return new Position(x+Node.xspace,y+Node.yspace);
+		return new Position(x+NodeDisplayer.xspace,y+NodeDisplayer.yspace);
 	}
 	public Position addLine()
 	{
-		return new Position(x,y+Node.yline);
+		return new Position(x,y+NodeDisplayer.yline);
 	}
 	public Position addTab()
 	{
-		return new Position(x+Node.xtab,y);
+		return new Position(x+NodeDisplayer.xtab,y);
 	}
 	public Position add(Position p)
 	{

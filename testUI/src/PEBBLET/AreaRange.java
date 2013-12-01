@@ -1,7 +1,5 @@
 package PEBBLET;
 
-import manager.Node;
-
 public class AreaRange {
 	public int sx;
 	public int sy;
@@ -53,12 +51,12 @@ public class AreaRange {
 	public Position nextRight()
 	{
 		if (sx==ex && sy==ey) return getStart();
-		return new Position(ex+Node.xspace,sy);
+		return new Position(ex+NodeDisplayer.xspace,sy);
 	}
 	public Position nextBottom()
 	{
 		if (sx==ex && sy==ey) return getStart();
-		return new Position(sx,ey+Node.yspace);
+		return new Position(sx,ey+NodeDisplayer.yspace);
 	}
 	public Position getStart()
 	{
@@ -70,10 +68,10 @@ public class AreaRange {
 	}
 	public void enclose()
 	{
-		sx-=Node.xspace;
-		sy-=Node.yspace;
-		ex+=Node.xspace;
-		ey+=Node.yspace;
+		sx-=NodeDisplayer.xspace;
+		sy-=NodeDisplayer.yspace;
+		ex+=NodeDisplayer.xspace;
+		ey+=NodeDisplayer.yspace;
 	}
 	public AreaRange merge(AreaRange a)
 	{
