@@ -2,6 +2,10 @@ package manager;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import PEBBLET.AreaRange;
+import PEBBLET.MyCanvas;
+import PEBBLET.Position;
+
 public class Node implements Serializable{
 	private NodeType node_type;
 	private Object data;
@@ -65,9 +69,10 @@ public class Node implements Serializable{
 	}
 	public void setParent(Node parent_)
 	{
-		parent.deleteChildNode(this);
+		if(parent.equals(parent_)) return;
+		if(parent!=null) parent.deleteChildNode(this);
 		parent=parent_;
-		parent.addChildNode(this);	
+		if(parent!=null) parent.addChildNode(this);	
 	}
 	public ArrayList<Node> getAllNode()
 	{
@@ -80,6 +85,7 @@ public class Node implements Serializable{
 	public void addChildNode(Node n)
 	{
 		children.add(n);
+		n.parent=this;
 	}
 	public Node getLastChildNode()
 	{
@@ -87,8 +93,8 @@ public class Node implements Serializable{
 	}
 	public void setChildNode(int index_, Node n)
 	{
-		n.setParent(this);
 		children.set(index_,n);
+		n.parent=this;
 	}
 	// 현 node가 leaf인지 판별하는 함수. 후에 변수 형태로 바뀔 수도 있음.
 	public boolean isLeaf()
@@ -103,4 +109,18 @@ public class Node implements Serializable{
 	{
 		children.remove(n);
 	}
+	
+	
+	
+	
+	//// For UI
+	public AreaRange ar_current;
+	public AreaRange ar_name;
+	public AreaRange ar_etc;
+	public static int xspace=4;
+	public static int xtab=50;
+	public static int yspace=4;
+	public static int yline=10;
+	public static int xchar=8;
+
 }

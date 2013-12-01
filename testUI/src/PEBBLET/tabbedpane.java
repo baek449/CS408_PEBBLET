@@ -71,7 +71,7 @@ public class tabbedpane extends JPanel{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          
         //Add content to the window.
-        frame.add(new tabbedpane(), BorderLayout.CENTER);
+        //frame.add(new tabbedpane(), BorderLayout.CENTER);
          
         //Display the window.
         frame.pack();

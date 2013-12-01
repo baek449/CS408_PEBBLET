@@ -43,12 +43,6 @@ public class DefinitionManager {
 		for(loop=0;loop<location_parent.length-1;loop++)
 			location_parent[loop]=location[loop];
 		Node n=search(location_parent);
-		fillupSelection(n, last_location, isName);
-	}
-
-	public static void fillupSelection(Node n, int last_location, boolean isName)
-	{
-		int loop;
 		NodeType selection_result;
 		String string_entered;
 		Node newnode;
