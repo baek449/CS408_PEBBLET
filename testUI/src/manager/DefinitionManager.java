@@ -186,7 +186,6 @@ public class DefinitionManager {
 			System.err.println("error! Invalid node on definition");
 
 		}
-		m.repaint();
 	}
 	
 	public static NodeType show_delete(AreaRange r)

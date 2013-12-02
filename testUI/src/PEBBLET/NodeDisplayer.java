@@ -170,12 +170,14 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 		{
 			// 이름 필드 선택함.
 			call_fillupSelection(n.getParent(),prev_index,true);
+			repaint();
 			return true;
 		}
 		else if (n.ar_etc.isvalid() && n.ar_etc.inside(p))
 		{
 			// ... 필드 선택함.
 			call_fillupSelection(n,n.numChildren(),false);
+			repaint();
 			return true;
 		}
 		// 자식 선택함.
@@ -193,6 +195,7 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 			return true;
 		// valid한 경우 조작 수행
 		call_fillupSelection(n.getParent(),prev_index,false);
+		repaint();
 		return true;
 	}
 	private class Worker extends Thread

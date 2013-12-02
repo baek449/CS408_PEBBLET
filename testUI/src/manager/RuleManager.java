@@ -846,7 +846,6 @@ public class RuleManager {
 			else
 				n.setChildNode(last_location,o);
 		}
-		m.repaint();
 	}
 	
 	public Rule getRule()
