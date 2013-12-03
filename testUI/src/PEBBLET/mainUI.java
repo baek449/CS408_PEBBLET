@@ -24,6 +24,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 //import javax.swing.KeyStroke;
@@ -269,31 +270,11 @@ public class mainUI extends JFrame{
 	}
 	
 	public static void addbox(JComponent comp, int x, int y){
-//		JPanel inputbox = new JPanel();
-//		JTextField detail = new JTextField();
-//		JComboBox<String> name = new JComboBox<String>();
-//		inputbox.setLayout(null);
-//		name.setBounds(5,5,100,20);
-//		inputbox.add(name);
-//		detail.setBounds(110,5,80,20);
-//		inputbox.add(detail);
-//		name.addItem("text1");
-//		name.addItem("test2");
-//		
-//		comp.setLayout(null);
-//		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-//        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-//        inputbox.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
-//        inputbox.setBounds(x, y, 200, 30);
-//		comp.add(inputbox);
-//		return inputbox;
+
 		
 		custominputbox input = new custominputbox(comp);
 		////adding root index***********************************/
-//		input.set_index();
-		
-		
-//		input.addtoPanel(comp, x, y);		
+	
 		int[] position = {x,y};
 		def_box_position.add(position);
 		def_box.add(input);
@@ -303,21 +284,10 @@ public class mainUI extends JFrame{
 
 	
 	public static void addsubbox(JComponent comp, custominputbox target){
-//		JTextField subbox = new JTextField();
-//		comp.setLayout(null);
-//		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-//        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-//        subbox.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
-//        subbox.setBounds(main.getBounds().x+10, main.getBounds().y+25, 40, 20);
-//		comp.add(subbox);
-		
-//		main.increase_level();
-//		int level = main.get_level();
+
 		
 		custominputbox subinput = new custominputbox(comp);
-//		subinput.addtoPanel(comp, main.getX() + 30, main.getY() + 35*level +10);
-//		subinput.set_parent(main);
-//		main.setlastchild(subinput);
+
 		
 		//index setting
 		ArrayList<Integer> subinput_index = new ArrayList<Integer>(target.get_index());
@@ -335,8 +305,17 @@ public class mainUI extends JFrame{
 		}
 		def_box.add(target_index+1, subinput);
 		
-//		return subinput;
+
         
+	}
+	
+	private static void createAndshowGUI(){
+		mainUI ex = new mainUI();
+		tabbedpane pane = new tabbedpane();
+		
+		Container contentpane = ex.getContentPane();
+		contentpane.add(pane, BorderLayout.NORTH);
+		ex.setVisible(true);
 	}
 	
 	public static void update_panel(JComponent comp){
@@ -348,25 +327,19 @@ public class mainUI extends JFrame{
 			box.addtoPanel(comp, x, y);
 			i++;
 		}
+		System.out.println(comp.getSize());
+		System.out.println(comp.getPreferredSize());
+	}
+	
+	public static void addpane(){
+		
 	}
 	
 	public static void main(String[] args){
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
 			public void run(){
-				mainUI ex = new mainUI();
-				
-				JTabbedPane pane = new JTabbedPane();
-				
-				tabbedpane tpane = new tabbedpane();
-				
-				JComponent def = tpane.makeTextPanel("def");
-				JComponent rule = tpane.makeTextPanel("");
-				JComponent comp = tpane.makeTextPanel("");
-				JComponent debug = tpane.makeTextPanel("");				
-				
-				
-				
+								
 				////////////////////////// TODO: DefinitionManager
 				//// Á¤ÀÇ
 				Node def_root = new Node(null, null);
@@ -467,25 +440,15 @@ public class mainUI extends JFrame{
 				DefinitionDisplayer test_def = new DefinitionDisplayer(dm);
 				RuleDisplayer test_rul = new RuleDisplayer(rm);
 				
-				
-				
-				
-				//addbox(def,10,10);
 
-				//update_panel(def);
 				
 //				JTextField mainbox = addbox(def,0,0);
 //				addsubbox(def, mainbox);
-				
-				pane.addTab("Definition", null, test_def, "make definition");
-				pane.addTab("Rule", null, test_rul, "make rule");
-				pane.addTab("Component", null, comp, "make component");
-				pane.addTab("Debugging", null, debug, "start debugging");
-				
-				
-				Container contentpane = ex.getContentPane();
-				contentpane.add(pane, BorderLayout.NORTH);
-				ex.setVisible(true);
+
+//				Container contentpane = ex.getContentPane();
+//				contentpane.add(pane, BorderLayout.NORTH);
+//				ex.setVisible(true);
+				createAndshowGUI();
 				
 			}
 		});
