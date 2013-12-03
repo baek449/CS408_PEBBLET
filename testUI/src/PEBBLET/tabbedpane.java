@@ -18,20 +18,23 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
 public class tabbedpane extends JPanel{
-	public tabbedpane(){
+	public tabbedpane(DefinitionDisplayer def, RuleDisplayer rule){
 		super(new GridLayout(1, 1));
 	 
 		JTabbedPane tabbedpane = new JTabbedPane();
 	
-		JComponent definition = makeTextPanel("Definition");
-		tabbedpane.addTab("Definition", null, definition, "make definition");
-	
-		JComponent rule = makeTextPanel("Rule");
+//		JComponent definition = makeTextPanel("Definition");
+		JScrollPane defsc = new JScrollPane(def);
+		defsc.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		defsc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		tabbedpane.addTab("Definition", null, defsc, "make definition");
+		
+//		JComponent rule = makeTextPanel("Rule");
 		tabbedpane.addTab("Rule", null, rule, "make rule");
 	
 		JComponent component = makeTextPanel("Component");
 		tabbedpane.addTab("Component", null, component, "make component");
-	
+		
 		JComponent debug = makeTextPanel("Debug");
 		tabbedpane.addTab("Debug", null, debug, "debugging");
 		
@@ -52,14 +55,10 @@ public class tabbedpane extends JPanel{
 
 
         JScrollPane scrollpane = new JScrollPane(panel);
-        scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollpane.setViewportView(panel);
         return scrollpane;
     }
-	
-	
-	
-	
 	
 	public static void createAndShowGUI() {
         //Create and set up the window.

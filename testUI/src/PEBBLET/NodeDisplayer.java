@@ -14,6 +14,8 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import manager.Node;
@@ -55,7 +57,7 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 	    } 
 	}
 	
-	
+	public JScrollPane pane;
 	private Graphics g_;
 	private JTextField input_string;
 	private String textfield_pool;
@@ -134,6 +136,8 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 	// 생성자와 그리기 함수
 	public NodeDisplayer()
 	{
+		pane = new JScrollPane();
+		
 		input_string=new JTextField();
 		input_selection=new WideComboBox<String>();
 		this.setLayout(null);
@@ -151,6 +155,10 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 		input_selection.addFocusListener(c_listener);
 		
 		addMouseListener(this);
+		pane.setPreferredSize(new Dimension(200,200));
+		pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		pane.add(this);
 	}
 	public final void paint(Graphics g) {
     	g_=g;
