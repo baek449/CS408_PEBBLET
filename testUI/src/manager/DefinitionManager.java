@@ -126,7 +126,7 @@ public class DefinitionManager {
 			if(last_location>=n.numChildren())
 			{
 				string_entered=m.UI_input_string(n.ar_etc,"");
-				newnode=new Node();
+				newnode=new Node(NodeType.nd_raw,null);
 				// 입력 단계에서 string을 integer로 변환. 향후 바뀔 수 있음.
 				try
 				{
@@ -166,6 +166,7 @@ public class DefinitionManager {
 			{
 				string_entered=m.UI_input_string(n.ar_etc,"");
 				newnode=new Node();
+				newnode.set_node_type(NodeType.nd_raw);
 				newnode.setData(string_entered);
 				n.addChildNode(newnode);
 				break;

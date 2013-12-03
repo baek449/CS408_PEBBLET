@@ -37,13 +37,9 @@ public class DefinitionDisplayer extends NodeDisplayer{
 			a= draw_vertical(n,p_,0);
 			return enclose(n,a,false).getEnd();
 		}
-		if(n.get_node_type()==null) // Leaf
+		if(n.get_node_type()==null)
 		{
-			a=new AreaRange(p,p,false);
-			a=draw_name_right(n,a);
-			a.valid=false;
-			n.ar_current=new AreaRange(a);
-			return a.getEnd();
+			System.err.println("Null Type Node Error");
 		}
 		switch(n.get_node_type())
 		{
@@ -118,6 +114,12 @@ public class DefinitionDisplayer extends NodeDisplayer{
 			a=draw_right_text(a,"Action ");
 			a=draw_name_right(n,a);
 			a=enclose(n, a, true);
+			return a.getEnd();
+		case nd_raw:
+			a=new AreaRange(p,p,false);
+			a=draw_name_right(n,a);
+			a.valid=false;
+			n.ar_current=new AreaRange(a);
 			return a.getEnd();
 		default:
 			System.err.println("Err");

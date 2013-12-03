@@ -374,7 +374,7 @@ public class mainUI extends JFrame{
 				
 				Node player_number = new Node(NodeType.nd_num,def_root);
 				player_number.setData("N_player");
-				Node player_number_value = new Node(null,player_number);
+				Node player_number_value = new Node(NodeType.nd_raw,player_number);
 				player_number_value.setData(3);
 				
 				Node global_variables = new Node(NodeType.nd_def_global, def_root);
@@ -395,13 +395,13 @@ public class mainUI extends JFrame{
 				card_trump.setData("Trump");
 				Node card_trump_shape = new Node(NodeType.nd_str,card_trump);
 				card_trump_shape.setData("shape");
-				Node card_trump_shape_spade = new Node(null,card_trump_shape);
+				Node card_trump_shape_spade = new Node(NodeType.nd_raw,card_trump_shape);
 				card_trump_shape_spade.setData("spade");
-				Node card_trump_shape_diamond = new Node(null,card_trump_shape);
+				Node card_trump_shape_diamond = new Node(NodeType.nd_raw,card_trump_shape);
 				card_trump_shape_diamond.setData("diamond");
-				Node card_trump_shape_heart = new Node(null,card_trump_shape);
+				Node card_trump_shape_heart = new Node(NodeType.nd_raw,card_trump_shape);
 				card_trump_shape_heart.setData("heart");
-				Node card_trump_shape_clover = new Node(null,card_trump_shape);
+				Node card_trump_shape_clover = new Node(NodeType.nd_raw,card_trump_shape);
 				card_trump_shape_clover.setData("clover");
 				Node card_trump_num=new Node(NodeType.nd_num,card_trump);
 				card_trump_num.setData("num");

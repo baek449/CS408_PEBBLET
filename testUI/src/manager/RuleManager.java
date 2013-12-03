@@ -5,9 +5,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import PEBBLET.AreaRange;
-import PEBBLET.DefinitionDisplayer;
 import PEBBLET.RuleDisplayer;
-import oracle.jrockit.jfr.Options;
 
 
 public class RuleManager {

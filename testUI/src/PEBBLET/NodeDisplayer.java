@@ -93,6 +93,7 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 	{
 		//input_string.setSize(size.ex-size.sx, size.ey-size.sy);
 		//input_string.setLocation(size.sx, size.sy);
+		if(current_data==null) current_data="";
 		input_string.setBounds(size.sx, size.sy, size.ex-size.sx, size.ey-size.sy);
 		input_string.setText(current_data);
 
@@ -104,6 +105,7 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 		revalidate();
 		repaint();
 		try {
+			System.out.println("Waiting...");
 			wait();
 		} catch (InterruptedException e) {
 			return textfield_original;
@@ -219,9 +221,9 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 	  @Override
 	public synchronized void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		  System.out.println("Click");
 		  if(w==null || !w.isAlive())
 		  {
+			  System.out.println("Click");
 			  w=new Worker(new Position(e.getX(),e.getY()));
 			  w.start();
 		  }
@@ -263,7 +265,6 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 	@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			System.out.println(e.toString());
 			input_over(input_string.getText());
 			
 		}
@@ -275,7 +276,7 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 		@Override
 		public void focusLost(FocusEvent e) {
 			// TODO Auto-generated method stub
-			input_over(textfield_original);	
+			//input_over(textfield_original);	
 		}
 	}
 	private class SelectionListener implements FocusListener, ActionListener {
@@ -292,7 +293,7 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 		@Override
 		public void focusLost(FocusEvent e) {
 			// TODO Auto-generated method stub
-			input_selection_over(-1);
+			// input_selection_over(-1);
 		}
 	}
 	
@@ -305,6 +306,7 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 		input_string.setVisible(false);
 		input_string.setFocusable(false);
 		textfield_pool=s;
+		System.out.println(input_string.getText()+" before notify");
 		notifyAll();
 	}
 	private synchronized void input_selection_over(int index)
