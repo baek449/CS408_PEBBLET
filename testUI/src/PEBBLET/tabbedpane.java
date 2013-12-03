@@ -42,14 +42,6 @@ public class tabbedpane extends JPanel{
 	
 	protected static JScrollPane makeTextPanel(String text) {
         JPanel panel = new JPanel(true);
-//        JLabel filler = new JLabel(text);
-        
-//        filler.setBounds(1, 1, 100, 100);
-//        filler.setHorizontalAlignment(JLabel.CENTER);
-//        panel.add(filler);
-//        panel.setLayout(new GridLayout(1, 1));
-        //panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-//        panel.setLayout(new ScrollPaneLayout());
         
         panel.setPreferredSize(new Dimension(0,650));
         
@@ -57,15 +49,7 @@ public class tabbedpane extends JPanel{
         Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
         Border loweredbevel = BorderFactory.createLoweredBevelBorder();
         panel.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
-//        panel.add(scroller);
-//        panel.add(filler);
-        
-//        JScrollPane scroller = new JScrollPane(panel);
-//        panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//        panel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//        
-//        scroller.setPreferredSize(new Dimension(0, 650));
-//        scroller.setBorder(BorderFactory.createCompoundBorder(raisedetched, loweredbevel));
+
 
         JScrollPane scrollpane = new JScrollPane(panel);
         scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
