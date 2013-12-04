@@ -262,7 +262,7 @@ public class mainUI extends JFrame{
 
         
 		setTitle("PEBBLET");
-		setSize(1000,500);
+		setSize(1000,800);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);	
 		
@@ -325,6 +325,7 @@ public class mainUI extends JFrame{
 		RuleDisplayer rule_displayer = new RuleDisplayer(rm);
 		
 		tabbedpane pane = new tabbedpane(def_displayer,rule_displayer);
+		
 
 		Container contentpane = ex.getContentPane();
 		contentpane.add(pane, BorderLayout.NORTH);
@@ -340,11 +341,9 @@ public class mainUI extends JFrame{
 			box.addtoPanel(comp, x, y);
 			i++;
 		}
-		System.out.println(comp.getSize());
-		System.out.println(comp.getPreferredSize());
 	}
 	
-	public static DefinitionManager display_def(){
+	private static DefinitionManager display_def(){
 		////////////////////////// TODO: DefinitionManager
 		//// Á¤ÀÇ
 		Node def_root = new Node(null, null);
@@ -388,7 +387,7 @@ public class mainUI extends JFrame{
 		sample_def.setRoot(def_root);
 		DefinitionManager dm = new DefinitionManager();
 		dm.setDefinition(sample_def);
-		
+				
 		return dm;
 		
 	}

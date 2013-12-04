@@ -24,29 +24,40 @@ public class tabbedpane extends JPanel{
 		JTabbedPane tabbedpane = new JTabbedPane();
 	
 //		JComponent definition = makeTextPanel("Definition");
+		Dimension curD = def.getcurrentdimension();
+		System.out.println(curD);
+		
+		def.setPreferredSize(curD);
+		
 		JScrollPane defsc = new JScrollPane(def);
+		
 		defsc.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		defsc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		defsc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);		
+		
+		
 		tabbedpane.addTab("Definition", null, defsc, "make definition");
 		
 //		JComponent rule = makeTextPanel("Rule");
 		tabbedpane.addTab("Rule", null, rule, "make rule");
 	
-		JComponent component = makeTextPanel("Component");
-		tabbedpane.addTab("Component", null, component, "make component");
+//		JComponent component = makePanel();//임시로 def를 display
+		Def_pane def1 = new Def_pane();
+		tabbedpane.addTab("Component", null, def1.get_scpane(), "make component");
 		
-		JComponent debug = makeTextPanel("Debug");
+		JComponent debug = makePanel();
 		tabbedpane.addTab("Debug", null, debug, "debugging");
 		
 		add(tabbedpane);
 		tabbedpane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		
+		
 	
 	}
 	
-	protected static JScrollPane makeTextPanel(String text) {
+	protected static JScrollPane makePanel() {
         JPanel panel = new JPanel(true);
         
-        panel.setPreferredSize(new Dimension(0,650));
+        panel.setPreferredSize(new Dimension(0,600));
         
 //        panel.add(Box.createRigidArea(new Dimension(0, 650)));//default 650
         Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);

@@ -2,6 +2,7 @@ package PEBBLET;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -67,6 +68,8 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 
 	// 표시할 목표 노드
 	private Node target;
+	private Position endpoint;
+	private Dimension currentDimension;
 
 
 	public static int xspace=4;
@@ -154,15 +157,22 @@ public abstract class NodeDisplayer extends JComponent implements MouseListener{
 		input_selection.addActionListener(c_listener);
 		input_selection.addFocusListener(c_listener);
 		
+		
 		addMouseListener(this);
-		pane.setPreferredSize(new Dimension(200,200));
 		pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		pane.add(this);
 	}
 	public final void paint(Graphics g) {
     	g_=g;
-		drawNode(target, new Position(0,0));
+		endpoint=drawNode(target, new Position(0,0));
+		
+		currentDimension = new Dimension(endpoint.x, endpoint.y);
+		System.out.println(currentDimension);
+	}
+	
+	public Dimension getcurrentdimension(){
+		return currentDimension;
 	}
 	
 	//////////////////////////////////////////////////////////
