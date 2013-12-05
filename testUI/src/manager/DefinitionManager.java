@@ -23,6 +23,25 @@ public class DefinitionManager {
 	private static final String[] selection_card_del = {"Number []","String []","Action []","(Delete)","(Cancel)"};
 	private static final String[] selection_del = {"(Delete)","(Cancel)"};
 	
+	public String[] get_selection_noncard(){
+		return selection_noncard;
+	}
+	public String[] get_selection_noncard_del(){
+		return selection_noncard_del;
+	}
+	
+	public String[] get_selection_card(){
+		return selection_card;
+	}
+	
+	public String[] get_selection_card_del(){
+		return selection_card_del;
+	}
+	
+	public String[] get_selection_del(){
+		return selection_del;
+	}
+	
 	private Definition definition;
 	private static DefinitionDisplayer m;
 	public Node search(int[] location)
