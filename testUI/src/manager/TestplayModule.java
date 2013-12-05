@@ -2,6 +2,7 @@ package manager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.Random;
@@ -18,6 +19,30 @@ public class TestplayModule {
 	// 변수의 실제 값 목록. 첫 번째 인덱스는 플레이어 번호(0이면 전역), 두 번째 인덱스는 dictionary에서 찾은 변수의 인덱스 값.
 	// 정수, 문자열, 또는 Node (Deck의 경우)를 들고있다.
 	private Object[][] variables;
+	private String[][][] variable_name_classification;
+	
+	public int get_current_player() {
+		try {
+			return playerStack.peek();
+		} catch (EmptyStackException e) {
+			return -1;
+		}
+	}
+	public ArrayList<Integer> get_player_seat() {
+		return player_seats;
+	}
+	public HashMap<String,Integer> get_global_variable_index() {
+		return global_variable_index;
+	}
+	public HashMap<String,Integer> get_player_variable_index() {
+		return player_variable_index;
+	}
+	public Object[][] get_variables() {
+		return variables;
+	}
+	public String[][][] get_variable_classification() {
+		return variable_name_classification;
+	}
 	
 	// 예시
 	// global_variable_index : [center:0 discard:1]
@@ -51,6 +76,8 @@ public class TestplayModule {
 		cardStack=new Stack<Node>();
 		logging=false;
 		
+		variable_name_classification=d.getVariableList();
+		
 		// 1. 플레이어 명수에 따라 player_seats를 초기화한다.
 		int n=(Integer)d.getRoot().getChildNode(0).getChildNode(0).getData();
 		player_seats=new ArrayList<Integer>();
@@ -82,7 +109,7 @@ public class TestplayModule {
 				variables[0][index]=new Integer(0);
 				break;
 			case nd_str:
-				variables[0][index]=new String();
+				variables[0][index]=new String("");
 				break;
 			case nd_deck:
 				variables[0][index]=new Node();
@@ -101,13 +128,13 @@ public class TestplayModule {
 			player_variable_index.put((String)player_var.get(index).getData(), index);
 			for(player_loop=1;player_loop<=n;player_loop++)
 			{
-				switch(global_var.get(index).get_node_type())
+				switch(player_var.get(index).get_node_type())
 				{
 				case nd_num:
 					variables[player_loop][index]=new Integer(0);
 					break;
 				case nd_str:
-					variables[player_loop][index]=new String();
+					variables[player_loop][index]=new String("");
 					break;
 				case nd_deck:
 					variables[player_loop][index]=new Node(NodeType.nd_deck,null);
@@ -156,7 +183,7 @@ public class TestplayModule {
 			action_move(n.getChildNode(0),n.getChildNode(1));
 			return;
 		case action_load:
-			action_load((String)n.getChildNode(0).getChildNode(0).getData(),n.getChildNode(1));
+			action_load((String)n.getChildNode(0).getData(),n.getChildNode(1));
 			return;
 		case action_shuffle:
 			action_shuffle(n.getChildNode(0));
@@ -194,6 +221,18 @@ public class TestplayModule {
 		case action_show:
 			System.err.println("Unimplemented action_show");
 			return;
+		case action_setint:
+			action_setint((String)n.getChildNode(0).getData(),n.getChildNode(1));
+			break;
+		case action_setstr:
+			action_setstr((String)n.getChildNode(0).getData(),n.getChildNode(1));
+			break;
+		case action_setdeck:
+			action_setdeck((String)n.getChildNode(0).getData(),n.getChildNode(1));
+			break;
+		case action_setplayer:
+			action_setplayer((String)n.getChildNode(0).getData(),n.getChildNode(1));
+			break;
 		}
 		System.err.println("Action Error");
 	}
@@ -543,6 +582,94 @@ public class TestplayModule {
 		// TODO: UI를 띄워 선택을 요구한다.
 	}
 	
+	public void action_setint(String name, Node n_raw)
+	{
+		// Global Variable Search
+		Integer a=global_variable_index.get(name);
+		if (a!=null) // global
+		{
+			variables[0][a]=num(n_raw);
+			return;
+		}
+		a=player_variable_index.get(name);
+		if (a!=null) // player
+		{
+			if(playerStack.isEmpty())
+			{
+				System.err.println("Set of player variable in global scope.");
+				return;
+			}
+			variables[playerStack.peek()][a]=num(n_raw);
+			return;
+		}
+	}
+
+	public void action_setstr(String name, Node n_raw)
+	{
+		// Global Variable Search
+		Integer a=global_variable_index.get(name);
+		if (a!=null) // global
+		{
+			variables[0][a]=str(n_raw);
+			return;
+		}
+		a=player_variable_index.get(name);
+		if (a!=null) // player
+		{
+			if(playerStack.isEmpty())
+			{
+				System.err.println("Set of player variable in global scope.");
+				return;
+			}
+			variables[playerStack.peek()][a]=str(n_raw);
+			return;
+		}
+	}
+
+	public void action_setdeck(String name, Node n_raw)
+	{
+		// Global Variable Search
+		Integer a=global_variable_index.get(name);
+		if (a!=null) // global
+		{
+			variables[0][a]=deck(n_raw);
+			return;
+		}
+		a=player_variable_index.get(name);
+		if (a!=null) // player
+		{
+			if(playerStack.isEmpty())
+			{
+				System.err.println("Set of player variable in global scope.");
+				return;
+			}
+			variables[playerStack.peek()][a]=deck(n_raw);
+			return;
+		}
+	}
+
+	public void action_setplayer(String name, Node n_raw)
+	{
+		// Global Variable Search
+		Integer a=global_variable_index.get(name);
+		if (a!=null) // global
+		{
+			variables[0][a]=players(n_raw);
+			return;
+		}
+		a=player_variable_index.get(name);
+		if (a!=null) // player
+		{
+			if(playerStack.isEmpty())
+			{
+				System.err.println("Set of player variable in global scope.");
+				return;
+			}
+			variables[playerStack.peek()][a]=players(n_raw);
+			return;
+		}
+	}
+
 	
 	
 	

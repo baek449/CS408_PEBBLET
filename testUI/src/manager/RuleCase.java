@@ -5,7 +5,7 @@ package manager;
  */
 public enum RuleCase {
 	action_multiple, action_move, action_load, action_shuffle, action_order, action_act, action_choose, action_card,
-	action_if, action_ifelse, action_repeat, action_endgame, action_endgame_draw, action_endgame_order, action_show,
+	action_if, action_ifelse, action_repeat, action_endgame, action_endgame_draw, action_endgame_order, action_show, action_setint, action_setstr, action_setdeck, action_setplayer,
 	player_multiple, player_current, player_all, player_exclude, player_left, player_right, player_left_all, player_right_all, player_satisfy, player_most, player_select, player_player,
 	deck_player, deck_select, card_all, card_top, card_bottom, card_satisfy, card_select,
 	cond_numcompare, cond_samecard, cond_sameplayer, cond_samestring, cond_typeequal, cond_istype, cond_and, cond_or, cond_not, cond_emptydeck,

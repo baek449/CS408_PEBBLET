@@ -12,7 +12,7 @@ public class RuleManager {
 	private static final String[] selection_action =
 		{"(Cancel)", "Multiple Actions", "Move [card] to [deck]", "Load [file] to [deck]", "Shuffle [deck]", "Order [deck] [order]*",
 		"Act [player] [action]", "If [cond] [action]", "If [cond] [action] else [action]", "Repeat [num] [action]", "Endgame Win [player]",
-		"Endgame Draw", "Endgame Order [order]*", "Show [card] to [player]", "[card].[action]"};
+		"Endgame Draw", "Endgame Order [order]*", "Show [card] to [player]", "[card].[action]","Set [variable]=[num]","Set [variable]=[string]","Set [variable]=[deck]","Set [variable]=[player]"};
 	private static final String[] selection_action_pscope = {"Choose from [namedAction]*"};
 	private static final String[] selection_player =
 		{"(Cancel)", "Multiple Players", "All Players", "Exclude [player] from [player]", "Left [num]th player from [player]",
@@ -195,7 +195,27 @@ public class RuleManager {
 			newnode=new Node(NodeType.nd_action,o);
 			newnode.set_scope_card(true);
 			return o;
-		case 15: // "Choose from [namedAction]*"
+		case 15: //"Set [variable]=[num]"
+			o.setData(RuleCase.action_setint);
+			newnode=new Node(NodeType.nd_raw,o);
+			newnode=new Node(NodeType.nd_num,o);
+			return o;
+		case 16: //"Set [variable]=[str]"
+			o.setData(RuleCase.action_setstr);
+			newnode=new Node(NodeType.nd_raw,o);
+			newnode=new Node(NodeType.nd_str,o);
+			return o;
+		case 17: //"Set [variable]=[deck]"
+			o.setData(RuleCase.action_setdeck);
+			newnode=new Node(NodeType.nd_raw,o);
+			newnode=new Node(NodeType.nd_deck,o);
+			return o;
+		case 18: //"Set [variable]=[player]"
+			o.setData(RuleCase.action_setplayer);
+			newnode=new Node(NodeType.nd_raw,o);
+			newnode=new Node(NodeType.nd_player,o);
+			return o;
+		case 19: // "Choose from [namedAction]*"
 			if(ps)
 			{
 				o.setData(RuleCase.action_choose);
