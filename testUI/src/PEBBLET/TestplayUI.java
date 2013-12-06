@@ -26,6 +26,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import manager.Node;
+import manager.Rule;
 import manager.TestplayModule;
 
 public class TestplayUI extends JFrame {
@@ -211,6 +212,7 @@ public class TestplayUI extends JFrame {
 				p.width+=card_name_gap;
 			}
 			box_end.width=p.width;
+			if(box_end.width<200+box_start.width) box_end.width=200+box_start.width;
 			box_end.height+=card_name_gap;
 			g.drawRect(box_start.width, box_start.height, box_end.width-box_start.width, box_end.height-box_start.height);
 			return box_end;
@@ -234,6 +236,49 @@ public class TestplayUI extends JFrame {
 		private JTextField input_field;
 		private boolean isCurrentSelection;
 		
+		private class ConfirmListener implements MouseListener {
+
+			@Override
+			public synchronized void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int loop;
+				ArrayList<Integer> a=new ArrayList<Integer>();
+				if(isCurrentSelection)
+				{
+					if(selections==null) return;
+					for(loop=0;loop<selections.length;loop++)
+						if(selections[loop].isSelected())
+							a.add(loop);
+					if(a.size()!=n) return;
+				}
+				else
+				{
+					try {
+						a.add(Integer.parseInt(input_field.getText()));
+					} catch(NumberFormatException e_) {
+						return;
+					}
+				}
+				tpm.set_selection_result(a);
+				reset();
+				notifyAll();
+				return;
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+		}
+		
 		public SelectionboardPanel()
 		{
 			this.setLayout(new BorderLayout());
@@ -242,6 +287,7 @@ public class TestplayUI extends JFrame {
 			add(confirm_panel,BorderLayout.WEST);
 			
 			confirm=new JButton("Confirm");
+			confirm.addMouseListener(new ConfirmListener());
 			//confirm.setPreferredSize(new Dimension(90,30));
 			confirm.setVisible(false);
 			confirm_panel.add(confirm);
@@ -321,6 +367,15 @@ public class TestplayUI extends JFrame {
 			return;
 		}
 	}
+	public void set_select_cases(String msg_,ArrayList<String> cases_, int n_)
+	{
+		selection_board.set_select_cases(msg_,cases_, n_);
+	}
+	public void set_call_int(int start_, int end_)
+	{
+		selection_board.set_call_int(start_, end_);
+	}
+	
 	
 	private PlayboardPanel play_board;
 	private SelectionboardPanel selection_board;
@@ -392,25 +447,6 @@ public class TestplayUI extends JFrame {
 		ar.add("test1234567");
 		ar.add("test1234567");
 		ar.add("test1234567");
-		ar.add("test1234567");
-		ar.add("test1234567");
-		ar.add("test1234567");
-		ar.add("test1234567");
-		ar.add("test1234567");
-		ar.add("test1234567");
-		ar.add("test1234567");
-		ar.add("test1234567");
-		ar.add("test1234567");
-		ar.add("test1234567");
-		ar.add("test1234567");
-		ar.add("test1234567");
-		ar.add("test1");
-		ar.add("test1");
-		ar.add("test1");
-		ar.add("test1");
-		ar.add("test1");
-		ar.add("test1");
-		ar.add("test1");
 		ar.add("test1");
 		ar.add("test1");
 		ar.add("test1");
@@ -442,6 +478,28 @@ public class TestplayUI extends JFrame {
 	{
 		selection_board.setPreferredSize(d);
 		selection_board.revalidate();
+	}
+	
+	////////////////////////// 테스트플레이 실행 관련 ///////////////////////
+	// 테스트플레이를 돌릴 규칙
+	private Rule rul;
+	public void set_rule(Rule rul_)
+	{
+		rul=rul_;
+	}
+	private class TPThread extends Thread {
+		public void run() {
+			tpm.action(rul.getRoot().getChildNode(0));
+		}
+	}
+	
+	private TPThread t;
+	// 돌리는 함수
+	public void run_testplay(Rule rul_)
+	{
+		set_rule(rul_);
+		t=new TPThread();
+		t.start();
 	}
     
     

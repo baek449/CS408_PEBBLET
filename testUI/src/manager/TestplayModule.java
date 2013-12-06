@@ -7,8 +7,11 @@ import java.util.HashMap;
 import java.util.Stack;
 import java.util.Random;
 
+import PEBBLET.TestplayUI;
+
 public class TestplayModule {
 	
+	private TestplayUI tpui;
 	///////////////////// 실제로 들고 있는 데이터 /////////////////////
 	// 플레이어 자리
 	private ArrayList<Integer> player_seats;
@@ -49,6 +52,12 @@ public class TestplayModule {
 	// player_variable_index : [hand:0 score:1 current:2]
 	// 이 경우, variables에 다음과 같이 저장된다.
 	// [[gl_center gl_discard] [p1_hand p1_score pl_current] [p2_hand p2_score p2_current]...]
+
+	private ArrayList<Integer> selection_result;
+	public void set_selection_result(ArrayList<Integer> a)
+	{
+		selection_result=a;
+	}
 	/////////////////////////////////////////////////////////////
 	
 	private Node def;
@@ -60,6 +69,11 @@ public class TestplayModule {
 	private TestLog testlog;
 	
 	private Random r;
+	
+	public void setUI (TestplayUI tpui_)
+	{
+		tpui=tpui_;
+	}
 	
 	// Constructor
 	public TestplayModule()
@@ -169,8 +183,6 @@ public class TestplayModule {
 	//////////////////////// Total Results //////////////////////
 	// Node 형태로 쓰인 언어를 interpret한다.
 	
-	// TODO: Implement this.
-	
 	// 액션 규칙을 수행한다.
 	public void action(Node n)
 	{
@@ -195,7 +207,7 @@ public class TestplayModule {
 			action_act(n.getChildNode(0), n.getChildNode(1));
 			return;
 		case action_choose:
-			System.err.println("Unimplemented action_choose");
+			select_action(n.getAllNode());
 			return;
 		case action_card:
 			action_card(n.getChildNode(0), (String)n.getChildNode(1).getData());
@@ -265,8 +277,7 @@ public class TestplayModule {
 			case player_most:
 				return player_most(n.getChildNode(0),(Node[])n.getAllNode().subList(1,n.numChildren()).toArray());
 			case player_select:
-				System.err.println("Unimplemented player_select");
-				return null;
+				return select_player(n.getChildNode(0),n.getChildNode(1));
 			}
 		}
 		else if (n.getData().getClass()==String.class)
@@ -282,6 +293,8 @@ public class TestplayModule {
 	}
 	
 	// Deck을 계산한다.
+	private int deck_owner=0;
+	
 	public Node deck(Node n)
 	{
 		if(n.getData().getClass()==RuleCase.class)
@@ -291,10 +304,10 @@ public class TestplayModule {
 			case deck_player:
 				ArrayList<Integer> p=players(n.getChildNode(1));
 				// TODO: Error Checking: p.size() must be 1.
+				deck_owner=p.get(0);
 				return (Node)player_variable_get((String)n.getChildNode(0).getData(),p.get(0));
 			case deck_select:
-				System.err.println("Unimplemented deck_select");
-				return null;
+				return select_deck(n.getAllNode());
 			}
 		}
 		else if (n.getData().getClass()==String.class)
@@ -321,8 +334,7 @@ public class TestplayModule {
 			case card_satisfy:
 				return cards_satisfy(n.getChildNode(0),n.getChildNode(1));
 			case card_select:
-				System.err.println("Unimplemented card_select");
-				return null;
+				return select_card(n.getChildNode(0),n.getChildNode(1));
 			}
 		}
 		System.out.println("Card Error");
@@ -378,8 +390,7 @@ public class TestplayModule {
 			case num_operation:
 				return num_operation(n.getChildNode(0),(String)n.getChildNode(1).getData(),n.getChildNode(2));
 			case num_call:
-				System.err.println("Unimplemented num_call");
-				return 0;
+				return call_num(n.getChildNode(0),n.getChildNode(1));
 			}
 		}
 		else if (n.getData().getClass()==String.class)
@@ -405,8 +416,7 @@ public class TestplayModule {
 			case string_raw:
 				return (String)n.getChildNode(0).getData();
 			case string_call:
-				System.err.println("Unimplemented string_call");
-				return null;
+				return call_string(n.getAllNode());
 			}
 		}
 		else if (n.getData().getClass()==String.class)
@@ -560,11 +570,6 @@ public class TestplayModule {
 			cardStack.pop();
 		}
 	}
-	// 미리 지정한 액션을 수행한다.
-	public void action_func(String name, String[] args)
-	{
-		// TODO: Action Function
-	}
 	public void action_endgame(boolean win, Node players)
 	{
 		// TODO: End Game
@@ -577,9 +582,23 @@ public class TestplayModule {
 	{
 		// TODO: End game with order
 	}
-	public void select_action(String[] options, Node[] actions)
+	public synchronized void select_action(ArrayList<Node> namedactions)
 	{
-		// TODO: UI를 띄워 선택을 요구한다.
+		ArrayList<String> c=new ArrayList<String>();
+		int loop;
+		for(loop=0;loop<namedactions.size();loop++)
+			c.add((String)namedactions.get(loop).getChildNode(0).getData());
+		// UI를 띄워 선택을 요구한다.
+		tpui.set_select_cases("Action" ,c, 1);
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			System.out.println("Interrupt");
+		}
+		for(loop=0;loop<selection_result.size();loop++)
+		{
+			action(namedactions.get(selection_result.get(loop)).getChildNode(1));
+		}
 	}
 	
 	public void action_setint(String name, Node n_raw)
@@ -837,10 +856,28 @@ public class TestplayModule {
 		return null;
 	}
 	
-	public ArrayList<Integer> select_player(int n, Node players_raw)
+	public ArrayList<Integer> select_player(Node n_raw, Node players_raw)
 	{
-		// TODO: UI를 띄워 선택을 요구한다.
-		return null;
+		ArrayList<Integer> player_=players(players_raw);
+		int n=num(n_raw);
+		ArrayList<String> c=new ArrayList<String>();
+		int loop;
+		for(loop=0;loop<player_.size();loop++)
+			c.add("Player "+player_.get(loop).toString());
+		// UI를 띄워 선택을 요구한다.
+		tpui.set_select_cases("Players" ,c, n);
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			System.out.println("Interrupt");
+		}
+		
+		ArrayList<Integer> result=new ArrayList<Integer>();
+		for(loop=0;loop<selection_result.size();loop++)
+		{
+			result.add(player_.get(selection_result.get(loop)));
+		}
+		return result;
 	}
 	
 
@@ -850,36 +887,62 @@ public class TestplayModule {
 	// Node를 계산하여 덱을 돌려준다.
 	// 리턴 : Node
 	
-	// 특정 플레이어의 덱
-	public Node deck_get(String name, Node player_raw)
-	{
-		// 플레이어를 계산한다.
-		ArrayList<Integer> p = players(player_raw);
-		// TODO: 1명이 아니면 에러를 띄운다.
-		// 플레이어의 덱을 불러온다.
-		return (Node)variables[p.get(0)][player_variable_index.get(name)];
-	}
-	
 	// 이미 정의된 덱
 	public Node deck_predefined(String name)
 	{
 		// 전역 변수에 있으면 불러온다.
 		Integer index = global_variable_index.get(name);
 		if (index!=null)
+		{
+			deck_owner=0;
 			return (Node)variables[0][index];
+		}
 		// 플레이어 변수에 있으면 현재 플레이어 기준으로 불러온다.
 		index = player_variable_index.get(name);
 		if (index!=null)
+		{
+			deck_owner=playerStack.peek();
 			return (Node)variables[playerStack.peek()][index];
+		}
 		// TODO: 변수 검색 실패. 에러 처리 필요.
+		System.err.println("deck_predefined: Invalid deck name");
 		return null;
 	}
 	
 	// 여러 덱 중 선택
-	public Node select_deck(Node[] decks)
+	public Node select_deck(ArrayList<Node> decks)
 	{
-		// TODO: UI를 띄워 선택을 요구한다.
-		return null;
+		ArrayList<Node> deck_=new ArrayList<Node>();
+		ArrayList<Integer> deck_owner_=new ArrayList<Integer>();
+		int loop;
+		for(loop=0;loop<decks.size();loop++)
+		{
+			deck_.add(deck(decks.get(loop)));
+			deck_owner_.add(new Integer(deck_owner));
+		}
+		
+		ArrayList<String> c=new ArrayList<String>();
+		for(loop=0;loop<deck_.size();loop++)
+		{
+			if(deck_owner_.get(loop)==0)
+			{
+				c.add("(Global)"+(String)deck_.get(loop).getData());
+			}
+			else
+			{
+				c.add("(Player "+deck_owner_.get(loop).toString()+")"+(String)deck_.get(loop).getData());
+			}
+		}
+		// UI를 띄워 선택을 요구한다.
+		tpui.set_select_cases("Deck" ,c, 1);
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			System.out.println("Interrupt");
+		}
+		
+		deck_owner=deck_owner_.get(selection_result.get(0));
+		return deck_.get(selection_result.get(0));
 	}
 	
 	///////////////////////// CARD EVALUATION FUNCTIONS ///////////////////////
@@ -938,10 +1001,29 @@ public class TestplayModule {
 		}
 		return result;
 	}
-	public ArrayList<Node> select_card(Node n_raw, Node deck)
+	public ArrayList<Node> select_card(Node n_raw, Node cards_raw)
 	{
-		// TODO: UI를 띄워 선택을 요구한다.
-		return null;
+		ArrayList<Node> card_=cards(cards_raw);
+		int n=num(n_raw);
+		
+		ArrayList<String> c=new ArrayList<String>();
+		int loop;
+		for(loop=0;loop<card_.size();loop++)
+			c.add((String)card_.get(loop).getData());
+		// UI를 띄워 선택을 요구한다.
+		tpui.set_select_cases("Cards" ,c, n);
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			System.out.println("Interrupt");
+		}
+		
+		ArrayList<Node> result=new ArrayList<Node>();
+		for(loop=0;loop<selection_result.size();loop++)
+		{
+			result.add(card_.get(selection_result.get(loop)));
+		}
+		return result;
 	}
 
 	
@@ -951,20 +1033,23 @@ public class TestplayModule {
 
 	public boolean cond_numcompare(Node n1_raw, String comparator, Node n2_raw)
 	{
+		int n1=num(n1_raw);
+		int n2=num(n2_raw);
 		if(comparator.equals("=="))
-			return num(n1_raw)==num(n2_raw);
+			return n1==n2;
 		else if(comparator.equals("!="))
-			return num(n1_raw)!=num(n2_raw);
+			return n1!=n2;
 		else if(comparator.equals(">"))
-			return num(n1_raw)>num(n2_raw);
+			return n1>n2;
 		else if(comparator.equals("<"))
-			return num(n1_raw)<num(n2_raw);
+			return n1<n2;
 		else if(comparator.equals(">="))
-			return num(n1_raw)>=num(n2_raw);
+			return n1>=n2;
 		else if(comparator.equals("<="))
-			return num(n1_raw)<=num(n2_raw);
+			return n1<=n2;
 		
 		// TODO: 잘못된 비교 연산자 오류 처리
+		System.err.println("cond_numcompare: Comparator Error");
 		return false;
 	}
 	public boolean cond_samecard(Node card_raw)
@@ -1067,76 +1152,66 @@ public class TestplayModule {
 		ArrayList<Node> c = cards(cards_raw);
 		return c.size();
 	}
-	//플레이어의 특정 변수(숫자)
-	public int num_get_player(String name, Node player_raw)
-	{
-		// 플레이어를 계산한다.
-				ArrayList<Integer> p = players(player_raw);
-				// TODO: 1명이 아니면 에러를 띄운다.
-				// 플레이어의 해당하는 값을 불러온다.
-				return (Integer)variables[p.get(0)][player_variable_index.get(name)];
-	}
-	//카드의 특정 변수(숫자)
-	public int num_get_card(String name, Node card_raw)
-	{
-		// 카드를 계산한다.
-		ArrayList<Node> c = cards(card_raw);
-		// TODO: 1장이 아니면 에러를 띄운다.
-		Node temp_card = c.get(0);
-		int loop;
-		for(loop = 0; loop<temp_card.numChildren(); loop++)
-		{
-			if(name.equals(temp_card.getChildNode(loop).getData()))
-			{
-				return (Integer)(temp_card.getChildNode(loop).getChildNode(0).getData());
-			}
-		}
-		
-		// TODO: 카드의 특정 attribute를 가져온다.
-		
-		return 0;
-	}
 	//숫자 간의 계산(사칙연산)
 	public int num_operation(Node num1, String op, Node num2)
 	{
-		//TODO: 사칙연산.
+		int n1=num(num1);
+		int n2=num(num2);
+		if(op.equals("+"))
+			return n1+n2;
+		if(op.equals("-"))
+			return n1-n2;
+		if(op.equals("*"))
+			return n1*n2;
+		if(op.equals("/"))
+			return n1/n2;
+		if(op.equals("/^"))
+			return (n1+n2-1)/n2;
+		if(op.equals("//"))
+			return (n1+n2/2)/n2;
+		if(op.equals("%"))
+			return n1%n2;
+		
+		// TODO: 잘못된 비교 연산자 오류 처리
+		System.err.println("num_operation: Operator Error");
 		return 0;
 	}
 	//플레이어가 숫자 선택
-	public int call_num(Node min, Node max)
+	public int call_num(Node min_raw, Node max_raw)
 	{
-		// TODO: 플레이어에게 min과 max사이의 수 중 선택하도록 하는 UI를 띄운다.
-		return 0;
+		int min_=num(min_raw);
+		int max_=num(max_raw);
+		// UI를 띄워 선택을 요구한다.
+		tpui.set_call_int(min_,max_);
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			System.out.println("Interrupt");
+		}
+		
+		return selection_result.get(0);
 	}
 	
 	///////////////////////// STRING EVALUATION FUNCTIONS ///////////////////////
 	// Node를 계산하여 해당하는 String값을  돌려준다.
 	// 리턴 :String
-
-	//플레이어의 특정 값
-	public String string_get_player(String name, Node player_raw)
+	public String call_string(ArrayList<Node> str_raw)
 	{
-		// 플레이어를 계산한다.
-		ArrayList<Integer> p = players(player_raw);
-		// TODO: 1명이 아니면 에러를 띄운다.
-		// 플레이어의 해당하는 값을 불러온다.
-		return (String)variables[p.get(0)][player_variable_index.get(name)];
-	}
-	
-	public String string_get_card(String name, Node card_raw)
-	{
-		// 카드를 계산한다.
-		ArrayList<Node> c = cards(card_raw);
-		// TODO: 1장이 아니면 에러를 띄운다.
-		// TODO: 카드의 특정 attribute를 가져온다. : 위의 num_get_card과 같음.
-		c.get(0).numChildren();
-		return null;
-	}
-	
-	public String call_string(String[] range)
-	{
-		// TODO: 플레이어에게 range 중 하나를 선택하도록 하는 UI를 띄운다.
-		return null;
+		int loop;
+		ArrayList<String> c=new ArrayList<String>();
+		for(loop=0;loop<str_raw.size();loop++)
+		{
+			c.add(str(str_raw.get(loop)));
+		}
+		// UI를 띄워 선택을 요구한다.
+		tpui.set_select_cases("String" ,c, 1);
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			System.out.println("Interrupt");
+		}
+		
+		return c.get(selection_result.get(0));
 	}
 	
 	
