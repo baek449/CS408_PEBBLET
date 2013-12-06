@@ -7,8 +7,26 @@ public class Definition implements Serializable{
 	private Node root;
 	public Definition()
 	{
-		root=null;
+		root = new Node(null, null);
+		
+		Node player_number = new Node(NodeType.nd_num, root);
+		player_number.setData("N_player");
+		Node player_number_value = new Node(NodeType.nd_raw,player_number);
+		player_number_value.setData(1);
+		
+		Node global_variables = new Node(NodeType.nd_def_global, root);
+		global_variables.setData("Global");
+		Node player_variables = new Node(NodeType.nd_def_player, root);
+		player_variables.setData("Player");
+		Node card_variables = new Node(NodeType.nd_def_card, root);
+		card_variables.setData("Card");
+
 	}
+	public Definition(Node root_)
+	{
+		root=root_;
+	}
+
 	public Node getRoot()
 	{
 		return root;

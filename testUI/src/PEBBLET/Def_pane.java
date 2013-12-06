@@ -27,8 +27,12 @@ public class Def_pane extends JComponent{
 	private JScrollPane def_sc;
 	
 	private JPanel global_pane;
+//	private ArrayList<Integer> global_pane_index;
+	private int[] global_pane_index = {1};
 	private JPanel players_pane; 
-	private ArrayList<JPanel> cards_pane;  
+//	private ArrayList<Integer> players_pane_index;
+	private int[] players_pane_index = {2};
+	private ArrayList<JPanel> cards_pane;
 	
 	private int players_num;
 	
@@ -85,6 +89,7 @@ public class Def_pane extends JComponent{
 	
 	public void make_global(){
 //		global_pane 여기다가 add
+		
 		global_pane.setLayout(null);
 		
 		make_global_item();
@@ -109,6 +114,7 @@ public class Def_pane extends JComponent{
 				global_pane.add(add_global);
 				def_pane.repaint();
 				def_pane.validate();
+				dm.getDefinition().getRoot().printAll();//for debugging
 			}
 		});
 		
@@ -129,6 +135,8 @@ public class Def_pane extends JComponent{
 
 		int i = 1;
 		box_type.addItem("Select type");
+		Deck_box select = new Deck_box();
+		select.set_parent(dm.search(global_pane_index));
 		while(i <= dm.get_selection_noncard_del().length){
 			box_type.addItem(dm.get_selection_noncard_del()[i-1]);
 			i++;
@@ -151,6 +159,7 @@ public class Def_pane extends JComponent{
 				String item = (String)e.getItem();
 				global_item_pane.setLayout(null);
 				if(e.getStateChange() == ItemEvent.SELECTED){
+					int del_box_index = getComponentIndex(global_item_pane);
 					switch (item) {
 						case "(Cancel)":
 							box_type.setSelectedItem(box_type.getItemAt(preStatus));
@@ -158,42 +167,49 @@ public class Def_pane extends JComponent{
 						case "Deck []":
 							preStatus = 1;
 							Deck_box deckbox = new Deck_box();
+							dm.search(global_pane_index).deleteChildNode(del_box_index);
 							global_item_pane.removeAll();
 							global_item_pane.setLayout(null);
 							global_item_pane.add(box_type);
 							deckbox.addtoPanel(global_item_pane, 125, 0);
 							def_pane.repaint();
+							deckbox.set_parent(dm.search(global_pane_index));
 							break;
 						case "Number []":
 							preStatus = 2;
 							Number_box numbox = new Number_box();
+							dm.search(global_pane_index).deleteChildNode(del_box_index);
 							global_item_pane.removeAll();
 							global_item_pane.setLayout(null);
 							global_item_pane.add(box_type);
 							numbox.addtoPanel(global_item_pane, 125, 0);
 							def_pane.repaint();
+							numbox.set_parent(dm.search(global_pane_index));
 							break;
 						case "String []":
 							preStatus = 3;
 							String_box stringbox = new String_box();
+							dm.search(global_pane_index).deleteChildNode(del_box_index);
 							global_item_pane.removeAll();
 							global_item_pane.setLayout(null);
 							global_item_pane.add(box_type);
 							stringbox.addtoPanel(global_item_pane, 125, 0);
 							def_pane.repaint();
+							stringbox.set_parent(dm.search(global_pane_index));
 							break;
 						case "Player []":
 							preStatus = 4;
 							Player_box playerbox = new Player_box();
+							dm.search(global_pane_index).deleteChildNode(del_box_index);
 							global_item_pane.removeAll();
 							global_item_pane.setLayout(null);
 							global_item_pane.add(box_type);
 							playerbox.addtoPanel(global_item_pane, 125, 0);
 							def_pane.repaint();
+							playerbox.set_parent(dm.search(global_pane_index));
 							break;
 						case "(Delete)":
 							int total = global_pane.getComponentCount();
-							int del_box_index = getComponentIndex(global_item_pane);
 							global_pane.remove(global_item_pane);
 							
 							for(int i = del_box_index; i < total-1; i++){
@@ -247,6 +263,16 @@ public class Def_pane extends JComponent{
 	
 	public void set_players_num(int i){
 		players_num = i;
+		int[] a={0,0};
+		dm.search(a).setData(i);
+	}
+	
+	public void addNodetoTarger(JComponent target){
+		
+	}
+	
+	public void getNodeFromTarget(JComponent target){
+		
 	}
 	
 	public static final int getComponentIndex(JComponent component) {

@@ -11,26 +11,36 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import manager.Node;
+import manager.NodeType;
+
 public class Number_box extends JComponent {
 	
 	private JTextField title;
 	private JLabel colon;
-	private ArrayList<JTextField> values;
+	private ArrayList<NumTextField> values;
 	private JButton add_button;
 	private JButton remove_button;
+	private JButton set_button;
 	
 	private JPanel Number_box_pane;
 	private int endof_box_pos;
+	
+	private Node Numbox_node;
+	
+	
 	public Number_box(){
 		Number_box_pane = new JPanel(true);
 		
 		endof_box_pos = 60;
 		
+		Numbox_node = new Node();
+		Numbox_node.set_node_type(NodeType.nd_num);
 		Number_box_pane.setLayout(null);
 		
 
 		
-		values = new ArrayList<JTextField>();
+		values = new ArrayList<NumTextField>();
 		
 		title = new JTextField();
 		title.setBounds(0,0,50,20);
@@ -46,6 +56,8 @@ public class Number_box extends JComponent {
 		add_button.setBounds(endof_box_pos + 5 , 0, 20,20);
 		remove_button = new JButton("-");
 		remove_button.setBounds(endof_box_pos + 30, 0, 20, 20);
+		set_button = new JButton("set");
+		set_button.setBounds(endof_box_pos + 55 , 0, 30, 20);
 		
 		add_button.addActionListener(new ActionListener() {
 			
@@ -55,7 +67,8 @@ public class Number_box extends JComponent {
 				add_values_box();
 				add_button.setBounds(endof_box_pos + 5 , 0, 20,20);
 				remove_button.setBounds(endof_box_pos + 30, 0, 20, 20);
-				Number_box_pane.setSize(endof_box_pos + 80, 20);
+				set_button.setBounds(endof_box_pos + 55, 0, 30, 20);
+				Number_box_pane.setSize(endof_box_pos + 110, 20);
 			}
 		});
 
@@ -68,35 +81,58 @@ public class Number_box extends JComponent {
 					remove_value_box();				
 					add_button.setBounds(endof_box_pos + 5 , 0, 20,20);
 					remove_button.setBounds(endof_box_pos + 30, 0, 20, 20);
-					Number_box_pane.setSize(endof_box_pos + 80, 20);
+					set_button.setBounds(endof_box_pos + 55, 0, 30, 20);
+					Number_box_pane.setSize(endof_box_pos + 110, 20);
 				}
 			}
 		});
 		
+		set_button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Numbox_node.setData(title.getText());
+				for(int a =0; a<values.size(); a++){
+					values.get(a).get_node().setData(values.get(a).getText());
+				}
+				
+			}
+		});
+		
+		
 		Number_box_pane.add(add_button);
 		Number_box_pane.add(remove_button);		
-		
+		Number_box_pane.add(set_button);
 		
 		
 		
 	}
 	
 	public void add_values_box(){
-		JTextField new_value = new JTextField();
+		NumTextField new_value = new NumTextField();
 		
 		int i = values.size();
 		
 		new_value.setBounds(60 + 55*i, 0, 50, 20);
 //		Number_box_pane.setLayout(null);
-		Number_box_pane.add(new_value); //add to pane
+//		Number_box_pane.add(new_value); //add to pane
+		
+		new_value.addtoPanel(Number_box_pane, 60+55*i, 0);
+		
+		new_value.set_parent(Numbox_node);
+		
 		values.add(new_value); 			//add to list
 		endof_box_pos += 55;
+		
 		
 	}
 	public void remove_value_box(){
 		
 		Number_box_pane.remove(values.get(values.size()-1));
 		endof_box_pos -= 55;
+		
+		Numbox_node.deleteChildNode(values.size()-1);
 		
 		values.remove(values.size()-1);
 		
@@ -109,21 +145,21 @@ public class Number_box extends JComponent {
 	
 	public void addtoPanel(JComponent comp, int x, int y){
 		comp.setLayout(null);
-		Number_box_pane.setBounds(x,y,endof_box_pos+80,20);
+		Number_box_pane.setBounds(x,y,endof_box_pos+110,20);
 		comp.add(Number_box_pane);
 	}
 	
-	public ArrayList<JTextField> get_values(){
+	public ArrayList<NumTextField> get_values(){
 		return values;
 	}
 	
 	public int get_values(int i){
 		
-		return Integer.parseInt(values.get(i).getText());
+		return values.get(i).getText();
 	}
 
 	
-	public void set_values(ArrayList<JTextField> _inputarray){
+	public void set_values(ArrayList<NumTextField> _inputarray){
 		int i = 0;
 		values.clear();
 		while(i < _inputarray.size()){
@@ -143,6 +179,25 @@ public class Number_box extends JComponent {
 	
 	public void set_title(String _input){
 		title.setText(_input);
+	}
+	public String get_title(){
+		return title.getText();
+	}
+	
+	public void set_Num_NodeData(String _input){
+		Numbox_node.setData(_input);
+	}
+	
+	public Object get_Num_NodeData(){
+		return Numbox_node.getData();
+	}
+	
+	public Node get_Numnode(){
+		return Numbox_node;
+	}
+	
+	public void set_parent(Node node_parent){
+		node_parent.addChildNode(Numbox_node);
 	}
 	
 	

@@ -113,6 +113,24 @@ public class Node implements Serializable{
 		children.remove(n);
 	}
 	
+	public void printAll()
+	{
+		printAll(0,0);
+	}
+	
+	private void printAll(int indent, int child_index)
+	{
+		int loop;
+		for(loop=0;loop<indent;loop++)
+			System.out.print("\t");
+		System.out.println(child_index+" / NodeType "+node_type+" / "+data);
+		for(loop=0;loop<numChildren();loop++)
+		{
+			getChildNode(loop).printAll(indent+1,loop);
+		}
+		
+	}
+
 	
 	//// For UI
 	public AreaRange ar_current;

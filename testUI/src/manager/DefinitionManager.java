@@ -42,6 +42,10 @@ public class DefinitionManager {
 		return selection_del;
 	}
 	
+	public DefinitionManager(){
+		definition = new Definition();
+	}
+	
 	private Definition definition;
 	private static DefinitionDisplayer m;
 	public Node search(int[] location)

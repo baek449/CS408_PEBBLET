@@ -10,12 +10,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import manager.Node;
+import manager.NodeType;
+
 public class String_box extends JComponent{
 	private JTextField title;
 	private JLabel colon;
-	private ArrayList<JTextField> values;
+	private ArrayList<StringTextField> values;
 	private JButton add_button;
 	private JButton remove_button;
+	private JButton set_button;
+	
+	private Node Strbox_node;
 	
 	private JPanel String_box_pane;
 	private int endof_box_pos;
@@ -26,9 +32,11 @@ public class String_box extends JComponent{
 		
 		String_box_pane.setLayout(null);
 		
+		Strbox_node = new Node();
+		Strbox_node.set_node_type(NodeType.nd_str);
 
 		
-		values = new ArrayList<JTextField>();
+		values = new ArrayList<StringTextField>();
 		
 		title = new JTextField();
 		title.setBounds(0,0,50,20);
@@ -44,6 +52,8 @@ public class String_box extends JComponent{
 		add_button.setBounds(endof_box_pos + 5 , 0, 20,20);
 		remove_button = new JButton("-");
 		remove_button.setBounds(endof_box_pos + 30, 0, 20, 20);
+		set_button = new JButton("set");
+		set_button.setBounds(endof_box_pos + 55, 0, 30, 20);
 		
 		add_button.addActionListener(new ActionListener() {
 			
@@ -53,7 +63,8 @@ public class String_box extends JComponent{
 				add_values_box();
 				add_button.setBounds(endof_box_pos + 5 , 0, 20,20);
 				remove_button.setBounds(endof_box_pos + 30, 0, 20, 20);
-				String_box_pane.setSize(endof_box_pos + 80, 20);
+				set_button.setBounds(endof_box_pos + 55, 0, 30, 20);
+				String_box_pane.setSize(endof_box_pos + 110, 20);
 			}
 		});
 
@@ -66,27 +77,44 @@ public class String_box extends JComponent{
 					remove_value_box();				
 					add_button.setBounds(endof_box_pos + 5 , 0, 20,20);
 					remove_button.setBounds(endof_box_pos + 30, 0, 20, 20);
-					String_box_pane.setSize(endof_box_pos + 80, 20);
+					set_button.setBounds(endof_box_pos + 55, 0, 30, 20);
+					String_box_pane.setSize(endof_box_pos + 110, 20);
 				}
 			}
 		});
 		
-		String_box_pane.add(add_button);
-		String_box_pane.add(remove_button);		
+		set_button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Strbox_node.setData(title.getText());
+				for(int a =0; a<values.size(); a++){
+					values.get(a).get_node().setData(values.get(a).getText());
+				}
+				
+			}
+		});
 		
+		String_box_pane.add(add_button);
+		String_box_pane.add(remove_button);	
+		String_box_pane.add(set_button);
 		
 		
 		
 	}
 	
 	public void add_values_box(){
-		JTextField new_value = new JTextField();
+		StringTextField new_value = new StringTextField();
 		
 		int i = values.size();
 		
 		new_value.setBounds(60 + 55*i, 0, 50, 20);
 //		String_box_pane.setLayout(null);
-		String_box_pane.add(new_value); //add to pane
+//		String_box_pane.add(new_value); //add to pane
+		new_value.addtoPanel(String_box_pane, 60+55*i, 0);
+		
+		new_value.set_parent(Strbox_node);
 		values.add(new_value); 			//add to list
 		endof_box_pos += 55;
 		
@@ -95,6 +123,8 @@ public class String_box extends JComponent{
 		
 		String_box_pane.remove(values.get(values.size()-1));
 		endof_box_pos -= 55;
+		
+		Strbox_node.deleteChildNode(values.size()-1);
 		
 		values.remove(values.size()-1);
 		
@@ -107,11 +137,11 @@ public class String_box extends JComponent{
 	
 	public void addtoPanel(JComponent comp, int x, int y){
 		comp.setLayout(null);
-		String_box_pane.setBounds(x,y,endof_box_pos+80,20);
+		String_box_pane.setBounds(x,y,endof_box_pos+110,20);
 		comp.add(String_box_pane);
 	}
 	
-	public ArrayList<JTextField> get_values(){
+	public ArrayList<StringTextField> get_values(){
 		return values;
 	}
 	
@@ -120,7 +150,7 @@ public class String_box extends JComponent{
 		return values.get(i).getText();
 	}
 	
-	public void set_values(ArrayList<JTextField> _inputarray){
+	public void set_values(ArrayList<StringTextField> _inputarray){
 		int i = 0;
 		values.clear();
 		while(i < _inputarray.size()){
@@ -140,6 +170,25 @@ public class String_box extends JComponent{
 	
 	public void set_title(String _input){
 		title.setText(_input);
+	}
+	public String get_title(){
+		return title.getText();
+	}
+	
+	public void set_Num_NodeData(String _input){
+		Strbox_node.setData(_input);
+	}
+	
+	public Object get_Num_NodeData(){
+		return Strbox_node.getData();
+	}
+	
+	public Node get_Numnode(){
+		return Strbox_node;
+	}
+	
+	public void set_parent(Node node_parent){
+		node_parent.addChildNode(Strbox_node);
 	}
 	
 }
