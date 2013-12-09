@@ -165,7 +165,7 @@ public class TestplayUI extends JFrame {
 			total.add(per_player_total[player_loop]);
 			total.add(Box.createRigidArea(new Dimension(10,10)));
 			
-			per_player_name[player_loop]=new JLabel("Player"+player_loop);
+			per_player_name[player_loop]=new JLabel("Player "+player_loop);
 			if(player_loop==0) per_player_name[player_loop].setText(" ");
 			per_player_total[player_loop].add(per_player_name[player_loop]);
 			per_player_name[player_loop].setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
@@ -219,6 +219,7 @@ public class TestplayUI extends JFrame {
 				per_var_type[player_loop][var_loop]=new JLabel(tmptype);
 				per_var_type[player_loop][var_loop].setForeground(new Color(0,0,200));
 				per_var_colon[player_loop][var_loop]=new JLabel("   :   ");
+				per_var_board[player_loop][var_loop].add(Box.createRigidArea(new Dimension(10,10)));
 				per_var_board[player_loop][var_loop].add(per_var_type[player_loop][var_loop]);
 				per_var_board[player_loop][var_loop].add(per_var_name[player_loop][var_loop]);
 				per_var_board[player_loop][var_loop].add(per_var_colon[player_loop][var_loop]);
@@ -262,7 +263,7 @@ public class TestplayUI extends JFrame {
 			
 			per_player_board[player_loop].add(per_player_deck_board[player_loop]);
 		}
-		
+		pack();
 		update_variable_UI();
 		
 		/////////////////////////////////////////////////////////////////////////////////////////
@@ -299,8 +300,6 @@ public class TestplayUI extends JFrame {
 		confirm=new JButton("Confirm");
 		confirm.addMouseListener(new MouseAdapter() {
 			public synchronized void mouseClicked(MouseEvent e) {
-				System.out.println("Confirm pressed");
-				System.out.println(currently_visible);
 				int loop;
 				ArrayList<Integer> a=new ArrayList<Integer>();
 				if(currently_visible.equals(input_board_layouts[1])) // Selection
@@ -394,33 +393,50 @@ public class TestplayUI extends JFrame {
 		player_order=tpm.get_player_seat();
 		cur_player=tpm.get_current_player();
 		total.removeAll();
+		total.add(Box.createRigidArea(new Dimension(10,10)));
+
 		int loop;
 		if(cur_player==-1)
 		{
 			total.add(per_player_total[0]);
+			total.add(Box.createRigidArea(new Dimension(10,10)));
+
 			for(loop=0;loop<player_order.size();loop++)
+			{
 				total.add(per_player_total[player_order.get(loop)]);
+				total.add(Box.createRigidArea(new Dimension(10,10)));
+			}
 			return;
 		}
 		cur_player=player_order.indexOf(cur_player);
 		total.add(per_player_total[player_order.get(cur_player)]);
+		total.add(Box.createRigidArea(new Dimension(10,10)));
 		total.add(per_player_total[0]);
+		total.add(Box.createRigidArea(new Dimension(10,10)));
+
 		for(loop=cur_player+1;loop<player_order.size();loop++)
+		{
 			total.add(per_player_total[player_order.get(loop)]);
+			total.add(Box.createRigidArea(new Dimension(10,10)));
+		}
 		for(loop=0;loop<cur_player;loop++)
+		{
 			total.add(per_player_total[player_order.get(loop)]);
+			total.add(Box.createRigidArea(new Dimension(10,10)));
+		}
 	}
 	public void update_variable_UI()
 	{
-		int player_loop, var_loop, card_loop, card_num;
-		boolean i;
+		int player_loop, var_loop, card_loop, card_num, card_data_loop;
+		boolean i,j,h;
 		Object t;
-		Node n;
-		String tmp;
+		Node n,crd;
+		String tmp,card_data;
 		update_player_order_UI();
 		for(player_loop=0;player_loop<per_player_board.length;player_loop++)
 		{
 			i=(player_loop==0);
+			j=(player_loop==tpm.get_current_player());
 			for(var_loop=0;var_loop<per_var_name[player_loop].length;var_loop++) // variables
 			{
 				if(i) t=variables[player_loop][global_variable_index.get(per_var_name[player_loop][var_loop].getText())];
@@ -433,6 +449,7 @@ public class TestplayUI extends JFrame {
 			{
 				per_deck_board[player_loop][var_loop].removeAll();
 				per_deck_board[player_loop][var_loop].add(per_deck_name[player_loop][var_loop]);
+				h=per_deck_name[player_loop][var_loop].getText().endsWith("#");
 				per_card_board[player_loop][var_loop]=null;
 				per_card_name[player_loop][var_loop]=null;
 				if(i) t=variables[player_loop][global_variable_index.get(per_deck_name[player_loop][var_loop].getText())];
@@ -461,7 +478,24 @@ public class TestplayUI extends JFrame {
 						//per_card_board[player_loop][var_loop][card_loop].setBounds(5, 20+card_loop*20, 60, 15);
 						per_card_board[player_loop][var_loop][card_loop].setBorder(BorderFactory.createLineBorder(Color.BLACK));
 						per_deck_board[player_loop][var_loop].add(per_card_board[player_loop][var_loop][card_loop]);
-						per_card_name[player_loop][var_loop][card_loop]=new JLabel((String)n.getChildNode(card_loop).getData());
+						per_card_name[player_loop][var_loop][card_loop]=new JLabel(" ");
+						if(!j && h)
+						{
+							per_card_name[player_loop][var_loop][card_loop].setText("???");
+							per_card_board[player_loop][var_loop][card_loop].setToolTipText("Hidden!");
+						}
+						else
+						{
+							crd=n.getChildNode(card_loop);
+							per_card_name[player_loop][var_loop][card_loop].setText((String)crd.getData());
+							card_data="<html>";
+							for(card_data_loop=0;card_data_loop<crd.numChildren();card_data_loop++)
+							{
+								card_data+=crd.getChildNode(card_data_loop).getData()+" : "+crd.getChildNode(card_data_loop).getChildNode(0).getData()+"<br>";
+							}
+							card_data+="</html>";
+							per_card_board[player_loop][var_loop][card_loop].setToolTipText(card_data);
+						}
 						per_card_board[player_loop][var_loop][card_loop].add(per_card_name[player_loop][var_loop][card_loop]);
 					}
 					per_deck_board[player_loop][var_loop].add(Box.createVerticalGlue());
@@ -535,6 +569,7 @@ public class TestplayUI extends JFrame {
 	}
 	public void set_endgame(String message)
 	{
+		tpm.stopRun();
 		update_variable_UI();
 		msg_label.setText("Game End");
 		err_msg_label.setText("");
@@ -547,10 +582,11 @@ public class TestplayUI extends JFrame {
 		
 		((CardLayout)input_board.getLayout()).show(input_board, input_board_layouts[3]);
 		currently_visible=input_board_layouts[3];
+		
 	}
 	private void update_window_size()
 	{
-		pack();
+//		pack();
 		Rectangle r=total.getVisibleRect();
 		set_play_board_size(r.getSize());
 	}
@@ -576,8 +612,10 @@ public class TestplayUI extends JFrame {
 	}
 	private class TPThread extends Thread {
 		public void run() {
+			tpm.makeRun();
 			tpm.action(rul.getRoot().getChildNode(0));
-			set_endgame("The game was ended without explicit termination.");
+			if(!currently_visible.equals(input_board_layouts[3]))
+				set_endgame("The game was ended without explicit termination.");
 		}
 	}
 	
