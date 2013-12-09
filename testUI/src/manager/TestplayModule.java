@@ -162,11 +162,6 @@ public class TestplayModule {
 				}
 			}
 		}
-		variables[0][1]=new Node(NodeType.nd_deck,null);
-		Node c1=new Node(NodeType.nd_card,(Node)variables[0][1]);
-		c1.setData("Spade A");
-		//c1=new Node(NodeType.nd_card,(Node)variables[0][1]);
-		//c1.setData("Spade A");
 	}
 	
 	// ***
@@ -1006,7 +1001,7 @@ public class TestplayModule {
 		}
 		return result;
 	}
-	public ArrayList<Node> select_card(Node n_raw, Node cards_raw)
+	public synchronized ArrayList<Node> select_card(Node n_raw, Node cards_raw)
 	{
 		ArrayList<Node> card_=cards(cards_raw);
 		int n=num(n_raw);

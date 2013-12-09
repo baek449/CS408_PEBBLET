@@ -84,7 +84,7 @@ public class TestplayMain {
 				Node deck_2_1 = new Node(NodeType.nd_deck, act_2_shuffle);
 				deck_2_1.setData("center");
 				
-				// 한 장씩 가져오기
+				// 두 장씩 가져오기
 				Node act_3_perplayer = new Node(NodeType.nd_action, act_multiple);
 				act_3_perplayer.setData(RuleCase.action_act);
 				// 전체 플레이어
@@ -108,6 +108,31 @@ public class TestplayMain {
 				Node deck_3_2_2=new Node(NodeType.nd_deck, act_3_2);
 				deck_3_2_2.setData("hand");
 				
+				// 한 장씩 버리기
+				Node act_4_perplayer = new Node(NodeType.nd_action, act_multiple);
+				act_4_perplayer.setData(RuleCase.action_act);
+				// 전체 플레이어
+				Node player_4_1=new Node(NodeType.nd_player, act_4_perplayer);
+				player_4_1.setData(RuleCase.player_all);
+				Node act_4_2=new Node(NodeType.nd_action, act_4_perplayer);
+				act_4_2.set_scope_player(true);
+				act_4_2.setData(RuleCase.action_move);
+				// top카드
+				Node card_4_2_1=new Node(NodeType.nd_card, act_4_2);
+				card_4_2_1.setData(RuleCase.card_select);
+				// 숫자 2
+				Node num_4_2_1_1=new Node(NodeType.nd_num, card_4_2_1);
+				num_4_2_1_1.setData(RuleCase.num_raw);
+				Node num_4_2_1_1_1=new Node(NodeType.nd_raw, num_4_2_1_1);
+				num_4_2_1_1_1.setData(1);
+				// hand 덱의 모든 카드
+				Node card_4_2_1_2=new Node(NodeType.nd_card,card_4_2_1);
+				card_4_2_1_2.setData(RuleCase.card_all);
+				Node deck_4_2_1_2_1=new Node(NodeType.nd_deck, card_4_2_1_2);
+				deck_4_2_1_2_1.setData("hand");
+				// discard 덱
+				Node deck_4_2_2=new Node(NodeType.nd_deck, act_4_2);
+				deck_4_2_2.setData("discard");
 				
 				Definition sample_def=new Definition();
 				sample_def.setRoot(def_root);
@@ -121,8 +146,6 @@ public class TestplayMain {
 		
 				////////////////////////// TODO: End
 				
-				//DefinitionDisplayer test_def = new DefinitionDisplayer(dm);
-				//RuleDisplayer test_rul = new RuleDisplayer(rm);
 				
 				
 				
@@ -131,6 +154,7 @@ public class TestplayMain {
 				TestplayModule tpm=new TestplayModule(sample_def);
 				
 				TestplayUI ex = new TestplayUI(tpm);
+				ex.run_testplay(sample_rul);
 				//tpm.action(rul_root.getChildNode(0));
 			}
 		});

@@ -40,9 +40,11 @@ public class TestplayUI extends JFrame {
 	// UI Components
 	private JPanel play_board; // 플레이 장면이 표시되는 곳 :center
 	///////////////////////////// play_board dynamic components
-	HashMap<String,Integer> global_variable_index, player_variable_index;
-	String[][][] variable_name_classification;
-	Object[][] variables;
+	private ArrayList<Integer> player_order;
+	private int cur_player;
+	private HashMap<String,Integer> global_variable_index, player_variable_index;
+	private String[][][] variable_name_classification;
+	private Object[][] variables;
 	
 	private JPanel total;
 	private JPanel[] per_player_total; // 플레이어별 보드 :center:#
@@ -111,6 +113,7 @@ public class TestplayUI extends JFrame {
 	
 	public TestplayUI (TestplayModule tpm_) {
 		tpm=tpm_;
+		tpm.setUI(this);
 		get_tpm_info();
 		setTitle("PEBBLET Testplay");
 		setSize(1000,500);
@@ -163,13 +166,13 @@ public class TestplayUI extends JFrame {
 			total.add(Box.createRigidArea(new Dimension(10,10)));
 			
 			per_player_name[player_loop]=new JLabel("Player"+player_loop);
-			if(player_loop==0) per_player_name[player_loop].setText("Global Field");
+			if(player_loop==0) per_player_name[player_loop].setText(" ");
 			per_player_total[player_loop].add(per_player_name[player_loop]);
 			per_player_name[player_loop].setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
 			
 			per_player_board[player_loop]=new JPanel();
 			per_player_board[player_loop].setLayout(new BoxLayout(per_player_board[player_loop],BoxLayout.PAGE_AXIS));
-			per_player_board[player_loop].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			if(player_loop!=0) per_player_board[player_loop].setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			per_player_total[player_loop].add(per_player_board[player_loop]);
 			per_player_board[player_loop].setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
 			
@@ -336,7 +339,7 @@ public class TestplayUI extends JFrame {
 				}
 				tpm.set_selection_result(a);
 				reset();
-				notifyAll();
+				t.interrupt();
 				return;
 			}
 		});
@@ -385,19 +388,28 @@ public class TestplayUI extends JFrame {
 		set_selection_board_size(new Dimension(600,80));
 		setVisible(true);
 		
-		ArrayList<String> ar=new ArrayList<String>();
-		ar.add("p1:hand");
-		ar.add("p2:hand");
-		ar.add("center");
-		ar.add("discard");
-		ar.add("test_12");
-		ar.add("test_1");
-		//set_select_cases("Deck",ar,2);
-		//set_call_int(13,20);
-		set_endgame("The game was ended without explicit termination.");
-		
     }
-	
+	public void update_player_order_UI()
+	{
+		player_order=tpm.get_player_seat();
+		cur_player=tpm.get_current_player();
+		total.removeAll();
+		int loop;
+		if(cur_player==-1)
+		{
+			total.add(per_player_total[0]);
+			for(loop=0;loop<player_order.size();loop++)
+				total.add(per_player_total[player_order.get(loop)]);
+			return;
+		}
+		cur_player=player_order.indexOf(cur_player);
+		total.add(per_player_total[player_order.get(cur_player)]);
+		total.add(per_player_total[0]);
+		for(loop=cur_player+1;loop<player_order.size();loop++)
+			total.add(per_player_total[player_order.get(loop)]);
+		for(loop=0;loop<cur_player;loop++)
+			total.add(per_player_total[player_order.get(loop)]);
+	}
 	public void update_variable_UI()
 	{
 		int player_loop, var_loop, card_loop, card_num;
@@ -405,6 +417,7 @@ public class TestplayUI extends JFrame {
 		Object t;
 		Node n;
 		String tmp;
+		update_player_order_UI();
 		for(player_loop=0;player_loop<per_player_board.length;player_loop++)
 		{
 			i=(player_loop==0);
@@ -473,6 +486,7 @@ public class TestplayUI extends JFrame {
 	}
 	public void set_select_cases(String msg_,ArrayList<String> cases_, int n_)
 	{
+		update_variable_UI();
 		msg="Select "+n_+" "+msg_+" :";
 		cases=cases_;
 		n=n_;
@@ -484,6 +498,7 @@ public class TestplayUI extends JFrame {
 		//confirm_board.setVisible(true);
 		
 		selections=new JToggleButton[cases.size()];
+		selection_board.removeAll();
 		selection_board.add(Box.createRigidArea(new Dimension(10,10)));
 		int loop;
 		for(loop=0;loop<selections.length;loop++)
@@ -502,12 +517,14 @@ public class TestplayUI extends JFrame {
 	} 
 	public void set_call_int(int start_, int end_)
 	{
+		update_variable_UI();
 		start=start_;
 		end=end_;
 		msg="Call "+start+" ~ "+end+" :";
 		
 		msg_label.setText(msg);
 		err_msg_label.setText("");
+		number_field.setText(" ");
 		msg_label.setVisible(true);
 		confirm.setVisible(true);
 		err_msg_label.setVisible(true);
@@ -518,6 +535,7 @@ public class TestplayUI extends JFrame {
 	}
 	public void set_endgame(String message)
 	{
+		update_variable_UI();
 		msg_label.setText("Game End");
 		err_msg_label.setText("");
 		msg_label.setVisible(true);
@@ -533,8 +551,6 @@ public class TestplayUI extends JFrame {
 	private void update_window_size()
 	{
 		pack();
-		//total.setBackground(Color.BLUE);
-		System.out.println(total.getVisibleRect());
 		Rectangle r=total.getVisibleRect();
 		set_play_board_size(r.getSize());
 	}
