@@ -162,6 +162,11 @@ public class TestplayModule {
 				}
 			}
 		}
+		variables[0][1]=new Node(NodeType.nd_deck,null);
+		Node c1=new Node(NodeType.nd_card,(Node)variables[0][1]);
+		c1.setData("Spade A");
+		//c1=new Node(NodeType.nd_card,(Node)variables[0][1]);
+		//c1.setData("Spade A");
 	}
 	
 	// ***
@@ -381,6 +386,8 @@ public class TestplayModule {
 		{
 			switch((RuleCase)n.getData())
 			{
+			case num_raw:
+				return (Integer)n.getChildNode(0).getData();
 			case num_size_player:
 				return num_size_player(n.getChildNode(0));
 			case num_size_deck:
@@ -399,8 +406,6 @@ public class TestplayModule {
 			if (i!=null) return i;
 			return (Integer)card_predefined((String)n.getData());
 		}
-		else if (n.getData().getClass()==Integer.class)
-			return (Integer)n.getData();
 		
 		System.out.println("num Error");
 		return 0;
@@ -456,7 +461,7 @@ public class TestplayModule {
 		for(int loop=0;loop<10;loop++)
 		{
 			temp=new Node(NodeType.nd_card,deck_);
-			temp.setData(loop);
+			temp.setData(String.valueOf(loop));
 		}
 	}
 	

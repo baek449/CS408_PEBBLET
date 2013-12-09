@@ -131,6 +131,7 @@ public class TestplayMain {
 				TestplayModule tpm=new TestplayModule(sample_def);
 				
 				TestplayUI ex = new TestplayUI(tpm);
+				//tpm.action(rul_root.getChildNode(0));
 			}
 		});
     }
