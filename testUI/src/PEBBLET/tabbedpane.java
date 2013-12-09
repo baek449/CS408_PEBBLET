@@ -26,16 +26,15 @@ public class tabbedpane extends JPanel{
 //		JComponent definition = makeTextPanel("Definition");
 	
 		
-		JScrollPane defsc = new JScrollPane();
-		JScrollPane rule = new JScrollPane();
-		
-		defsc.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		defsc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);		
 		
 		
-		tabbedpane.addTab("Definition", null, defsc, "make definition");
+		Def_pane def = new Def_pane();
+		
+		
+		tabbedpane.addTab("Definition", null, def.get_scpane(), "make definition");
 		
 //		JComponent rule = makeTextPanel("Rule");
+		JPanel rule = new JPanel();
 		tabbedpane.addTab("Rule", null, rule, "make rule");
 	
 //		JComponent component = makePanel();//임시로 def를 display

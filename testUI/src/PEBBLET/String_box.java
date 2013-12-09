@@ -44,16 +44,14 @@ public class String_box extends JComponent{
 		colon = new JLabel(":");
 		colon.setBounds(55,0,5,20);
 		
-		String_box_pane.add(title);
-		String_box_pane.add(colon);
-		add_values_box();
+		
 		
 		add_button = new JButton("+");
-		add_button.setBounds(endof_box_pos + 5 , 0, 20,20);
+		add_button.setBounds(endof_box_pos + 60 , 0, 20,20);
 		remove_button = new JButton("-");
-		remove_button.setBounds(endof_box_pos + 30, 0, 20, 20);
+		remove_button.setBounds(endof_box_pos + 85, 0, 20, 20);
 		set_button = new JButton("set");
-		set_button.setBounds(endof_box_pos + 55, 0, 30, 20);
+		set_button.setBounds(endof_box_pos + 110, 0, 30, 20);
 		
 		add_button.addActionListener(new ActionListener() {
 			
@@ -99,6 +97,9 @@ public class String_box extends JComponent{
 		String_box_pane.add(add_button);
 		String_box_pane.add(remove_button);	
 		String_box_pane.add(set_button);
+		String_box_pane.add(title);
+		String_box_pane.add(colon);
+		add_values_box();
 		
 		
 		
@@ -121,7 +122,8 @@ public class String_box extends JComponent{
 	}
 	public void remove_value_box(){
 		
-		String_box_pane.remove(values.get(values.size()-1));
+//		String_box_pane.remove(values.get(values.size()-1));
+		String_box_pane.remove(String_box_pane.getComponentCount()-1);
 		endof_box_pos -= 55;
 		
 		Strbox_node.deleteChildNode(values.size()-1);

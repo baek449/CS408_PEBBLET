@@ -38,15 +38,21 @@ public class Def_pane extends JComponent{
 	
 	private int preStatus = 0;
 	private int endof_global_pane = 30;
+	private JLabel closeMark;
+	
+	
 
 	public Def_pane(){
 		
 		dm = new DefinitionManager();
-		
+		closeMark = new JLabel("}");
+
 		def_pane = new JPanel(true);
 		def_pane.setSize(new Dimension(900, 600));
 		
 		def_sc = new JScrollPane(def_pane);
+		def_sc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		def_sc.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		def_sc.setPreferredSize(new Dimension(900, 600));
 		
 		global_pane = new JPanel(true);
@@ -54,7 +60,7 @@ public class Def_pane extends JComponent{
 		cards_pane = new ArrayList<JPanel>();
 		players_num = 0;
 		make_num_players();
-		make_global();		
+		make_global();	
 		
 	}
 	public void make_num_players(){
@@ -91,33 +97,46 @@ public class Def_pane extends JComponent{
 //		global_pane 여기다가 add
 		
 		global_pane.setLayout(null);
-		
-		make_global_item();
+		JLabel Global = new JLabel("Global {");
+		Global.setBounds(5, endof_global_pane+5, 100, 20);
+		endof_global_pane += 25;
 		//add button 추후수정 combobox
+		global_pane.add(Global);
+
+		make_global_item();
+
 		final JButton add_global = new JButton("add"); //... 버튼 디폴
 		add_global.setBounds(50,endof_global_pane+5,50,20);
 		endof_global_pane += 30;
-		global_pane.setSize(new Dimension(890, endof_global_pane));
 		global_pane.add(add_global);
-		
+		closeMark.setBounds(5, endof_global_pane+5, 20, 20);
+		endof_global_pane += 30;
+		global_pane.add(closeMark);
+		global_pane.setSize(new Dimension(890, endof_global_pane));
+
 		add_global.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				global_pane.setLayout(null);
-				endof_global_pane -= 30;
+				endof_global_pane -= 60;
 				make_global_item();
 				add_global.setBounds(50, endof_global_pane + 5, 50,20);
+				endof_global_pane +=30;
+				closeMark.setBounds(5, endof_global_pane + 5, 20, 20);
 				endof_global_pane += 30;
 				global_pane.setSize(new Dimension(890, endof_global_pane));
 				global_pane.add(add_global);
+				global_pane.add(closeMark);
 				def_pane.repaint();
 				def_pane.validate();
 				dm.getDefinition().getRoot().printAll();//for debugging
+				System.out.println(global_pane.getComponentCount());
 			}
 		});
 		
+
 		
 		def_pane.setLayout(null);
 		def_pane.add(global_pane);	
@@ -149,7 +168,6 @@ public class Def_pane extends JComponent{
 		endof_global_pane += 30;
 		global_pane.add(global_item_pane);
 		def_pane.repaint();
-
 		
 		box_type.addItemListener(new ItemListener() {
 			

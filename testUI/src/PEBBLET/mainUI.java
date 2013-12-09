@@ -312,14 +312,6 @@ public class mainUI extends JFrame{
 	private static void createAndshowGUI(){
 		mainUI ex = new mainUI();
 		
-		
-		
-//		DefinitionDisplayer test_def = new DefinitionDisplayer(dm);
-//		RuleDisplayer test_rul = new RuleDisplayer(rm);
-		
-
-		
-		
 		tabbedpane pane = new tabbedpane();
 		
 
