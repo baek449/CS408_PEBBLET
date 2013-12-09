@@ -40,7 +40,7 @@ public class TestplayMain {
 				Node player_variables = new Node(NodeType.nd_def_player, def_root);
 				player_variables.setData("Player");
 				Node player_hand=new Node(NodeType.nd_deck, player_variables);
-				player_hand.setData("hand");
+				player_hand.setData("hand#");
 				Node player_str=new Node(NodeType.nd_str, player_variables);
 				player_str.setData("test_str");
 				Node player_num=new Node(NodeType.nd_num, player_variables);
@@ -106,7 +106,7 @@ public class TestplayMain {
 				deck_3_2_1_2.setData("center");
 				// hand 덱
 				Node deck_3_2_2=new Node(NodeType.nd_deck, act_3_2);
-				deck_3_2_2.setData("hand");
+				deck_3_2_2.setData("hand#");
 				
 				// 한 장씩 버리기
 				Node act_4_perplayer = new Node(NodeType.nd_action, act_multiple);
@@ -129,10 +129,17 @@ public class TestplayMain {
 				Node card_4_2_1_2=new Node(NodeType.nd_card,card_4_2_1);
 				card_4_2_1_2.setData(RuleCase.card_all);
 				Node deck_4_2_1_2_1=new Node(NodeType.nd_deck, card_4_2_1_2);
-				deck_4_2_1_2_1.setData("hand");
+				deck_4_2_1_2_1.setData("hand#");
 				// discard 덱
 				Node deck_4_2_2=new Node(NodeType.nd_deck, act_4_2);
 				deck_4_2_2.setData("discard");
+				
+				// 모두 승리
+				Node act_5_end = new Node(NodeType.nd_action, act_multiple);
+				act_5_end.setData(RuleCase.action_endgame);
+				// 전체 플레이어
+				Node player_5_1=new Node(NodeType.nd_player, act_5_end);
+				player_5_1.setData(RuleCase.player_all);
 				
 				Definition sample_def=new Definition();
 				sample_def.setRoot(def_root);

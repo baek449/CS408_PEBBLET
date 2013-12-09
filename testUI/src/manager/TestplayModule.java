@@ -11,6 +11,15 @@ import PEBBLET.TestplayUI;
 
 public class TestplayModule {
 	
+	boolean isRunning=false;
+	public void makeRun()
+	{
+		isRunning=true;
+	}
+	public void stopRun()
+	{
+		isRunning=false;
+	}
 	private TestplayUI tpui;
 	///////////////////// 실제로 들고 있는 데이터 /////////////////////
 	// 플레이어 자리
@@ -186,6 +195,7 @@ public class TestplayModule {
 	// 액션 규칙을 수행한다.
 	public void action(Node n)
 	{
+		if(!isRunning) return;
 		switch((RuleCase)n.getData())
 		{
 		case action_multiple:
@@ -222,13 +232,13 @@ public class TestplayModule {
 			action_repeat(n.getChildNode(0), n.getChildNode(1));
 			return;
 		case action_endgame:
-			System.err.println("Unimplemented action_endgame");
+			action_endgame(true,n.getChildNode(0));
 			return;
 		case action_endgame_draw:
-			System.err.println("Unimplemented action_endgame_draw");
+			action_endgame_draw();
 			return;
 		case action_endgame_order:
-			System.err.println("Unimplemented action_endgame_order");
+			action_endgame_order((Node[])n.getAllNode().toArray());
 			return;
 		case action_show:
 			System.err.println("Unimplemented action_show");
@@ -453,10 +463,19 @@ public class TestplayModule {
 		// TODO: 현재는 dummy card 10장을 집어넣어 테스트하는 상태
 		Node deck_=deck(deck_raw);
 		Node temp;
+		Node temp2,temp3;
 		for(int loop=0;loop<10;loop++)
 		{
 			temp=new Node(NodeType.nd_card,deck_);
 			temp.setData(String.valueOf(loop));
+			temp2=new Node(NodeType.nd_str,temp);
+			temp2.setData("_type");
+			temp3=new Node(NodeType.nd_raw,temp2);
+			temp3.setData("Dummy");
+			temp2=new Node(NodeType.nd_num,temp);
+			temp2.setData("value");
+			temp3=new Node(NodeType.nd_raw,temp2);
+			temp3.setData(String.valueOf(loop));
 		}
 	}
 	
@@ -532,7 +551,10 @@ public class TestplayModule {
 		ArrayList<Node> n=action_raw.getAllNode();
 		int loop;
 		for(loop=0;loop<n.size();loop++)
+		{
 			action(n.get(loop));
+			if(!isRunning) return;
+		}
 	}
 	
 	// condition_raw가 지정하는 조건이 만족되면 action_raw를 수행한다.
@@ -555,7 +577,10 @@ public class TestplayModule {
 		int n=num(n_raw);
 		int loop;
 		for(loop=0;loop<n;loop++)
+		{
 			action(action_raw);
+			if(!isRunning) return;
+		}
 	}
 	
 	public void action_card(Node c_raw, String varname)
@@ -568,19 +593,36 @@ public class TestplayModule {
 			cardStack.push(c.get(loop));
 			action(target);
 			cardStack.pop();
+			if(!isRunning) return;
 		}
 	}
-	public void action_endgame(boolean win, Node players)
+	public void action_endgame(boolean win, Node players_raw)
 	{
-		// TODO: End Game
+		String msg="";
+		ArrayList<Integer> p=players(players_raw);
+		for(int loop=0;loop<p.size();loop++)
+			msg += ", Player "+p.get(loop);
+		msg=msg.substring(2);
+		
+		if(win) msg="Victory of "+msg+".";
+		else msg="Defeat of "+msg+".";
+		tpui.set_endgame(msg);
 	}
 	public void action_endgame_draw()
 	{
-		// TODO: End Draw Game
+		tpui.set_endgame("The game ended with a draw.");
 	}
 	public void action_endgame_order(Node[] order)
 	{
-		// TODO: End game with order
+		Node player_node=new Node(NodeType.nd_player,null);
+		player_node.setData(RuleCase.player_all);
+		ArrayList<Integer> p=player_most(player_node,order);
+		String msg="";
+		for(int loop=0;loop<p.size();loop++)
+			msg += ", Player "+p.get(loop);
+		msg=msg.substring(2);
+		msg="Rank of "+msg+".";
+		tpui.set_endgame(msg);
 	}
 	public synchronized void select_action(ArrayList<Node> namedactions)
 	{
@@ -598,6 +640,7 @@ public class TestplayModule {
 		for(loop=0;loop<selection_result.size();loop++)
 		{
 			action(namedactions.get(selection_result.get(loop)).getChildNode(1));
+			if(!isRunning) return;
 		}
 	}
 	
