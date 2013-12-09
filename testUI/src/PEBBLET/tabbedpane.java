@@ -18,18 +18,16 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
 public class tabbedpane extends JPanel{
-	public tabbedpane(DefinitionDisplayer def, RuleDisplayer rule){
+	public tabbedpane(){
 		super(new GridLayout(1, 1));
 	 
 		JTabbedPane tabbedpane = new JTabbedPane();
 	
 //		JComponent definition = makeTextPanel("Definition");
-		Dimension curD = def.getcurrentdimension();
-		System.out.println(curD);
+	
 		
-		def.setPreferredSize(curD);
-		
-		JScrollPane defsc = new JScrollPane(def);
+		JScrollPane defsc = new JScrollPane();
+		JScrollPane rule = new JScrollPane();
 		
 		defsc.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		defsc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);		
