@@ -35,7 +35,7 @@ public class testclassfordebug {
 		Node card_variables = new Node(null, def_root);
 		card_variables.setData("Card");
 		Node card_trump = new Node(NodeType.nd_card,card_variables);
-		card_trump.setData("Trump");
+		card_trump.setData(null);
 		Node card_trump_shape = new Node(NodeType.nd_str,card_trump);
 		card_trump_shape.setData("shape");
 		Node card_trump_shape_spade = new Node(null,card_trump_shape);
@@ -98,6 +98,7 @@ public class testclassfordebug {
 		
 		Definition d = new Definition();
 		d.setRoot(def_root);
+		def_root.printAll();
 		/*
 		////////////////////// 테스트플레이 ///////////////////
 		TestplayModule tpm=new TestplayModule(d);

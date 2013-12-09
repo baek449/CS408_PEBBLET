@@ -448,11 +448,7 @@ public class mainUI extends JFrame{
 	public static void main(String[] args){
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
-			public void run(){
-								
-				
-				//// definition
-				display_def();
+			public void run(){			
 				
 				//// ±ÔÄ¢
 				display_rule(display_def());

@@ -20,13 +20,7 @@ public class Definition implements Serializable{
 		player_variables.setData("Player");
 		Node card_variables = new Node(NodeType.nd_def_card, root);
 		card_variables.setData("Card");
-
 	}
-	public Definition(Node root_)
-	{
-		root=root_;
-	}
-
 	public Node getRoot()
 	{
 		return root;
