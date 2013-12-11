@@ -32,13 +32,16 @@ public class Def_pane extends JComponent{
 	private JPanel players_pane; 
 //	private ArrayList<Integer> players_pane_index;
 	private int[] players_pane_index = {2};
-	private ArrayList<JPanel> cards_pane;
 	
+	private JPanel cards_pane;
+//	private ArrayList<E>
+		
 	private int players_num;
 	
 	private int preStatus = 0;
 	private int endof_global_pane = 30;
 	private int endof_player_pane = 30;
+	private int total_endof = 0;
 
 	private JLabel closeMark;
 	private JLabel closeMarkP;
@@ -63,11 +66,12 @@ public class Def_pane extends JComponent{
 		
 		global_pane = new JPanel(true);
 		players_pane = new JPanel(true);
-		cards_pane = new ArrayList<JPanel>();
+		cards_pane = new JPanel(true);
 		players_num = 0;
 		make_num_players();
 		make_global();	
 		make_players();
+		make_card();
 		
 	}
 	public void make_num_players(){
@@ -476,10 +480,32 @@ public class Def_pane extends JComponent{
 	}
 	
 	public void make_card(){
+		int endof = get_total_end();
+		def_pane.setLayout(null);
+		
+		cards_pane.setLayout(null);
+		cards_pane.setBounds(5, endof, 890, 400);
+		
+		JButton add_card = new JButton("add_card");
+		
+		CardPane cardpane = new CardPane();
+		
+		cardpane.addtoPanel(cards_pane, 0, 0);
+
+		add_card.setBounds(20,cardpane.get_endof(),100,20);
+
+		cards_pane.add(add_card);
+		
+		def_pane.add(cards_pane);
+		
 		
 	}
 	
-	public void remove_card(){
+	public void make_card_item(){
+		
+	}
+	
+	public void remove_card_item(){
 		
 	}
 	
@@ -522,7 +548,16 @@ public class Def_pane extends JComponent{
 	    }
 
 	    return -1;
-	  }
+	}
+	
+	public int get_total_end(){
+		total_endof = endof_global_pane+endof_player_pane;
+		return total_endof;
+	}
+	
+	public void set_total_end(int i){
+		total_endof = i ;
+	}
 	
 
 }
