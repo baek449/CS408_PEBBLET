@@ -41,6 +41,7 @@ public class Def_pane extends JComponent{
 	private int endof_player_pane = 30;
 
 	private JLabel closeMark;
+	private JLabel closeMarkP;
 	
 	
 	
@@ -49,6 +50,7 @@ public class Def_pane extends JComponent{
 		
 		dm = new DefinitionManager();
 		closeMark = new JLabel("}");
+		closeMarkP = new JLabel("}");
 
 		def_pane = new JPanel(true);
 		def_pane.setSize(new Dimension(900, 600));
@@ -110,7 +112,7 @@ public class Def_pane extends JComponent{
 		make_global_item();
 
 		final JButton add_global = new JButton("add"); //... 버튼 디폴
-		add_global.setBounds(50,endof_global_pane+5,50,20);
+		add_global.setBounds(50,endof_global_pane+5,100,20);
 		endof_global_pane += 30;
 		global_pane.add(add_global);
 		closeMark.setBounds(5, endof_global_pane+5, 20, 20);
@@ -183,7 +185,7 @@ public class Def_pane extends JComponent{
 				String item = (String)e.getItem();
 				global_item_pane.setLayout(null);
 				if(e.getStateChange() == ItemEvent.SELECTED){
-					int del_box_index = getComponentIndex(global_item_pane);
+					int del_box_index = getComponentIndex(global_item_pane)-1;
 					switch (item) {
 						case "(Cancel)":
 							box_type.setSelectedItem(box_type.getItemAt(preStatus));
@@ -237,7 +239,7 @@ public class Def_pane extends JComponent{
 							global_pane.remove(global_item_pane);
 							
 							for(int i = del_box_index; i < total-1; i++){
-								global_pane.getComponent(i).setLocation(global_pane.getComponent(i).getX(), global_pane.getComponent(i).getY()-30);
+								global_pane.getComponent(i+1).setLocation(global_pane.getComponent(i+1).getX(), global_pane.getComponent(i+1).getY()-30);
 								def_pane.repaint();
 								def_pane.validate();
 							}
@@ -263,15 +265,42 @@ public class Def_pane extends JComponent{
 		players_pane.setLayout(null);
 		JLabel Players = new JLabel("Players {");
 		Players.setBounds(5, 5, 100, 20);
+		players_pane.add(Players);
+
 		endof_player_pane += 25;
 		make_players_item();
 		
 		final JButton add_players = new JButton("add");
-		add_players.setBounds();
+		add_players.setBounds(50, endof_player_pane + 5, 100, 20);
+		endof_player_pane +=30;
+		players_pane.add(add_players);
 		
-		players_pane.add(Players);
+		closeMarkP.setBounds(5, endof_player_pane + 5 , 30, 20);
+		endof_player_pane += 30;
+		players_pane.add(closeMarkP);
+		players_pane.setBounds(0,endof_global_pane,890, endof_player_pane);
+
+		add_players.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				players_pane.setLayout(null);
+				endof_player_pane -= 60;
+				make_players_item();
+				add_players.setBounds(50,endof_player_pane +5, 100, 20);
+				endof_player_pane += 30;
+				closeMarkP.setBounds(5, endof_player_pane + 5, 30, 20);
+//add???
+				def_pane.repaint();
+				def_pane.validate();
+				dm.getDefinition().getRoot().printAll();//for debugging
+				System.out.println(global_pane.getComponentCount());				
+				
+				
+			}
+		});
 		
-		players_pane.setBounds(0,endof_global_pane,890, endof_player_pane- endof_global_pane);
 		def_pane.setLayout(null);
 		def_pane.add(players_pane);
 		
