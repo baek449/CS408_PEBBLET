@@ -53,7 +53,8 @@ public class Def_pane extends JComponent{
 		closeMarkP = new JLabel("}");
 
 		def_pane = new JPanel(true);
-		def_pane.setSize(new Dimension(900, 600));
+//		def_pane.setSize(new Dimension(900, 600));
+		def_pane.setPreferredSize(new Dimension(900, 500));
 		
 		def_sc = new JScrollPane(def_pane);
 		def_sc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -140,11 +141,15 @@ public class Def_pane extends JComponent{
 				global_pane.setSize(new Dimension(890, endof_global_pane));
 				
 				down_players_pane();//추가로 cards
-				
+				def_pane.setPreferredSize(new Dimension(900, endof_global_pane + endof_player_pane + 20));
+
+				def_sc.repaint();
+				def_sc.validate();
 				def_pane.repaint();
 				def_pane.validate();
 				dm.getDefinition().getRoot().printAll();//for debugging
 				System.out.println(global_pane.getComponentCount());
+				
 			}
 		});
 		
@@ -255,6 +260,10 @@ public class Def_pane extends JComponent{
 							endof_global_pane -= 30;
 							global_pane.setSize(new Dimension(890, endof_global_pane + 5));
 							up_players_pane(); //cards 도 똑같
+							def_pane.setPreferredSize(new Dimension(900, endof_global_pane + endof_player_pane + 20));
+
+							def_sc.repaint();
+							def_sc.validate();
 							
 							break;
 						default:
@@ -303,6 +312,10 @@ public class Def_pane extends JComponent{
 				closeMarkP.setBounds(5, endof_player_pane + 5, 30, 20);
 				endof_player_pane +=30;
 				players_pane.setSize(new Dimension(890, endof_player_pane));
+				def_pane.setPreferredSize(new Dimension(900, endof_global_pane + endof_player_pane + 20));
+
+				def_sc.repaint();
+				def_sc.validate();
 //add???
 				def_pane.repaint();
 				def_pane.validate();
@@ -426,7 +439,10 @@ public class Def_pane extends JComponent{
 							}
 							endof_player_pane -= 30;
 							players_pane.setSize(new Dimension(890, endof_player_pane + 5));
-							
+							def_pane.setPreferredSize(new Dimension(900, endof_global_pane + endof_player_pane + 20));
+
+							def_sc.repaint();
+							def_sc.validate();
 							break;
 
 						default:
