@@ -120,7 +120,6 @@ public class Number_box extends JComponent {
 //		Number_box_pane.add(new_value); //add to pane
 		
 		new_value.addtoPanel(Number_box_pane, 60+55*i, 0);
-		System.out.println(Number_box_pane.getComponentCount());
 		new_value.set_parent(Numbox_node);
 		
 		values.add(new_value); 			//add to list
