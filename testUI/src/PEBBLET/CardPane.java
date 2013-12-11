@@ -1,9 +1,12 @@
 package PEBBLET;
 
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import manager.DefinitionManager;
 
 public class CardPane extends JPanel{
 	private JPanel card_pane;
@@ -31,7 +34,7 @@ public class CardPane extends JPanel{
 		card_pane.setLayout(null);
 		card_pane.add(title_pane);
 		
-		final JComboBox<String> box_type = new 
+ 
 		
 	}
 	
@@ -40,7 +43,28 @@ public class CardPane extends JPanel{
 		return endof_card_pane;
 	}
 	
-	public void add_card_item(){
+	public void add_card_item(DefinitionManager dm, int index){
+		
+		final JPanel card_item_pane = new JPanel();
+		card_item_pane.setLayout(null);
+
+		final JComboBox<String> box_type = new JComboBox<String>();
+		int[] temp = {index};
+		box_type.setBounds(0,0,120,20);
+		int i = 1;
+		box_type.addItem("Select type");
+		Action_box select = new Action_box();
+		select.set_parent(dm.search(temp));
+		while(i <= dm.get_selection_card_del().length){
+			box_type.addItem(dm.get_selection_card_del()[i-1]);
+			i++;
+		}
+		card_item_pane.add(box_type);
+		
+		card_pane.setLayout(null);
+		card_item_pane.setBounds(50, endof_card_pane + 5, 900, 30);
+		endof_card_pane += 30;
+		card_pane.add(card_item_pane);
 		
 	}
 	

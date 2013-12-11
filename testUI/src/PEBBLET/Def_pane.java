@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import com.sun.org.apache.xerces.internal.impl.dtd.models.DFAContentModel;
+
 import manager.DefinitionManager;
 
 public class Def_pane extends JComponent{
@@ -32,7 +34,7 @@ public class Def_pane extends JComponent{
 	private JPanel players_pane; 
 //	private ArrayList<Integer> players_pane_index;
 	private int[] players_pane_index = {2};
-	
+	private int[] cards_pane_index = {3};
 	private JPanel cards_pane;
 //	private ArrayList<E>
 		
@@ -489,15 +491,20 @@ public class Def_pane extends JComponent{
 		JButton add_card = new JButton("add_card");
 		
 		CardPane cardpane = new CardPane();
-		
+		cardpane.add_card_item(dm, 3);
+
 		cardpane.addtoPanel(cards_pane, 0, 0);
+		
+		
+		
 
 		add_card.setBounds(20,cardpane.get_endof(),100,20);
 
 		cards_pane.add(add_card);
 		
 		def_pane.add(cards_pane);
-		
+		def_pane.repaint();
+		def_pane.validate();
 		
 	}
 	
