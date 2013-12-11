@@ -38,7 +38,10 @@ public class Def_pane extends JComponent{
 	
 	private int preStatus = 0;
 	private int endof_global_pane = 30;
+	private int endof_player_pane = 30;
+
 	private JLabel closeMark;
+	
 	
 	
 
@@ -61,6 +64,7 @@ public class Def_pane extends JComponent{
 		players_num = 0;
 		make_num_players();
 		make_global();	
+		make_players();
 		
 	}
 	public void make_num_players(){
@@ -129,6 +133,8 @@ public class Def_pane extends JComponent{
 				global_pane.setSize(new Dimension(890, endof_global_pane));
 				global_pane.add(add_global);
 				global_pane.add(closeMark);
+				down_players_pane();//추가로 cards
+				
 				def_pane.repaint();
 				def_pane.validate();
 				dm.getDefinition().getRoot().printAll();//for debugging
@@ -237,6 +243,7 @@ public class Def_pane extends JComponent{
 							}
 							endof_global_pane -= 30;
 							global_pane.setSize(new Dimension(890, endof_global_pane + 5));
+							up_players_pane(); //cards 도 똑같
 							
 							break;
 						default:
@@ -253,7 +260,36 @@ public class Def_pane extends JComponent{
 	}
 	
 	public void make_players(){
+		players_pane.setLayout(null);
+		JLabel Players = new JLabel("Players {");
+		Players.setBounds(5, 5, 100, 20);
+		endof_player_pane += 25;
+		make_players_item();
 		
+		final JButton add_players = new JButton("add");
+		add_players.setBounds();
+		
+		players_pane.add(Players);
+		
+		players_pane.setBounds(0,endof_global_pane,890, endof_player_pane- endof_global_pane);
+		def_pane.setLayout(null);
+		def_pane.add(players_pane);
+		
+		
+	}
+	
+	public void make_players_item(){
+		
+	}
+	
+	public void up_players_pane(){
+		
+		players_pane.setBounds(players_pane.getX(), players_pane.getY()-30, players_pane.getWidth(),players_pane.getHeight());
+
+	}
+	public void down_players_pane(){
+		players_pane.setBounds(players_pane.getX(), players_pane.getY()+30, players_pane.getWidth(),players_pane.getHeight());
+
 	}
 	
 	public void make_card(){

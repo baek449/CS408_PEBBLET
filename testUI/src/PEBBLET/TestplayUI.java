@@ -9,6 +9,8 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -630,3 +632,53 @@ public class TestplayUI extends JFrame {
     
     
 }
+
+
+/*
+ * global_pane 여기다가 add
+		
+		global_pane.setLayout(null);
+		JLabel Global = new JLabel("Global {");
+		Global.setBounds(5, endof_global_pane+5, 100, 20);
+		endof_global_pane += 25;
+		//add button 추후수정 combobox
+		global_pane.add(Global);
+
+		make_global_item();
+
+		final JButton add_global = new JButton("add"); //... 버튼 디폴
+		add_global.setBounds(50,endof_global_pane+5,50,20);
+		endof_global_pane += 30;
+		global_pane.add(add_global);
+		closeMark.setBounds(5, endof_global_pane+5, 20, 20);
+		endof_global_pane += 30;
+		global_pane.add(closeMark);
+		global_pane.setSize(new Dimension(890, endof_global_pane));
+
+		add_global.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				global_pane.setLayout(null);
+				endof_global_pane -= 60;
+				make_global_item();
+				add_global.setBounds(50, endof_global_pane + 5, 50,20);
+				endof_global_pane +=30;
+				closeMark.setBounds(5, endof_global_pane + 5, 20, 20);
+				endof_global_pane += 30;
+				global_pane.setSize(new Dimension(890, endof_global_pane));
+				global_pane.add(add_global);
+				global_pane.add(closeMark);
+				def_pane.repaint();
+				def_pane.validate();
+				dm.getDefinition().getRoot().printAll();//for debugging
+				System.out.println(global_pane.getComponentCount());
+			}
+		});
+		
+
+		
+		def_pane.setLayout(null);
+		def_pane.add(global_pane);	
+		*/
