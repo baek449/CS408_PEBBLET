@@ -1,8 +1,11 @@
 package PEBBLET;
 
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,7 +20,7 @@ import manager.DefinitionManager;
 
 public class CardPane extends JPanel{
 	private JPanel card_pane;
-	
+	private int preStatus = 0;
 	private int endof_card_pane;
 	
 	public CardPane(final DefinitionManager dm, final int i, final JButton add_card){
@@ -31,12 +34,25 @@ public class CardPane extends JPanel{
 		title.setBounds(0,0,100,20);
 		title_pane.add(title);
 		
-		JTextField title_text = new JTextField();
-		title_text.setBounds(50,0,150,20);
+		final JTextField title_text = new JTextField();
+		title_text.setBounds(50,0,120,20);
 		title_pane.add(title_text);
 		
+		JButton set_button = new JButton("Set");
+		set_button.setBounds(180, 0, 70, 20);
+		title_pane.add(set_button);
+		final int[] temp = {i};
+		set_button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				dm.search(temp).setData(title_text.getText());
+			}
+		});
+		
 		JLabel open_mark = new JLabel("{");
-		open_mark.setBounds(200,0,20,20);
+		open_mark.setBounds(260,0,20,20);
 		title_pane.add(open_mark);
 		
 		card_pane.setLayout(null);
@@ -53,7 +69,7 @@ public class CardPane extends JPanel{
 		card_pane.add(closeMark);
 		endof_card_pane -=60;
 		
-		add_card_item(dm, i);
+		add_card_item(dm, i, add_card);
 		
 		endof_card_pane += 60;
 		
@@ -64,7 +80,7 @@ public class CardPane extends JPanel{
 				// TODO Auto-generated method stub
 				card_pane.setLayout(null);
 				endof_card_pane -=60;
-				add_card_item(dm, i);
+				add_card_item(dm, i, add_card);
 				add_item.setBounds(50, endof_card_pane+5, 100,20);
 				endof_card_pane +=30;
 				closeMark.setBounds(0, endof_card_pane +5, 20,20);
@@ -90,13 +106,13 @@ public class CardPane extends JPanel{
 		return endof_card_pane;
 	}
 	
-	public void add_card_item(DefinitionManager dm, int index){
+	public void add_card_item(final DefinitionManager dm, int index, final JButton add_button){
 		
 		final JPanel card_item_pane = new JPanel();
 		card_item_pane.setLayout(null);
 
 		final JComboBox<String> box_type = new JComboBox<String>();
-		int[] temp = {index};
+		final int[] temp = {index};
 		box_type.setBounds(0,0,120,20);
 		int i = 1;
 		box_type.addItem("Select type");
@@ -113,6 +129,97 @@ public class CardPane extends JPanel{
 		endof_card_pane += 30;
 		card_pane.add(card_item_pane);
 		
+		box_type.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				String item = (String)e.getItem();
+				card_item_pane.setLayout(null);
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					int del_box_index = getComponentIndex(card_item_pane)-3;
+					switch(item){
+						case "(Cancle)":
+							box_type.setSelectedItem(box_type.getItemAt(preStatus));
+							break;
+						case "Number []":
+							preStatus = 1;
+							Number_box numbox = new Number_box();
+							dm.search(temp).deleteChildNode(del_box_index);
+							card_item_pane.removeAll();
+							card_item_pane.setLayout(null);
+							card_item_pane.add(box_type);
+							numbox.addtoPanel(card_item_pane, 125, 0);
+							card_pane.repaint();
+							card_pane.validate();
+							numbox.set_parent(dm.search(temp));
+							break;
+						case "String []":
+							preStatus = 2;
+							String_box stringbox = new String_box();
+							dm.search(temp).deleteChildNode(del_box_index);
+							card_item_pane.removeAll();
+							card_item_pane.setLayout(null);
+							card_item_pane.add(box_type);
+							stringbox.addtoPanel(card_item_pane, 125, 0);
+							card_pane.repaint();
+							card_pane.validate();
+							stringbox.set_parent(dm.search(temp));
+							break;
+						case "Action []":
+							preStatus = 3;
+							Action_box actbox = new Action_box();
+							dm.search(temp).deleteChildNode(del_box_index);
+							card_item_pane.removeAll();
+							card_item_pane.setLayout(null);
+							card_item_pane.add(box_type);
+							actbox.addtoPanel(card_item_pane, 125, 0);
+							card_pane.repaint();
+							card_pane.validate();
+							actbox.set_parent(dm.search(temp));
+							break;
+						case "(Delete)":
+							int total = card_pane.getComponentCount();
+							card_pane.remove(card_item_pane);
+							
+							card_pane.getComponent(2).setLocation(card_pane.getComponent(2).getX(), card_pane.getComponent(2).getY()-30);
+							card_pane.getComponent(1).setLocation(card_pane.getComponent(1).getX(), card_pane.getComponent(1).getY()-30);
+							add_button.setLocation(add_button.getX(), add_button.getY()-30);
+							
+							for(int i = del_box_index+3; i < total-1; i++){
+								card_pane.getComponent(i).setLocation(card_pane.getComponent(i).getX(), card_pane.getComponent(i).getY()-30);
+								card_pane.repaint();
+								card_pane.validate();
+							}
+							endof_card_pane -= 30;
+							card_pane.setSize(new Dimension(890, endof_card_pane + 5));
+														
+							break;
+						default:
+							preStatus = 0;
+							card_item_pane.removeAll();
+							card_item_pane.setLayout(null);
+							card_item_pane.add(box_type);
+							card_pane.repaint();
+							card_pane.validate();
+							break;
+					}
+				}
+			}
+		});
+		
+	}
+	
+	public static final int getComponentIndex(JComponent component) {
+	    if (component != null && component.getParent() != null) {
+	      Container c = component.getParent();
+	      for (int i = 0; i < c.getComponentCount(); i++) {
+	        if (c.getComponent(i) == component)
+	          return i;
+	      }
+	    }
+
+	    return -1;
 	}
 	
 	public void addtoPanel(JComponent comp, int x, int y){
