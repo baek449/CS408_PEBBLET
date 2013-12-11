@@ -1,10 +1,17 @@
 package PEBBLET;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import com.sun.corba.se.spi.ior.MakeImmutable;
 
 import manager.DefinitionManager;
 
@@ -13,7 +20,8 @@ public class CardPane extends JPanel{
 	
 	private int endof_card_pane;
 	
-	public CardPane(){
+	public CardPane(final DefinitionManager dm, final int i, final JButton add_card){
+		
 		endof_card_pane = 30;
 		card_pane = new JPanel();
 		JPanel title_pane = new JPanel();
@@ -34,7 +42,46 @@ public class CardPane extends JPanel{
 		card_pane.setLayout(null);
 		card_pane.add(title_pane);
 		
- 
+		endof_card_pane +=30;
+		final JButton add_item = new JButton("add");
+		add_item.setBounds(50, endof_card_pane+5, 100,20);
+		endof_card_pane +=30;
+		card_pane.add(add_item);
+		
+		final JLabel closeMark = new JLabel("}");
+		closeMark.setBounds(0, endof_card_pane + 5, 20,20);
+		card_pane.add(closeMark);
+		endof_card_pane -=60;
+		
+		add_card_item(dm, i);
+		
+		endof_card_pane += 60;
+		
+		add_item.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				card_pane.setLayout(null);
+				endof_card_pane -=60;
+				add_card_item(dm, i);
+				add_item.setBounds(50, endof_card_pane+5, 100,20);
+				endof_card_pane +=30;
+				closeMark.setBounds(0, endof_card_pane +5, 20,20);
+				endof_card_pane+=30;
+				card_pane.setSize(new Dimension(800,endof_card_pane));
+				card_pane.setPreferredSize(new Dimension(800,endof_card_pane));
+
+				add_card.setBounds(add_card.getX(), add_card.getY()+30,add_card.getWidth(), add_card.getHeight());
+				card_pane.repaint();
+				card_pane.validate();
+				repaint();
+				validate();
+				
+				
+			}
+		});
+
 		
 	}
 	

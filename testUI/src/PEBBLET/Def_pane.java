@@ -147,6 +147,8 @@ public class Def_pane extends JComponent{
 				global_pane.setSize(new Dimension(890, endof_global_pane));
 				
 				down_players_pane();//추가로 cards
+				down_card_pane();
+				
 				def_pane.setPreferredSize(new Dimension(900, endof_global_pane + endof_player_pane + 20));
 
 				def_sc.repaint();
@@ -266,6 +268,7 @@ public class Def_pane extends JComponent{
 							endof_global_pane -= 30;
 							global_pane.setSize(new Dimension(890, endof_global_pane + 5));
 							up_players_pane(); //cards 도 똑같
+							up_card_pane();
 							def_pane.setPreferredSize(new Dimension(900, endof_global_pane + endof_player_pane + 20));
 
 							def_sc.repaint();
@@ -319,7 +322,7 @@ public class Def_pane extends JComponent{
 				endof_player_pane +=30;
 				players_pane.setSize(new Dimension(890, endof_player_pane));
 				def_pane.setPreferredSize(new Dimension(900, endof_global_pane + endof_player_pane + 20));
-
+				down_card_pane();
 				def_sc.repaint();
 				def_sc.validate();
 //add???
@@ -446,7 +449,7 @@ public class Def_pane extends JComponent{
 							endof_player_pane -= 30;
 							players_pane.setSize(new Dimension(890, endof_player_pane + 5));
 							def_pane.setPreferredSize(new Dimension(900, endof_global_pane + endof_player_pane + 20));
-
+							up_card_pane();
 							def_sc.repaint();
 							def_sc.validate();
 							break;
@@ -490,8 +493,8 @@ public class Def_pane extends JComponent{
 		
 		JButton add_card = new JButton("add_card");
 		
-		CardPane cardpane = new CardPane();
-		cardpane.add_card_item(dm, 3);
+		CardPane cardpane = new CardPane(dm, 3, add_card);
+//		cardpane.add_card_item(dm, 3);
 
 		cardpane.addtoPanel(cards_pane, 0, 0);
 		
@@ -506,6 +509,13 @@ public class Def_pane extends JComponent{
 		def_pane.repaint();
 		def_pane.validate();
 		
+	}
+	
+	public void up_card_pane(){
+		cards_pane.setLocation(cards_pane.getX(), cards_pane.getY()-30);
+	}
+	public void down_card_pane(){
+		cards_pane.setLocation(cards_pane.getX(), cards_pane.getY()+30);
 	}
 	
 	public void make_card_item(){
