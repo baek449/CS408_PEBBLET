@@ -1,4 +1,4 @@
-package PEBBLET;
+package PEBBLET.panel;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -13,6 +13,10 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import PEBBLET.boxs.Action_box;
+import PEBBLET.boxs.Number_box;
+import PEBBLET.boxs.String_box;
 
 import com.sun.corba.se.spi.ior.MakeImmutable;
 

@@ -17,6 +17,9 @@ import javax.swing.ScrollPaneLayout;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
+import PEBBLET.panel.Def_pane;
+import PEBBLET.panel.Rule_pane;
+
 public class tabbedpane extends JPanel{
 	public tabbedpane(){
 		super(new GridLayout(1, 1));
@@ -34,8 +37,8 @@ public class tabbedpane extends JPanel{
 		tabbedpane.addTab("Definition", null, def.get_scpane(), "make definition");
 		
 //		JComponent rule = makeTextPanel("Rule");
-		JPanel rule = new JPanel();
-		tabbedpane.addTab("Rule", null, rule, "make rule");
+		Rule_pane rule = new Rule_pane();
+		tabbedpane.addTab("Rule", null, rule.get_scpane(), "make rule");
 	
 //		JComponent component = makePanel();//임시로 def를 display
 		Def_pane def1 = new Def_pane();

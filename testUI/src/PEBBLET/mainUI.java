@@ -33,6 +33,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
+import PEBBLET.boxs.custominputbox;
 import manager.Definition;
 import manager.DefinitionManager;
 import manager.Node;

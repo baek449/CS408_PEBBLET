@@ -1,4 +1,4 @@
-package PEBBLET;
+package PEBBLET.boxs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+
+import PEBBLET.mainUI;
 
 public class custominputbox extends JComponent{	
 	

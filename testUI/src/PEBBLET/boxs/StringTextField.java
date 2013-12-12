@@ -1,4 +1,4 @@
-package PEBBLET;
+package PEBBLET.boxs;
 
 import javax.swing.JComponent;
 import javax.swing.JTextField;

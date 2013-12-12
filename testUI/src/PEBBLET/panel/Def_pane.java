@@ -1,4 +1,4 @@
-package PEBBLET;
+package PEBBLET.panel;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -15,6 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import PEBBLET.boxs.Deck_box;
+import PEBBLET.boxs.Number_box;
+import PEBBLET.boxs.Player_box;
+import PEBBLET.boxs.String_box;
 
 import com.sun.org.apache.xerces.internal.impl.dtd.models.DFAContentModel;
 
@@ -498,6 +503,7 @@ public class Def_pane extends JComponent{
 		cards_pane.setBounds(5, endof, 890, 400);
 		
 		JButton add_card = new JButton("add_card");
+		
 		
 		CardPane cardpane = new CardPane(dm, 3, add_card, this);
 		endof_cards_pane = cardpane.get_endof();
