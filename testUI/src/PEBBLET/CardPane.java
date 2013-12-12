@@ -88,21 +88,23 @@ public class CardPane extends JPanel{
 				card_pane.setSize(new Dimension(800,endof_card_pane));
 				card_pane.setPreferredSize(new Dimension(800,endof_card_pane));
 				
-				_this.set_cards_pane(endof_card_pane + 60);
+//				_this.get_card_pane().setPreferredSize(new Dimension(800,endof_card_pane) );
+				_this.set_card_pane_presize(800, endof_card_pane + 30);
+				repaint();
+				validate();
+				
+				_this.set_cards_pane(endof_card_pane );
 				_this.set_total_end(_this.get_total_end());
 //				_this
 
 				add_card.setBounds(add_card.getX(), add_card.getY()+30,add_card.getWidth(), add_card.getHeight());
 				
-				_this.get_pane().setPreferredSize(new Dimension(900, _this.get_total_end() + 60));
-				System.out.println(_this.get_pane().getSize());
-				System.out.println(_this.get_pane().getPreferredSize());
+				_this.get_pane().setPreferredSize(new Dimension(900, _this.get_total_end() +30));
+//				_this.get_pane().setSize(new Dimension(900, _this.get_total_end() + 60));
+				
 				card_pane.repaint();
 				card_pane.validate();
-				repaint();
-				validate();
-				
-				
+				dm.getDefinition().getRoot().printAll();//for debugging
 			}
 		});
 
@@ -199,6 +201,9 @@ public class CardPane extends JPanel{
 								card_pane.repaint();
 								card_pane.validate();
 							}
+							int[] temp = {3};
+							dm.search(temp).deleteChildNode(del_box_index);
+
 							endof_card_pane -= 30;
 							card_pane.setSize(new Dimension(890, endof_card_pane + 5));
 							_this.get_pane().setPreferredSize(new Dimension(900, _this.get_total_end() + 20));

@@ -263,6 +263,7 @@ public class mainUI extends JFrame{
         
 		setTitle("PEBBLET");
 		setSize(1000,800);
+//		setPreferredSize(new Dimension(1000, 1000));
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);	
 		

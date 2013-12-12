@@ -259,7 +259,8 @@ public class Def_pane extends JComponent{
 						case "(Delete)":
 							int total = global_pane.getComponentCount();
 							global_pane.remove(global_item_pane);
-							
+							dm.search(global_pane_index).deleteChildNode(del_box_index);
+
 							global_pane.getComponent(2).setLocation(global_pane.getComponent(2).getX(), global_pane.getComponent(2).getY()-30);
 							global_pane.getComponent(1).setLocation(global_pane.getComponent(1).getX(), global_pane.getComponent(1).getY()-30);
 
@@ -440,7 +441,8 @@ public class Def_pane extends JComponent{
 						case "(Delete)":
 							int total = players_pane.getComponentCount();
 							players_pane.remove(players_item_pane);
-							
+							dm.search(players_pane_index).deleteChildNode(del_box_index);
+
 							players_pane.getComponent(2).setLocation(players_pane.getComponent(2).getX(), players_pane.getComponent(2).getY()-30);
 							players_pane.getComponent(1).setLocation(players_pane.getComponent(1).getX(), players_pane.getComponent(1).getY()-30);
 
@@ -525,6 +527,19 @@ public class Def_pane extends JComponent{
 	}
 	public void down_card_pane(){
 		cards_pane.setLocation(cards_pane.getX(), cards_pane.getY()+30);
+	}
+	
+	public JComponent get_card_pane(){
+		return cards_pane;
+	}
+	
+	public void set_card_pane_presize(int x, int y){
+		cards_pane.setPreferredSize(new Dimension(x, y));
+		cards_pane.setSize(new Dimension(x, y));
+	}
+	
+	public void set_def_pane_size(int x, int y){
+		def_pane.setPreferredSize(new Dimension(x, y));
 	}
 	
 	public void make_card_item(){

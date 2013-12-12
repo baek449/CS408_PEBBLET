@@ -51,7 +51,7 @@ public class tabbedpane extends JPanel{
 	
 	}
 	
-	protected static JScrollPane makePanel() {
+	protected static JPanel makePanel() {
         JPanel panel = new JPanel(true);
         
         panel.setPreferredSize(new Dimension(0,600));
@@ -65,7 +65,7 @@ public class tabbedpane extends JPanel{
         JScrollPane scrollpane = new JScrollPane(panel);
         scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollpane.setViewportView(panel);
-        return scrollpane;
+        return panel;
     }
 	
 	public static void createAndShowGUI() {
