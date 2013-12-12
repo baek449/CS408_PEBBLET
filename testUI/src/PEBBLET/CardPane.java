@@ -23,7 +23,7 @@ public class CardPane extends JPanel{
 	private int preStatus = 0;
 	private int endof_card_pane;
 	
-	public CardPane(final DefinitionManager dm, final int i, final JButton add_card){
+	public CardPane(final DefinitionManager dm, final int i, final JButton add_card, final Def_pane _this){
 		
 		endof_card_pane = 30;
 		card_pane = new JPanel();
@@ -69,7 +69,7 @@ public class CardPane extends JPanel{
 		card_pane.add(closeMark);
 		endof_card_pane -=60;
 		
-		add_card_item(dm, i, add_card);
+		add_card_item(dm, i, add_card, _this);
 		
 		endof_card_pane += 60;
 		
@@ -80,15 +80,23 @@ public class CardPane extends JPanel{
 				// TODO Auto-generated method stub
 				card_pane.setLayout(null);
 				endof_card_pane -=60;
-				add_card_item(dm, i, add_card);
+				add_card_item(dm, i, add_card, _this);
 				add_item.setBounds(50, endof_card_pane+5, 100,20);
 				endof_card_pane +=30;
 				closeMark.setBounds(0, endof_card_pane +5, 20,20);
 				endof_card_pane+=30;
 				card_pane.setSize(new Dimension(800,endof_card_pane));
 				card_pane.setPreferredSize(new Dimension(800,endof_card_pane));
+				
+				_this.set_cards_pane(endof_card_pane + 60);
+				_this.set_total_end(_this.get_total_end());
+//				_this
 
 				add_card.setBounds(add_card.getX(), add_card.getY()+30,add_card.getWidth(), add_card.getHeight());
+				
+				_this.get_pane().setPreferredSize(new Dimension(900, _this.get_total_end() + 60));
+				System.out.println(_this.get_pane().getSize());
+				System.out.println(_this.get_pane().getPreferredSize());
 				card_pane.repaint();
 				card_pane.validate();
 				repaint();
@@ -106,7 +114,7 @@ public class CardPane extends JPanel{
 		return endof_card_pane;
 	}
 	
-	public void add_card_item(final DefinitionManager dm, int index, final JButton add_button){
+	public void add_card_item(final DefinitionManager dm, int index, final JButton add_button, final Def_pane _this){
 		
 		final JPanel card_item_pane = new JPanel();
 		card_item_pane.setLayout(null);
@@ -193,6 +201,9 @@ public class CardPane extends JPanel{
 							}
 							endof_card_pane -= 30;
 							card_pane.setSize(new Dimension(890, endof_card_pane + 5));
+							_this.get_pane().setPreferredSize(new Dimension(900, _this.get_total_end() + 20));
+							repaint();
+							validate();
 														
 							break;
 						default:
@@ -228,6 +239,11 @@ public class CardPane extends JPanel{
 //		set_button.setBounds(x+125, y, 30, 20);
 		comp.add(card_pane);
 //		comp.add(set_button);
+	}
+	
+	public int get_card_endof(){
+		
+		return endof_card_pane;
 	}
 
 }

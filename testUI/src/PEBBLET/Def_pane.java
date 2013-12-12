@@ -43,10 +43,14 @@ public class Def_pane extends JComponent{
 	private int preStatus = 0;
 	private int endof_global_pane = 30;
 	private int endof_player_pane = 30;
+	private int endof_cards_pane = 0 ;
+
 	private int total_endof = 0;
 
 	private JLabel closeMark;
 	private JLabel closeMarkP;
+
+
 	
 	
 	
@@ -149,7 +153,7 @@ public class Def_pane extends JComponent{
 				down_players_pane();//추가로 cards
 				down_card_pane();
 				
-				def_pane.setPreferredSize(new Dimension(900, endof_global_pane + endof_player_pane + 20));
+				def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
 
 				def_sc.repaint();
 				def_sc.validate();
@@ -269,7 +273,7 @@ public class Def_pane extends JComponent{
 							global_pane.setSize(new Dimension(890, endof_global_pane + 5));
 							up_players_pane(); //cards 도 똑같
 							up_card_pane();
-							def_pane.setPreferredSize(new Dimension(900, endof_global_pane + endof_player_pane + 20));
+							def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
 
 							def_sc.repaint();
 							def_sc.validate();
@@ -321,7 +325,7 @@ public class Def_pane extends JComponent{
 				closeMarkP.setBounds(5, endof_player_pane + 5, 30, 20);
 				endof_player_pane +=30;
 				players_pane.setSize(new Dimension(890, endof_player_pane));
-				def_pane.setPreferredSize(new Dimension(900, endof_global_pane + endof_player_pane + 20));
+				def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
 				down_card_pane();
 				def_sc.repaint();
 				def_sc.validate();
@@ -448,7 +452,7 @@ public class Def_pane extends JComponent{
 							}
 							endof_player_pane -= 30;
 							players_pane.setSize(new Dimension(890, endof_player_pane + 5));
-							def_pane.setPreferredSize(new Dimension(900, endof_global_pane + endof_player_pane + 20));
+							def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
 							up_card_pane();
 							def_sc.repaint();
 							def_sc.validate();
@@ -493,7 +497,8 @@ public class Def_pane extends JComponent{
 		
 		JButton add_card = new JButton("add_card");
 		
-		CardPane cardpane = new CardPane(dm, 3, add_card);
+		CardPane cardpane = new CardPane(dm, 3, add_card, this);
+		endof_cards_pane = cardpane.get_endof();
 //		cardpane.add_card_item(dm, 3);
 
 		cardpane.addtoPanel(cards_pane, 0, 0);
@@ -506,6 +511,10 @@ public class Def_pane extends JComponent{
 		cards_pane.add(add_card);
 		
 		def_pane.add(cards_pane);
+		
+		def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
+
+		
 		def_pane.repaint();
 		def_pane.validate();
 		
@@ -567,8 +576,12 @@ public class Def_pane extends JComponent{
 	    return -1;
 	}
 	
+	public void set_cards_pane(int i){
+		endof_cards_pane = i;
+	}
+	
 	public int get_total_end(){
-		total_endof = endof_global_pane+endof_player_pane;
+		total_endof = endof_global_pane + endof_player_pane + endof_cards_pane;
 		return total_endof;
 	}
 	

@@ -5,7 +5,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import PEBBLET.AreaRange;
-import PEBBLET.RuleDisplayer;
 
 
 public class RuleManager {
@@ -42,7 +41,7 @@ public class RuleManager {
 	
 	private Rule rule;
 	private String[][][] varList;
-	private static RuleDisplayer m;
+//	private static RuleDisplayer m;
 	
 	public Node search(int[] location)
 	{
@@ -977,8 +976,8 @@ public class RuleManager {
 			return false;
 		}
 	}
-	public void setUI(RuleDisplayer m_)
-	{
-		m=m_;
-	}
+//	public void setUI(RuleDisplayer m_)
+//	{
+//		m=m_;
+//	}
 }
