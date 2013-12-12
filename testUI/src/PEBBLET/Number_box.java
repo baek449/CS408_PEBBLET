@@ -48,16 +48,14 @@ public class Number_box extends JComponent {
 		colon = new JLabel(":");
 		colon.setBounds(55,0,5,20);
 		
-		Number_box_pane.add(title);
-		Number_box_pane.add(colon);
-		add_values_box();
+		
 		
 		add_button = new JButton("+");
-		add_button.setBounds(endof_box_pos + 5 , 0, 20,20);
+		add_button.setBounds(endof_box_pos + 60 , 0, 20,20);
 		remove_button = new JButton("-");
-		remove_button.setBounds(endof_box_pos + 30, 0, 20, 20);
+		remove_button.setBounds(endof_box_pos + 85, 0, 20, 20);
 		set_button = new JButton("set");
-		set_button.setBounds(endof_box_pos + 55 , 0, 30, 20);
+		set_button.setBounds(endof_box_pos + 110 , 0, 30, 20);
 		
 		add_button.addActionListener(new ActionListener() {
 			
@@ -104,6 +102,9 @@ public class Number_box extends JComponent {
 		Number_box_pane.add(add_button);
 		Number_box_pane.add(remove_button);		
 		Number_box_pane.add(set_button);
+		Number_box_pane.add(title);
+		Number_box_pane.add(colon);
+		add_values_box();
 		
 		
 		
@@ -119,7 +120,6 @@ public class Number_box extends JComponent {
 //		Number_box_pane.add(new_value); //add to pane
 		
 		new_value.addtoPanel(Number_box_pane, 60+55*i, 0);
-		
 		new_value.set_parent(Numbox_node);
 		
 		values.add(new_value); 			//add to list
@@ -128,8 +128,9 @@ public class Number_box extends JComponent {
 		
 	}
 	public void remove_value_box(){
-		
-		Number_box_pane.remove(values.get(values.size()-1));
+//		Number_box_pane.remove(values.get(values.size()-1));
+		Number_box_pane.remove(Number_box_pane.getComponentCount()-1);
+
 		endof_box_pos -= 55;
 		
 		Numbox_node.deleteChildNode(values.size()-1);
