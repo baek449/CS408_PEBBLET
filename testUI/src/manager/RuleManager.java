@@ -102,7 +102,7 @@ public class RuleManager {
 		}
 	}
 	
-	public Node processActionSelection(boolean ps, boolean cs, boolean delete)
+	private String[] preActionSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -119,8 +119,11 @@ public class RuleManager {
 				options.add(varList[2][4][loop]);
 		if (delete) options.add("Delete");
 		// 2. Getting an input
-		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
-		
+		return options.toArray(new String[options.size()]);
+	}
+	
+	private Node postActionSelection(boolean ps, boolean cs, boolean delete, String[] options, int input)
+	{
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_action,null);
@@ -224,16 +227,16 @@ public class RuleManager {
 			break;
 		}
 
-		if(delete && input==(options.size()-1))
+		if(delete && input==(options.length-1))
 		{
 			o.set_node_type(NodeType.nd_special_delete);
 			return o;
 		}
-		o.setData(options.get(input));
+		o.setData(options[input]);
 		return o;
 	}
 	
-	public Node processPlayerSelection(boolean ps, boolean cs, boolean delete)
+	private String[] prePlayerSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -255,8 +258,11 @@ public class RuleManager {
 				options.add(varList[2][3][loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
+		return options.toArray(new String[options.size()]);
 		
+	}
+	private Node postPlayerSelection(boolean ps, boolean cs, boolean delete, String[] options, int input)
+	{
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_player,null);
@@ -324,16 +330,16 @@ public class RuleManager {
 			}
 			break;
 		}
-		if(delete && input==(options.size()-1))
+		if(delete && input==(options.length-1))
 		{
 			o.set_node_type(NodeType.nd_special_delete);
 			return o;
 		}
-		o.setData(options.get(input));
+		o.setData(options[input]);
 		return o;
 	}
 	
-	public Node processDeckSelection(boolean ps, boolean cs, boolean delete)
+	private String[] preDeckSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -355,8 +361,10 @@ public class RuleManager {
 				options.add(varList[2][2][loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
-		
+		return options.toArray(new String[options.size()]);
+	}
+	private Node postDeckSelection(boolean ps, boolean cs, boolean delete, String[] options, int input)
+	{
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_deck,null);
@@ -381,16 +389,16 @@ public class RuleManager {
 			}
 			break;
 		}
-		if(delete && input==(options.size()-1))
+		if(delete && input==(options.length-1))
 		{
 			o.set_node_type(NodeType.nd_special_delete);
 			return o;
 		}
-		o.setData(options.get(input));
+		o.setData(options[input]);
 		return o;
 	}
 	
-	public Node processCardSelection(boolean ps, boolean cs, boolean delete)
+	private String[] preCardSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -404,8 +412,10 @@ public class RuleManager {
 				options.add(selection_card_pscope[loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
-		
+		return options.toArray(new String[options.size()]);
+	}
+	private Node postCardSelection(boolean ps, boolean cs, boolean delete, String[] options, int input)
+	{
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_card,null);
@@ -447,17 +457,17 @@ public class RuleManager {
 			}
 			break;
 		}
-		if(delete && input==(options.size()-1))
+		if(delete && input==(options.length-1))
 		{
 			o.set_node_type(NodeType.nd_special_delete);
 			return o;
 		}
-		o.setData(options.get(input));
+		o.setData(options[input]);
 		return o;
 	}
 	
 	
-	public Node processCondSelection(boolean ps, boolean cs, boolean delete)
+	private String[] preCondSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -468,8 +478,10 @@ public class RuleManager {
 			options.add(selection_cond[loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
-		
+		return options.toArray(new String[options.size()]);
+	}
+	private Node postCondSelection(boolean ps, boolean cs, boolean delete, String[] options, int input)
+	{
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_cond,null);
@@ -530,16 +542,16 @@ public class RuleManager {
 			newnode=new Node(NodeType.nd_deck,o);
 			return o;
 		}
-		if(delete && input==(options.size()-1))
+		if(delete && input==(options.length-1))
 		{
 			o.set_node_type(NodeType.nd_special_delete);
 			return o;
 		}
-		o.setData(options.get(input));
+		o.setData(options[input]);
 		return o;
 	}
 	
-	public Node processOrderSelection(boolean ps, boolean cs, boolean delete)
+	private String[] preOrderSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -550,8 +562,10 @@ public class RuleManager {
 			options.add(selection_order[loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
-		
+		return options.toArray(new String[options.size()]);
+	}
+	private Node postOrderSelection(boolean ps, boolean cs, boolean delete, String[] options, int input)
+	{
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_order,null);
@@ -571,16 +585,16 @@ public class RuleManager {
 			newnode=new Node(NodeType.nd_num,o);
 			return o;
 		}
-		if(delete && input==(options.size()-1))
+		if(delete && input==(options.length-1))
 		{
 			o.set_node_type(NodeType.nd_special_delete);
 			return o;
 		}
-		o.setData(options.get(input));
+		o.setData(options[input]);
 		return o;
 	}
 	
-	public Node processNumSelection(boolean ps, boolean cs, boolean delete)
+	private String[] preNumSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -602,8 +616,10 @@ public class RuleManager {
 				options.add(varList[2][0][loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
-		
+		return options.toArray(new String[options.size()]);
+	}
+	private Node postNumSelection(boolean ps, boolean cs, boolean delete, String[] options, int input)
+	{
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_num,null);
@@ -658,16 +674,16 @@ public class RuleManager {
 			}
 			break;
 		}
-		if(delete && input==(options.size()-1))
+		if(delete && input==(options.length-1))
 		{
 			o.set_node_type(NodeType.nd_special_delete);
 			return o;
 		}
-		o.setData(options.get(input));
+		o.setData(options[input]);
 		return o;
 	}
 	
-	public Node processStringSelection(boolean ps, boolean cs, boolean delete)
+	private String[] preStringSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -689,8 +705,10 @@ public class RuleManager {
 				options.add(varList[2][1][loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
-		
+		return options.toArray(new String[options.size()]);
+	}
+	private Node postStringSelection(boolean ps, boolean cs, boolean delete, String[] options, int input)
+	{
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_str,null);
@@ -726,17 +744,17 @@ public class RuleManager {
 			}
 			break;
 		}
-		if(delete && input==(options.size()-1))
+		if(delete && input==(options.length-1))
 		{
 			o.set_node_type(NodeType.nd_special_delete);
 			return o;
 		}
-		o.setData(options.get(input));
+		o.setData(options[input]);
 		return o;
 	}
 	
 	
-	public Node processNamedActionSelection(boolean ps, boolean cs, boolean delete)
+	private String[] preNamedActionSelection(boolean ps, boolean cs, boolean delete)
 	{
 		//// Start: Ask UI for selection
 		
@@ -747,8 +765,10 @@ public class RuleManager {
 			options.add(selection_namedAction[loop]);
 		if(delete) options.add("Delete");
 		// 2. Getting an input
-		int input = m.UI_input_selection(ar, options.toArray(new String[options.size()]));
-		
+		return options.toArray(new String[options.size()]);
+	}
+	private Node postNamedActionSelection(boolean ps, boolean cs, boolean delete, String[] options, int input)
+	{
 		// 3. Making a node
 		Node newnode;
 		Node o=new Node(NodeType.nd_namedAction,null);
@@ -765,56 +785,115 @@ public class RuleManager {
 			newnode=new Node(NodeType.nd_action,o);
 			return o;
 		}
-		if(delete && input==(options.size()-1))
+		if(delete && input==(options.length-1))
 		{
 			o.set_node_type(NodeType.nd_special_delete);
 			return o;
 		}
-		o.setData(options.get(input));
+		o.setData(options[input]);
 		return o;
 	}
 
 	// t type에 대한 선택지를 띄워주고 플레이어에게 선택을 받은 후 적절한 node를 만들어 리턴해주는 함수. 취소시 null.
-	public Node processSelection(NodeType t, boolean ps, boolean cs, boolean delete)
+	private String[] preSelections(NodeType t, boolean ps, boolean cs, boolean delete)
 	{
 		// TODO
 		switch(t)
 		{
 		case nd_action:
-			return processActionSelection(ps, cs, delete);
+			return preActionSelection(ps, cs, delete);
 		case nd_player:
-			return processPlayerSelection(ps, cs, delete);
+			return prePlayerSelection(ps, cs, delete);
 		case nd_deck:
-			return processDeckSelection(ps, cs, delete);
+			return preDeckSelection(ps, cs, delete);
 		case nd_card:
-			return processCardSelection(ps, cs, delete);
+			return preCardSelection(ps, cs, delete);
 		case nd_cond:
-			return processCondSelection(ps, cs, delete);
+			return preCondSelection(ps, cs, delete);
 		case nd_order:
-			return processOrderSelection(ps, cs, delete);
+			return preOrderSelection(ps, cs, delete);
 		case nd_num:
-			return processNumSelection(ps, cs, delete);
+			return preNumSelection(ps, cs, delete);
 		case nd_str:
-			return processStringSelection(ps, cs, delete);
+			return preStringSelection(ps, cs, delete);
 		case nd_namedAction:
-			return processNamedActionSelection(ps, cs, delete);
+			return preNamedActionSelection(ps, cs, delete);
 		}
-		System.err.println("processSelection: Invalid node type.");
+		System.err.println("preSelection: Invalid node type.");
+		return null;
+	}
+
+	private String[] previous_selection;
+	private Node postSelections(NodeType t, boolean ps, boolean cs, boolean delete, int input)
+	{
+		// TODO
+		switch(t)
+		{
+		case nd_action:
+			return postActionSelection(ps, cs, delete, previous_selection, input);
+		case nd_player:
+			return postPlayerSelection(ps, cs, delete, previous_selection, input);
+		case nd_deck:
+			return postDeckSelection(ps, cs, delete, previous_selection, input);
+		case nd_card:
+			return postCardSelection(ps, cs, delete, previous_selection, input);
+		case nd_cond:
+			return postCondSelection(ps, cs, delete, previous_selection, input);
+		case nd_order:
+			return postOrderSelection(ps, cs, delete, previous_selection, input);
+		case nd_num:
+			return postNumSelection(ps, cs, delete, previous_selection, input);
+		case nd_str:
+			return postStringSelection(ps, cs, delete, previous_selection, input);
+		case nd_namedAction:
+			return postNamedActionSelection(ps, cs, delete, previous_selection, input);
+		}
+		System.err.println("postSelection: Invalid node type.");
 		return null;
 	}
 	
-	AreaRange ar;
-	public void fillupSelection(int[] location, boolean isName)
+	public boolean isDeletable(Node n)
 	{
-		int[] location_parent = new int[location.length-1];
-		int last_location=location[location.length-1];
-		int loop;
-		for(loop=0;loop<location_parent.length-1;loop++)
-			location_parent[loop]=location[loop];
-		Node n=search(location_parent);
-		fillupSelection(n,last_location,isName);
+		Node p=n.getParent();
+		if(p==null || p.getData()==null || p.getData().getClass()!=RuleCase.class) return false;
+		return type_multiple_allowed((RuleCase)p.getData()).nt==n.get_node_type();
 	}
-	public void fillupSelection(Node n, int last_location, boolean isName)
+	
+	public boolean isAddAvailable(Node n)
+	{
+		if(n.getData()==null || n.getData().getClass()!=RuleCase.class) return false;
+		return (type_multiple_allowed((RuleCase)n.getData()))!=null;
+	}
+	
+	public Node onAddNew(Node n)
+	{
+		if(n.getData()==null || n.getData().getClass()!=RuleCase.class) return null;
+		NodeTypewithScope nts=type_multiple_allowed((RuleCase)n.getData());
+		Node result=new Node(nts.nt,null);
+		result.set_scope_card(nts.card_scope || result.get_scope_card());
+		result.set_scope_player(nts.player_scope || result.get_scope_player());
+		return result;
+	}
+	
+	public boolean isSelection(Node n)
+	{
+		return n.get_node_type()==NodeType.nd_raw;
+	}
+	
+	public String[] getSelectionCases(Node n)
+	{
+		String[] result = preSelections(n.get_node_type(),n.get_scope_player(),n.get_scope_card(),isDeletable(n));
+		previous_selection=result;
+		return result;
+	}
+	
+	public Node applySelectionCases(Node n, int input)
+	{
+		return postSelections(n.get_node_type(),n.get_scope_player(),n.get_scope_card(),isDeletable(n),input);
+	}
+	
+	/*
+	private String[] getSelectionCases(Node n, int last_location, boolean isName)
 	{
 		Node child;
 		Node o;
@@ -865,6 +944,7 @@ public class RuleManager {
 				n.setChildNode(last_location,o);
 		}
 	}
+	*/
 	
 	public Rule getRule()
 	{
