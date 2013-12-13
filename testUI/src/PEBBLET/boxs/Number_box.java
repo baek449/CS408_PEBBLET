@@ -193,7 +193,7 @@ public class Number_box extends JComponent {
 		return Numbox_node.getData();
 	}
 	
-	public Node get_Numnode(){
+	public Node get_node(){
 		return Numbox_node;
 	}
 	

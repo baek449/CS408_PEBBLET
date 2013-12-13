@@ -185,7 +185,7 @@ public class String_box extends JComponent{
 		return Strbox_node.getData();
 	}
 	
-	public Node get_Numnode(){
+	public Node get_node(){
 		return Strbox_node;
 	}
 	

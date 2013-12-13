@@ -211,6 +211,10 @@ public class Def_pane extends JComponent{
 				String item = (String)e.getItem();
 				global_item_pane.setLayout(null);
 				if(e.getStateChange() == ItemEvent.SELECTED){
+					Deck_box deckbox = new Deck_box();
+					Number_box numbox = new Number_box();
+					String_box stringbox = new String_box();
+					Player_box playerbox = new Player_box();
 					int del_box_index = getComponentIndex(global_item_pane)-3;
 					switch (item) {
 						case "(Cancel)":
@@ -219,7 +223,7 @@ public class Def_pane extends JComponent{
 							break;
 						case "Deck []":
 							preStatus = 1;
-							Deck_box deckbox = new Deck_box();
+//							dm.search(global_pane_index).deleteChildNode(deckbox.get_node());
 							dm.search(global_pane_index).deleteChildNode(del_box_index);
 							global_item_pane.removeAll();
 							global_item_pane.setLayout(null);
@@ -230,7 +234,7 @@ public class Def_pane extends JComponent{
 							break;
 						case "Number []":
 							preStatus = 2;
-							Number_box numbox = new Number_box();
+//							dm.search(global_pane_index).deleteChildNode(numbox.get_node());
 							dm.search(global_pane_index).deleteChildNode(del_box_index);
 							global_item_pane.removeAll();
 							global_item_pane.setLayout(null);
@@ -241,7 +245,7 @@ public class Def_pane extends JComponent{
 							break;
 						case "String []":
 							preStatus = 3;
-							String_box stringbox = new String_box();
+//							dm.search(global_pane_index).deleteChildNode(stringbox.get_node());
 							dm.search(global_pane_index).deleteChildNode(del_box_index);
 							global_item_pane.removeAll();
 							global_item_pane.setLayout(null);
@@ -252,7 +256,7 @@ public class Def_pane extends JComponent{
 							break;
 						case "Player []":
 							preStatus = 4;
-							Player_box playerbox = new Player_box();
+//							dm.search(global_pane_index).deleteChildNode(playerbox.get_node());
 							dm.search(global_pane_index).deleteChildNode(del_box_index);
 							global_item_pane.removeAll();
 							global_item_pane.setLayout(null);
@@ -264,7 +268,16 @@ public class Def_pane extends JComponent{
 						case "(Delete)":
 							int total = global_pane.getComponentCount();
 							global_pane.remove(global_item_pane);
-							dm.search(global_pane_index).deleteChildNode(del_box_index);
+							switch(preStatus){
+								case 1:
+									dm.search(global_pane_index).deleteChildNode(deckbox.get_node());
+								case 2:
+									dm.search(global_pane_index).deleteChildNode(numbox.get_node());
+								case 3:
+									dm.search(global_pane_index).deleteChildNode(stringbox.get_node());
+								case 4:
+									dm.search(global_pane_index).deleteChildNode(playerbox.get_node());
+							}
 
 							global_pane.getComponent(2).setLocation(global_pane.getComponent(2).getX(), global_pane.getComponent(2).getY()-30);
 							global_pane.getComponent(1).setLocation(global_pane.getComponent(1).getX(), global_pane.getComponent(1).getY()-30);
