@@ -271,12 +271,18 @@ public class Def_pane extends JComponent{
 							switch(preStatus){
 								case 1:
 									dm.search(global_pane_index).deleteChildNode(deckbox.get_node());
+									break;
 								case 2:
 									dm.search(global_pane_index).deleteChildNode(numbox.get_node());
+									break;
 								case 3:
 									dm.search(global_pane_index).deleteChildNode(stringbox.get_node());
+									break;
 								case 4:
 									dm.search(global_pane_index).deleteChildNode(playerbox.get_node());
+									break;
+								default:
+									break;
 							}
 
 							global_pane.getComponent(2).setLocation(global_pane.getComponent(2).getX(), global_pane.getComponent(2).getY()-30);

@@ -91,6 +91,8 @@ public class Rule_pane extends JComponent {
 		
 		int i = 1;
 		box_type.addItem("Select type");
+		
+//		for(i = 0; )
 		action_item_pane.setBounds(50,endof_rule_pane, 900, 20);
 		action_item_pane.add(box_type);
 		
