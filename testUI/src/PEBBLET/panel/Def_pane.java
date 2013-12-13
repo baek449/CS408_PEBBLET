@@ -280,7 +280,8 @@ public class Def_pane extends JComponent{
 								case 4:
 									dm.search(global_pane_index).deleteChildNode(playerbox.get_node());
 									break;
-								default:
+								case 0:
+									dm.search(global_pane_index).deleteChildNode(del_box_index);
 									break;
 							}
 
@@ -311,6 +312,7 @@ public class Def_pane extends JComponent{
 							def_pane.repaint();
 							break;
 					};
+					preStatus = 0;
 				}
 			}
 		});	
@@ -393,7 +395,10 @@ public class Def_pane extends JComponent{
 		players_pane.add(players_item_pane);
 		def_pane.repaint();
 		def_pane.validate();
-		
+		final Deck_box deckbox = new Deck_box();
+		final Number_box numbox = new Number_box();
+		final String_box strbox = new String_box();
+		final Player_box playerbox = new Player_box();		
 		box_type.addItemListener(new ItemListener() {
 			
 			@Override
@@ -411,7 +416,7 @@ public class Def_pane extends JComponent{
 							break;
 						case "Deck []":
 							preStatus = 5;
-							Deck_box deckbox = new Deck_box();
+							
 							dm.search(players_pane_index).deleteChildNode(del_box_index);
 							players_item_pane.removeAll();
 							players_item_pane.setLayout(null);
@@ -424,7 +429,6 @@ public class Def_pane extends JComponent{
 
 						case "Number []":
 							preStatus = 6;
-							Number_box numbox = new Number_box();
 							dm.search(players_pane_index).deleteChildNode(del_box_index);
 							players_item_pane.removeAll();
 							players_item_pane.setLayout(null);
@@ -437,7 +441,6 @@ public class Def_pane extends JComponent{
 
 						case "String []":
 							preStatus = 7;
-							String_box strbox = new String_box();
 							dm.search(players_pane_index).deleteChildNode(del_box_index);
 							players_item_pane.removeAll();
 							players_item_pane.setLayout(null);
@@ -450,7 +453,7 @@ public class Def_pane extends JComponent{
 
 						case "Player []":
 							preStatus = 8;
-							Player_box playerbox = new Player_box();
+
 							dm.search(players_pane_index).deleteChildNode(del_box_index);
 							players_item_pane.removeAll();
 							players_item_pane.setLayout(null);
@@ -464,11 +467,27 @@ public class Def_pane extends JComponent{
 						case "(Delete)":
 							int total = players_pane.getComponentCount();
 							players_pane.remove(players_item_pane);
-							dm.search(players_pane_index).deleteChildNode(del_box_index);
+							
 
 							players_pane.getComponent(2).setLocation(players_pane.getComponent(2).getX(), players_pane.getComponent(2).getY()-30);
 							players_pane.getComponent(1).setLocation(players_pane.getComponent(1).getX(), players_pane.getComponent(1).getY()-30);
-
+							switch(preStatus){
+								case 5:
+									dm.search(global_pane_index).deleteChildNode(deckbox.get_node());
+									break;
+								case 6:
+									dm.search(global_pane_index).deleteChildNode(numbox.get_node());
+									break;
+								case 7:
+									dm.search(global_pane_index).deleteChildNode(strbox.get_node());
+									break;
+								case 8:
+									dm.search(global_pane_index).deleteChildNode(playerbox.get_node());
+									break;
+								case 0:
+									dm.search(global_pane_index).deleteChildNode(del_box_index);
+									break;
+							}
 							
 							for(int i = del_box_index+3; i < total-1; i++){
 								players_pane.getComponent(i).setLocation(players_pane.getComponent(i).getX(), players_pane.getComponent(i).getY()-30);
@@ -492,10 +511,8 @@ public class Def_pane extends JComponent{
 							def_pane.validate();
 							break;
 
-					
-					
-					
 					}
+					preStatus = 0;
 				}
 				
 			}
