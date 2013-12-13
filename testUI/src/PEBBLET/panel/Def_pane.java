@@ -202,19 +202,18 @@ public class Def_pane extends JComponent{
 		endof_global_pane += 30;
 		global_pane.add(global_item_pane);
 		def_pane.repaint();
-		
+		final Deck_box deckbox = new Deck_box();
+		final Number_box numbox = new Number_box();
+		final String_box stringbox = new String_box();
+		final Player_box playerbox = new Player_box();
 		box_type.addItemListener(new ItemListener() {
-			
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
 				String item = (String)e.getItem();
 				global_item_pane.setLayout(null);
 				if(e.getStateChange() == ItemEvent.SELECTED){
-					Deck_box deckbox = new Deck_box();
-					Number_box numbox = new Number_box();
-					String_box stringbox = new String_box();
-					Player_box playerbox = new Player_box();
+					
 					int del_box_index = getComponentIndex(global_item_pane)-3;
 					switch (item) {
 						case "(Cancel)":

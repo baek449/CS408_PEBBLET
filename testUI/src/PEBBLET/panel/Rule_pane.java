@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import manager.Node;
 import manager.RuleManager;
 
 public class Rule_pane extends JComponent {
@@ -21,6 +22,7 @@ public class Rule_pane extends JComponent {
 	private JScrollPane rule_sc;
 	
 	private int[] action_mul_index = {0,0};
+	private Node action_mul_node;
 	
 	private int preStatus = 0;
 	private int endof_rule_pane = 30;
@@ -30,8 +32,8 @@ public class Rule_pane extends JComponent {
 	
 	public Rule_pane(){
 		rm = new RuleManager();
+//		action_mul_node = rm.search(action_mul_index);
 		closeMark = new JLabel("}");
-		
 		rule_pane = new JPanel(true);
 		rule_pane.setPreferredSize(new Dimension(900, 500));
 		
@@ -40,7 +42,7 @@ public class Rule_pane extends JComponent {
 		rule_sc.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		rule_sc.setPreferredSize(new Dimension(900, 600));
 		
-		make_action();
+//		make_action();
 		
 	}
 	
@@ -91,7 +93,7 @@ public class Rule_pane extends JComponent {
 		
 		int i = 1;
 		box_type.addItem("Select type");
-		
+		String[] box_item = rm.getSelectionCases(action_mul_node);
 //		for(i = 0; )
 		action_item_pane.setBounds(50,endof_rule_pane, 900, 20);
 		action_item_pane.add(box_type);
