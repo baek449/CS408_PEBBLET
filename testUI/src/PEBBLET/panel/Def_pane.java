@@ -467,27 +467,26 @@ public class Def_pane extends JComponent{
 						case "(Delete)":
 							int total = players_pane.getComponentCount();
 							players_pane.remove(players_item_pane);
-							
-
-							players_pane.getComponent(2).setLocation(players_pane.getComponent(2).getX(), players_pane.getComponent(2).getY()-30);
-							players_pane.getComponent(1).setLocation(players_pane.getComponent(1).getX(), players_pane.getComponent(1).getY()-30);
+														
 							switch(preStatus){
 								case 5:
-									dm.search(global_pane_index).deleteChildNode(deckbox.get_node());
+									dm.search(players_pane_index).deleteChildNode(deckbox.get_node());
 									break;
 								case 6:
-									dm.search(global_pane_index).deleteChildNode(numbox.get_node());
+									dm.search(players_pane_index).deleteChildNode(numbox.get_node());
 									break;
 								case 7:
-									dm.search(global_pane_index).deleteChildNode(strbox.get_node());
+									dm.search(players_pane_index).deleteChildNode(strbox.get_node());
 									break;
 								case 8:
-									dm.search(global_pane_index).deleteChildNode(playerbox.get_node());
+									dm.search(players_pane_index).deleteChildNode(playerbox.get_node());
 									break;
 								case 0:
-									dm.search(global_pane_index).deleteChildNode(del_box_index);
+									dm.search(players_pane_index).deleteChildNode(del_box_index);
 									break;
 							}
+							players_pane.getComponent(2).setLocation(players_pane.getComponent(2).getX(), players_pane.getComponent(2).getY()-30);
+							players_pane.getComponent(1).setLocation(players_pane.getComponent(1).getX(), players_pane.getComponent(1).getY()-30);
 							
 							for(int i = del_box_index+3; i < total-1; i++){
 								players_pane.getComponent(i).setLocation(players_pane.getComponent(i).getX(), players_pane.getComponent(i).getY()-30);
