@@ -35,7 +35,7 @@ public class rule_raw_panel {
 	}
 	
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		_panel.setLayout(null);
+		//_panel.setLayout(null);
 		raw_panel.setBounds(x,y,500,30);
 		_panel.add(raw_panel);
 //		_panel.setPreferredSize(new Dimension(_panel.getWidth()+150, _panel.getHeight()+20));

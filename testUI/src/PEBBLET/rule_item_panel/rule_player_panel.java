@@ -101,7 +101,7 @@ public class rule_player_panel extends JPanel {
 		});
 	}
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		_panel.setLayout(null);
+		//_panel.setLayout(null);
 		player_panel_.setBounds(x,y,500,30);
 		_panel.add(player_panel_);
 		_panel.repaint();

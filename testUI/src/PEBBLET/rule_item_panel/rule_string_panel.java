@@ -54,7 +54,7 @@ public class rule_string_panel {
 		});
 	}
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		_panel.setLayout(null);
+		//_panel.setLayout(null);
 		string_panel.setBounds(x,y,500,30);
 		_panel.add(string_panel);
 		_panel.repaint();

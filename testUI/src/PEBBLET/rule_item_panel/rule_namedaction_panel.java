@@ -54,7 +54,7 @@ public class rule_namedaction_panel {
 		});
 	}
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		_panel.setLayout(null);
+		//_panel.setLayout(null);
 		namedaction_panel.setBounds(x,y,500,30);
 		_panel.add(namedaction_panel);
 		_panel.repaint();

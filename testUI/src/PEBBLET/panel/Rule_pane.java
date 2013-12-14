@@ -1,11 +1,14 @@
 package PEBBLET.panel;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -106,7 +109,8 @@ public class Rule_pane extends JComponent {
 		final Node action_item_node = rm.onAddNew(action_mul_node);
 		action_mul_node.addChildNode(action_item_node);
 		
-		action_item_pane.setLayout(null);
+		action_item_pane.setLayout(new GridLayout(1,0));
+		
 		
 		final JComboBox<String> box_type = new JComboBox<String>();
 		
@@ -131,14 +135,19 @@ public class Rule_pane extends JComponent {
 					for(int i = 0; i < action_item_node.numChildren(); i++){
 						switch(action_item_node.getChildNode(i).get_node_type()){
 						case nd_action:
-//							rule_action_panel _action_panel = new rule_action_panel(action_item_node.getChildNode(i), rm);
-							rule_action_panel _action_panel = new rule_action_panel();
+							rule_action_panel _action_panel = new rule_action_panel(action_item_node.getChildNode(i), rm);
+//							rule_action_panel _action_panel = new rule_action_panel();
 							xpos += 150;
-							action_item_pane.setPreferredSize(new Dimension(900, 30));
+							//action_item_pane.setPreferredSize(new Dimension(900, 30));
 							_action_panel.addtoPanel(action_item_pane, xpos, 0);
-							
-							_action_panel.setPreferredSize(new Dimension(500,30));
-							_action_panel.setSize(500, 30);
+							/*_action_panel.setBorder(BorderFactory.createLineBorder(Color.RED));
+							action_item_pane.add(_action_panel);
+							System.out.println(action_item_pane.getLayout());
+							action_item_pane.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+							//_action_panel.setPreferredSize(new Dimension(500,30));
+							//_action_panel.setSize(500, 30);
+							action_item_pane.revalidate();
+							action_item_pane.repaint();*/
 							
 							break;
 						case nd_player:

@@ -54,7 +54,7 @@ public class rule_number_panel {
 		});
 	}
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		_panel.setLayout(null);
+		//_panel.setLayout(null);
 		number_panel.setBounds(x,y,500,30);
 		_panel.add(number_panel);
 		_panel.repaint();
