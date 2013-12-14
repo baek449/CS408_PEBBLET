@@ -142,6 +142,9 @@ public class CardPane extends JPanel{
 		card_item_pane.setBounds(50, endof_card_pane + 5, 900, 30);
 		endof_card_pane += 30;
 		card_pane.add(card_item_pane);
+		final Number_box numbox = new Number_box();
+		final String_box stringbox = new String_box();
+		final Action_box actbox = new Action_box();
 		
 		box_type.addItemListener(new ItemListener() {
 			
@@ -158,7 +161,6 @@ public class CardPane extends JPanel{
 							break;
 						case "Number []":
 							preStatus = 1;
-							Number_box numbox = new Number_box();
 							dm.search(temp).deleteChildNode(del_box_index);
 							card_item_pane.removeAll();
 							card_item_pane.setLayout(null);
@@ -170,7 +172,6 @@ public class CardPane extends JPanel{
 							break;
 						case "String []":
 							preStatus = 2;
-							String_box stringbox = new String_box();
 							dm.search(temp).deleteChildNode(del_box_index);
 							card_item_pane.removeAll();
 							card_item_pane.setLayout(null);
@@ -182,7 +183,6 @@ public class CardPane extends JPanel{
 							break;
 						case "Action []":
 							preStatus = 3;
-							Action_box actbox = new Action_box();
 							dm.search(temp).deleteChildNode(del_box_index);
 							card_item_pane.removeAll();
 							card_item_pane.setLayout(null);
@@ -195,6 +195,20 @@ public class CardPane extends JPanel{
 						case "(Delete)":
 							int total = card_pane.getComponentCount();
 							card_pane.remove(card_item_pane);
+							switch(preStatus){
+								case 1:
+									dm.search(temp).deleteChildNode(numbox.get_node());
+									break;
+								case 2:
+									dm.search(temp).deleteChildNode(stringbox.get_node());
+									break;
+								case 3:
+									dm.search(temp).deleteChildNode(actbox.get_node());
+									break;
+								case 0:
+									dm.search(temp).deleteChildNode(del_box_index);
+									break;
+							}
 							
 							card_pane.getComponent(2).setLocation(card_pane.getComponent(2).getX(), card_pane.getComponent(2).getY()-30);
 							card_pane.getComponent(1).setLocation(card_pane.getComponent(1).getX(), card_pane.getComponent(1).getY()-30);
@@ -206,8 +220,7 @@ public class CardPane extends JPanel{
 								card_pane.validate();
 							}
 							int[] temp = {3};
-							dm.search(temp).deleteChildNode(del_box_index);
-
+							
 							endof_card_pane -= 30;
 							card_pane.setSize(new Dimension(890, endof_card_pane + 5));
 							_this.get_pane().setPreferredSize(new Dimension(900, _this.get_total_end() + 20));
@@ -224,6 +237,7 @@ public class CardPane extends JPanel{
 							card_pane.validate();
 							break;
 					}
+					preStatus = 0;
 				}
 			}
 		});
