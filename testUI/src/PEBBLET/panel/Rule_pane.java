@@ -254,6 +254,11 @@ public class Rule_pane extends JComponent {
 		int sum = 0;
 		for(int i = 0; i < comp.getComponentCount(); i++){
 			Component c=comp.getComponent(i);
+			if(c.getClass()==JComboBox.class)
+			{
+				sum++;
+				continue;
+			}
 			if(!JComponent.class.isAssignableFrom(c.getClass())) continue;
 			JComponent child = (JComponent) c;
 			sum += get_all_count(child);
