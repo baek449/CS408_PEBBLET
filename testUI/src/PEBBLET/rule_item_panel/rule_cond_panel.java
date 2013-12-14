@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -22,7 +23,7 @@ public class rule_cond_panel {
 		cond_ComboBox = new JComboBox<String>();
 		cond_ComboBox.setBounds(0, 0, 150, 20);
 		cond_panel = new JPanel();
-		cond_panel.setLayout(new GridLayout(1,0));
+		cond_panel.setLayout(new BoxLayout(cond_panel, BoxLayout.LINE_AXIS));
 		cond_panel.add(cond_ComboBox);
 		
 	}
@@ -32,8 +33,9 @@ public class rule_cond_panel {
 		cond_ComboBox.setBounds(0, 0, 150, 20);
 		set_comboitem(rm.getSelectionCases(_input), rm);
 		cond_panel = new JPanel();
-		cond_panel.setLayout(new GridLayout(1,0));
+		cond_panel.setLayout(new BoxLayout(cond_panel, BoxLayout.LINE_AXIS));
 		cond_panel.add(cond_ComboBox);
+		cond_panel.setMinimumSize(new Dimension(150,30));
 		cond_panel.setPreferredSize(new Dimension(150, 30));
 		
 	}
@@ -56,7 +58,7 @@ public class rule_cond_panel {
 		});
 	}
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		//_panel.setLayout(new GridLayout(1,0));
+		//_panel.setLayout(new BoxLayout(cond_panel, BoxLayout.LINE_AXIS));
 		cond_panel.setBounds(x,y,150,30);
 		_panel.add(cond_panel);
 		_panel.repaint();

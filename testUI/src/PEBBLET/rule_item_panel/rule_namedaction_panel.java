@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -21,7 +22,7 @@ public class rule_namedaction_panel {
 		namedaction_ComboBox = new JComboBox<String>();
 		namedaction_ComboBox.setBounds(0, 0, 150, 20);
 		namedaction_panel = new JPanel();
-		namedaction_panel.setLayout(new GridLayout(1,0));
+		namedaction_panel.setLayout(new BoxLayout(namedaction_panel, BoxLayout.LINE_AXIS));
 		namedaction_panel.add(namedaction_ComboBox);
 		
 	}
@@ -31,8 +32,9 @@ public class rule_namedaction_panel {
 		namedaction_ComboBox.setBounds(0, 0, 150, 20);
 		set_comboitem(rm.getSelectionCases(_input), rm);
 		namedaction_panel = new JPanel();
-		namedaction_panel.setLayout(new GridLayout(1,0));
+		namedaction_panel.setLayout(new BoxLayout(namedaction_panel, BoxLayout.LINE_AXIS));
 		namedaction_panel.add(namedaction_ComboBox);
+		namedaction_panel.setMinimumSize(new Dimension(150,30));
 		namedaction_panel.setPreferredSize(new Dimension(150, 30));
 		
 	}
@@ -55,7 +57,7 @@ public class rule_namedaction_panel {
 		});
 	}
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		//_panel.setLayout(new GridLayout(1,0));
+		//_panel.setLayout(new BoxLayout(namedaction_panel, BoxLayout.LINE_AXIS));
 		namedaction_panel.setBounds(x,y,150,30);
 		_panel.add(namedaction_panel);
 		_panel.repaint();

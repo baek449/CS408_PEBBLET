@@ -1,8 +1,8 @@
 package PEBBLET.panel;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -15,6 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.BoxLayout;
 
 import PEBBLET.rule_item_panel.rule_action_panel;
 import PEBBLET.rule_item_panel.rule_card_panel;
@@ -42,6 +43,7 @@ public class Rule_pane extends JComponent {
 	
 	private int preStatus = 0;
 	private int endof_rule_pane = 30;
+	private int count_all = 0;
 	
 	private JLabel closeMark;
 	
@@ -94,6 +96,8 @@ public class Rule_pane extends JComponent {
 				rule_pane.validate();
 				
 				rm.getRule().getRoot().printAll();
+				System.out.println(get_all_count(rule_pane));
+				
 				
 				
 			}
@@ -109,7 +113,7 @@ public class Rule_pane extends JComponent {
 		final Node action_item_node = rm.onAddNew(action_mul_node);
 		action_mul_node.addChildNode(action_item_node);
 		
-		action_item_pane.setLayout(new GridLayout(1,0));
+		action_item_pane.setLayout(new BoxLayout(action_item_pane,BoxLayout.LINE_AXIS));
 		
 		
 		final JComboBox<String> box_type = new JComboBox<String>();
@@ -224,14 +228,38 @@ public class Rule_pane extends JComponent {
 	
 	public void check_and_resize(JComponent _action_item_pane){
 		int i = _action_item_pane.getComponentCount();
+//		count_all = _action_item_pane.getComponentCount();
 		System.out.println(i);
 //		i*150 == weight
-		_action_item_pane.setPreferredSize(new Dimension(i*150, 30));
-		_action_item_pane.setSize(new Dimension(i*150, 30));
+		_action_item_pane.setPreferredSize(new Dimension(i*300, 30));
+		_action_item_pane.setSize(new Dimension(i*300, 30));
+		if(i*300>=rule_pane.getWidth()){
+			rule_pane.setPreferredSize(new Dimension(i*300,rule_pane.getHeight()));
+			rule_pane.setSize(new Dimension(count_all*300, rule_pane.getHeight()));
+		}
+		System.out.println(_action_item_pane.getSize());
+		System.out.println(_action_item_pane.getPreferredSize());
+		_action_item_pane.revalidate();
+		rule_pane.revalidate();
+		System.out.println("after revalidate");
+		System.out.println(_action_item_pane.getSize());
+		System.out.println(_action_item_pane.getPreferredSize());
 	}
 	
 	public JComponent get_scpane(){
 		return rule_sc;
+	}
+	
+	public int get_all_count(JComponent comp){
+		int sum = 0;
+		for(int i = 0; i < comp.getComponentCount(); i++){
+			Component c=comp.getComponent(i);
+			if(c.getClass()!=JComponent.class) continue;
+			JComponent child = (JComponent) c;
+			sum += get_all_count(child);
+		}
+		
+		return sum+1;
 	}
 	
 }

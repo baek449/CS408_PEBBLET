@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -21,7 +22,7 @@ public class rule_deck_panel {
 		deck_ComboBox = new JComboBox<String>();
 		deck_ComboBox.setBounds(0, 0, 150, 20);
 		deck_panel = new JPanel();
-		deck_panel.setLayout(new GridLayout(1,0));
+		deck_panel.setLayout(new BoxLayout(deck_panel, BoxLayout.LINE_AXIS));
 		deck_panel.add(deck_ComboBox);
 		
 	}
@@ -31,8 +32,9 @@ public class rule_deck_panel {
 		deck_ComboBox.setBounds(0, 0, 150, 20);
 		set_comboitem(rm.getSelectionCases(_input), rm);
 		deck_panel = new JPanel();
-		deck_panel.setLayout(new GridLayout(1,0));
+		deck_panel.setLayout(new BoxLayout(deck_panel, BoxLayout.LINE_AXIS));
 		deck_panel.add(deck_ComboBox);
+		deck_panel.setMinimumSize(new Dimension(150,30));
 		deck_panel.setPreferredSize(new Dimension(150, 30));
 		
 	}
@@ -55,7 +57,7 @@ public class rule_deck_panel {
 		});
 	}
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		//_panel.setLayout(new GridLayout(1,0));
+		//_panel.setLayout(new BoxLayout(deck_panel, BoxLayout.LINE_AXIS));
 		deck_panel.setBounds(x,y,150,30);
 		_panel.add(deck_panel);
 		_panel.repaint();

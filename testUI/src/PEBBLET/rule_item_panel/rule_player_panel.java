@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -17,12 +18,14 @@ public class rule_player_panel extends JPanel {
 	private JComboBox<String> player_ComboBox;
 	private JPanel player_panel_;
 	
+	private int count_children = 0;
+	
 	public rule_player_panel(){
 		rule_player_node = new Node();
 		player_ComboBox = new JComboBox<String>();
 		player_ComboBox.setBounds(0, 0, 150, 20);
 		player_panel_ = new JPanel();
-		player_panel_.setLayout(new GridLayout(1,0));
+		player_panel_.setLayout(new BoxLayout(player_panel_, BoxLayout.LINE_AXIS));
 		player_panel_.add(player_ComboBox);
 		
 	}
@@ -32,8 +35,9 @@ public class rule_player_panel extends JPanel {
 		player_ComboBox.setBounds(0, 0, 150, 20);
 		set_comboitem(rm.getSelectionCases(_input), rm);
 		player_panel_ = new JPanel();
-		player_panel_.setLayout(new GridLayout(1,0));
+		player_panel_.setLayout(new BoxLayout(player_panel_, BoxLayout.LINE_AXIS));
 		player_panel_.add(player_ComboBox);
+		player_panel_.setMinimumSize(new Dimension(150,30));
 		player_panel_.setPreferredSize(new Dimension(150, 30));
 		
 	}
@@ -102,11 +106,12 @@ public class rule_player_panel extends JPanel {
 		});
 	}
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		//_panel.setLayout(new GridLayout(1,0));
+		//_panel.setLayout(new BoxLayout(player_panel, BoxLayout.LINE_AXIS));
 		player_panel_.setBounds(x,y,150,30);
 		_panel.add(player_panel_);
 		_panel.repaint();
 		_panel.validate();
 	}
+	
 
 }

@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -21,7 +22,7 @@ public class rule_card_panel {
 		card_ComboBox = new JComboBox<String>();
 		card_ComboBox.setBounds(0, 0, 150, 20);
 		card_panel = new JPanel();
-		card_panel.setLayout(new GridLayout(1,0));
+		card_panel.setLayout(new BoxLayout(card_panel, BoxLayout.LINE_AXIS));
 		card_panel.add(card_ComboBox);
 		
 	}
@@ -31,8 +32,9 @@ public class rule_card_panel {
 		card_ComboBox.setBounds(0, 0, 150, 20);
 		set_comboitem(rm.getSelectionCases(_input), rm);
 		card_panel = new JPanel();
-		card_panel.setLayout(new GridLayout(1,0));
+		card_panel.setLayout(new BoxLayout(card_panel, BoxLayout.LINE_AXIS));
 		card_panel.add(card_ComboBox);
+		card_panel.setMinimumSize(new Dimension(150,30));
 		card_panel.setPreferredSize(new Dimension(150, 30));
 		
 	}
@@ -56,7 +58,7 @@ public class rule_card_panel {
 		});
 	}
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		//_panel.setLayout(new GridLayout(1,0));
+		//_panel.setLayout(new BoxLayout(card_panel, BoxLayout.LINE_AXIS));
 		card_panel.setBounds(x,y,150,30);
 		_panel.add(card_panel);
 		_panel.repaint();
