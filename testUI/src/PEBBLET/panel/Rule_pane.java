@@ -96,7 +96,7 @@ public class Rule_pane extends JComponent {
 				rule_pane.validate();
 				
 				rm.getRule().getRoot().printAll();
-				System.out.println(get_all_count(rule_pane));
+				System.out.println("getallcount "+get_all_count(rule_pane));
 				
 				
 				
@@ -254,7 +254,7 @@ public class Rule_pane extends JComponent {
 		int sum = 0;
 		for(int i = 0; i < comp.getComponentCount(); i++){
 			Component c=comp.getComponent(i);
-			if(c.getClass()!=JComponent.class) continue;
+			if(!JComponent.class.isAssignableFrom(c.getClass())) continue;
 			JComponent child = (JComponent) c;
 			sum += get_all_count(child);
 		}
