@@ -1,6 +1,7 @@
 package PEBBLET.rule_item_panel;
 
 import java.awt.Dimension;
+import java.awt.GridLayout;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -19,7 +20,7 @@ public class rule_raw_panel {
 		raw_text = new JTextField();
 		raw_text.setBounds(0, 0, 150, 20);
 		raw_panel = new JPanel();
-		raw_panel.setLayout(null);
+		raw_panel.setLayout(new GridLayout(1,0));
 		raw_panel.add(raw_text);
 		
 	}
@@ -29,14 +30,14 @@ public class rule_raw_panel {
 		raw_text = new JTextField();
 		raw_text.setBounds(0, 0, 150, 20);
 		raw_panel = new JPanel();
-		raw_panel.setLayout(null);
+		raw_panel.setLayout(new GridLayout(1,0));
 		raw_panel.add(raw_text);
-		raw_panel.setPreferredSize(new Dimension(500,30));
+		raw_panel.setPreferredSize(new Dimension(150,30));
 	}
 	
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		//_panel.setLayout(null);
-		raw_panel.setBounds(x,y,500,30);
+		//_panel.setLayout(new GridLayout(1,0));
+		raw_panel.setBounds(x,y,150,30);
 		_panel.add(raw_panel);
 //		_panel.setPreferredSize(new Dimension(_panel.getWidth()+150, _panel.getHeight()+20));
 		_panel.repaint();

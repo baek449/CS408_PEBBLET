@@ -1,6 +1,7 @@
 package PEBBLET.rule_item_panel;
 
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -20,7 +21,7 @@ public class rule_order_panel {
 		order_ComboBox = new JComboBox<String>();
 		order_ComboBox.setBounds(0, 0, 150, 20);
 		order_panel = new JPanel();
-		order_panel.setLayout(null);
+		order_panel.setLayout(new GridLayout(1,0));
 		order_panel.add(order_ComboBox);
 		
 	}
@@ -30,9 +31,9 @@ public class rule_order_panel {
 		order_ComboBox.setBounds(0, 0, 150, 20);
 		set_comboitem(rm.getSelectionCases(_input), rm);
 		order_panel = new JPanel();
-		order_panel.setLayout(null);
+		order_panel.setLayout(new GridLayout(1,0));
 		order_panel.add(order_ComboBox);
-		order_panel.setPreferredSize(new Dimension(500, 30));
+		order_panel.setPreferredSize(new Dimension(150, 30));
 		
 	}
 	
@@ -54,8 +55,8 @@ public class rule_order_panel {
 		});
 	}
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		//_panel.setLayout(null);
-		order_panel.setBounds(x,y,500,30);
+		//_panel.setLayout(new GridLayout(1,0));
+		order_panel.setBounds(x,y,150,30);
 		_panel.add(order_panel);
 		_panel.repaint();
 		_panel.validate();

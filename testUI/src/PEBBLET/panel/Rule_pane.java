@@ -201,8 +201,8 @@ public class Rule_pane extends JComponent {
 						}
 					}
 					
-					action_item_pane.setPreferredSize(new Dimension(900+xpos,30));
-					rule_pane.setPreferredSize(new Dimension(900+xpos,30));
+					action_item_pane.setPreferredSize(new Dimension(150,30));
+					rule_pane.setPreferredSize(new Dimension(900,30));
 					
 
 				}

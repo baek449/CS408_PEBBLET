@@ -2,6 +2,7 @@ package PEBBLET.rule_item_panel;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -23,7 +24,7 @@ public class rule_action_panel extends JPanel {
 		action_ComboBox = new JComboBox<String>();
 		action_ComboBox.setBounds(0, 0, 150, 20);
 		action_panel = new JPanel();
-		action_panel.setLayout(null);
+		action_panel.setLayout(new GridLayout(1,0));
 		action_panel.add(action_ComboBox);
 	}
 	public rule_action_panel(Node _input, final RuleManager rm){
@@ -32,8 +33,8 @@ public class rule_action_panel extends JPanel {
 		action_ComboBox.setBounds(0, 0, 150, 20);
 		set_comboitem(rm.getSelectionCases(_input), rm);
 		action_panel = new JPanel();
-		action_panel.setLayout(null);
-		action_panel.setPreferredSize(new Dimension(500, 30));
+		action_panel.setLayout(new GridLayout(1,0));
+		action_panel.setPreferredSize(new Dimension(150, 30));
 
 		action_panel.add(action_ComboBox);
 	}
@@ -103,8 +104,8 @@ public class rule_action_panel extends JPanel {
 		});
 	}
 	public void addtoPanel(JComponent _panel, int x, int y ){
-		//_panel.setLayout(null);
-		action_panel.setBounds(x,y,500,30);
+		//_panel.setLayout(new GridLayout(1,0));
+		action_panel.setBounds(x,y,150,30);
 		_panel.add(action_panel);
 		_panel.repaint();
 		_panel.validate();
