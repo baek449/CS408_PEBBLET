@@ -203,7 +203,9 @@ public class Rule_pane extends JComponent {
 					
 					action_item_pane.setPreferredSize(new Dimension(150,30));
 					rule_pane.setPreferredSize(new Dimension(900,30));
-					
+					check_and_resize(action_item_pane);
+					System.out.println(action_item_pane.getPreferredSize());
+					System.out.println(action_item_pane.getSize());
 
 				}
 			}
@@ -218,6 +220,14 @@ public class Rule_pane extends JComponent {
 		rule_pane.validate();
 		
 		
+	}
+	
+	public void check_and_resize(JComponent _action_item_pane){
+		int i = _action_item_pane.getComponentCount();
+		System.out.println(i);
+//		i*150 == weight
+		_action_item_pane.setPreferredSize(new Dimension(i*150, 30));
+		_action_item_pane.setSize(new Dimension(i*150, 30));
 	}
 	
 	public JComponent get_scpane(){
