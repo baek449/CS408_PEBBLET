@@ -3,6 +3,8 @@ package PEBBLET.panel;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -11,6 +13,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import PEBBLET.rule_item_panel.rule_action_panel;
+import PEBBLET.rule_item_panel.rule_card_panel;
+import PEBBLET.rule_item_panel.rule_cond_panel;
+import PEBBLET.rule_item_panel.rule_deck_panel;
+import PEBBLET.rule_item_panel.rule_namedaction_panel;
+import PEBBLET.rule_item_panel.rule_number_panel;
+import PEBBLET.rule_item_panel.rule_order_panel;
+import PEBBLET.rule_item_panel.rule_player_panel;
+import PEBBLET.rule_item_panel.rule_raw_panel;
+import PEBBLET.rule_item_panel.rule_string_panel;
+import manager.DefinitionManager;
 import manager.Node;
 import manager.RuleManager;
 
@@ -21,7 +34,7 @@ public class Rule_pane extends JComponent {
 	private JPanel rule_pane;
 	private JScrollPane rule_sc;
 	
-	private int[] action_mul_index = {0,0};
+	private int[] action_mul_index = {0};
 	private Node action_mul_node;
 	
 	private int preStatus = 0;
@@ -29,10 +42,12 @@ public class Rule_pane extends JComponent {
 	
 	private JLabel closeMark;
 	
+	private int xpos =0;
 	
 	public Rule_pane(){
 		rm = new RuleManager();
-//		action_mul_node = rm.search(action_mul_index);
+		rm.updateVariableList(new DefinitionManager());
+		action_mul_node = rm.search(action_mul_index);
 		closeMark = new JLabel("}");
 		rule_pane = new JPanel(true);
 		rule_pane.setPreferredSize(new Dimension(900, 500));
@@ -42,7 +57,7 @@ public class Rule_pane extends JComponent {
 		rule_sc.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		rule_sc.setPreferredSize(new Dimension(900, 600));
 		
-//		make_action();
+		make_action();
 		
 	}
 	
@@ -70,10 +85,13 @@ public class Rule_pane extends JComponent {
 				add_action.setLocation(add_action.getX(), add_action.getY()+30);
 				closeMark.setLocation(closeMark.getX(), closeMark.getY()+30);
 				
-				rule_pane.setPreferredSize(new Dimension(900, endof_rule_pane+90));
+				rule_pane.setPreferredSize(new Dimension(900+xpos, endof_rule_pane+90));
 				
 				rule_pane.repaint();
 				rule_pane.validate();
+				
+				rm.getRule().getRoot().printAll();
+				
 				
 			}
 		});
@@ -85,17 +103,105 @@ public class Rule_pane extends JComponent {
 	
 	public void make_action_item(){
 		final JPanel action_item_pane = new JPanel();
+		final Node action_item_node = rm.onAddNew(action_mul_node);
+		action_mul_node.addChildNode(action_item_node);
+		
 		action_item_pane.setLayout(null);
 		
 		final JComboBox<String> box_type = new JComboBox<String>();
 		
 		box_type.setBounds(0,0,120,20);
 		
-		int i = 1;
 		box_type.addItem("Select type");
-		String[] box_item = rm.getSelectionCases(action_mul_node);
-//		for(i = 0; )
-		action_item_pane.setBounds(50,endof_rule_pane, 900, 20);
+		String[] box_item = rm.getSelectionCases(action_item_node);
+		for(int i = 0; i < box_item.length ; i++){
+			box_type.addItem(box_item[i]);
+		}
+		
+		box_type.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getStateChange() == ItemEvent.SELECTED){
+					int box_index = box_type.getSelectedIndex()-1;
+					Node n = rm.applySelectionCases(action_item_node, box_index);
+					System.out.println(box_index);
+					action_item_node.replace(n);
+					for(int i = 0; i < action_item_node.numChildren(); i++){
+						switch(action_item_node.getChildNode(i).get_node_type()){
+						case nd_action:
+//							rule_action_panel _action_panel = new rule_action_panel(action_item_node.getChildNode(i), rm);
+							rule_action_panel _action_panel = new rule_action_panel();
+							xpos += 150;
+							action_item_pane.setPreferredSize(new Dimension(900, 30));
+							_action_panel.addtoPanel(action_item_pane, xpos, 0);
+							
+							_action_panel.setPreferredSize(new Dimension(500,30));
+							_action_panel.setSize(500, 30);
+							
+							break;
+						case nd_player:
+							rule_player_panel player_panel = new rule_player_panel(action_item_node.getChildNode(i), rm);
+							xpos += 150;
+							player_panel.addtoPanel(action_item_pane, xpos, 0);
+							break;
+						case nd_deck:
+							rule_deck_panel deck_panel = new rule_deck_panel(action_item_node.getChildNode(i), rm);
+							xpos += 150;
+							deck_panel.addtoPanel(action_item_pane, xpos, 0);
+							break;
+						case nd_card:
+							rule_card_panel card_panel = new rule_card_panel(action_item_node.getChildNode(i), rm);
+							xpos += 150;
+							card_panel.addtoPanel(action_item_pane, xpos, 0);
+							break;
+						case nd_cond:
+							rule_cond_panel cond_panel = new rule_cond_panel(action_item_node.getChildNode(i), rm);
+							xpos += 150;
+							cond_panel.addtoPanel(action_item_pane, xpos, 0);
+							break;
+						case nd_num:
+							rule_number_panel num_panel = new rule_number_panel(action_item_node.getChildNode(i), rm);
+							xpos += 150;
+							num_panel.addtoPanel(action_item_pane, xpos, 0);
+							break;
+						case nd_str:
+							rule_string_panel str_panel = new rule_string_panel(action_item_node.getChildNode(i), rm);
+							xpos += 150;
+							str_panel.addtoPanel(action_item_pane, xpos, 0);
+							break;
+						case nd_order:
+							rule_order_panel ord_panel = new rule_order_panel(action_item_node.getChildNode(i), rm);
+							xpos += 150;
+							ord_panel.addtoPanel(action_item_pane, xpos, 0);
+							break;
+						case nd_namedAction:
+							rule_namedaction_panel natc_panel = new rule_namedaction_panel(action_item_node.getChildNode(i), rm);
+							xpos += 150;
+							natc_panel.addtoPanel(action_item_pane, xpos, 0);
+							break;
+						case nd_raw:
+							rule_raw_panel raw_panel = new rule_raw_panel(action_item_node.getChildNode(i), rm);
+							xpos += 150;
+							raw_panel.addtoPanel(action_item_pane, xpos, 0);
+							break;
+						default:
+							break;
+							
+						}
+					}
+					
+					action_item_pane.setPreferredSize(new Dimension(900+xpos,30));
+					rule_pane.setPreferredSize(new Dimension(900+xpos,30));
+					
+
+				}
+			}
+		});
+		
+		
+		action_item_pane.setBounds(50,endof_rule_pane, 900+xpos, 30);
 		action_item_pane.add(box_type);
 		
 		rule_pane.add(action_item_pane);

@@ -6,7 +6,14 @@ public class Rule implements Serializable{
 	private Node root;
 	public Rule()
 	{
-		root=null;
+		root=new Node();
+		Node action_mul = new Node(NodeType.nd_action, root);
+		action_mul.setData(RuleCase.action_multiple);
+		
+	}
+	public Rule(Node root_)
+	{
+		root=root_;
 	}
 	public Node getRoot()
 	{

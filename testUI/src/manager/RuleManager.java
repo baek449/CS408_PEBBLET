@@ -43,6 +43,10 @@ public class RuleManager {
 	private String[][][] varList;
 //	private static RuleDisplayer m;
 	
+	public RuleManager(){
+		rule = new Rule();
+	}
+	
 	public Node search(int[] location)
 	{
 		Node cur=rule.getRoot();
@@ -855,7 +859,9 @@ public class RuleManager {
 	{
 		Node p=n.getParent();
 		if(p==null || p.getData()==null || p.getData().getClass()!=RuleCase.class) return false;
-		return type_multiple_allowed((RuleCase)p.getData()).nt==n.get_node_type();
+		NodeTypewithScope nts=type_multiple_allowed((RuleCase)p.getData());
+		if(nts==null) return false;
+		return nts.nt==n.get_node_type();
 	}
 	
 	public boolean isAddAvailable(Node n)
@@ -882,6 +888,10 @@ public class RuleManager {
 	public String[] getSelectionCases(Node n)
 	{
 		String[] result = preSelections(n.get_node_type(),n.get_scope_player(),n.get_scope_card(),isDeletable(n));
+//		System.out.println(n.get_node_type());
+//		System.out.println(n.get_scope_player());
+//		System.out.println(n.get_scope_card());
+//		System.out.println(isDeletable(n));
 		previous_selection=result;
 		return result;
 	}

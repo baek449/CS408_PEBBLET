@@ -118,6 +118,20 @@ public class Node implements Serializable{
 		printAll(0,0);
 	}
 	
+	public void replace(Node _input){
+		this.setData(_input.getData());
+		this.set_node_type(_input.get_node_type());
+		this.set_scope_player(_input.get_scope_player());
+		this.set_scope_card(_input.get_scope_card());
+		this.remove_all_children();
+		for(int i = 0 ; i < _input.numChildren(); i++){
+			this.addChildNode(_input.getChildNode(i));
+		}
+	}
+	public void remove_all_children(){
+		this.children.clear();
+	}
+	
 	private void printAll(int indent, int child_index)
 	{
 		int loop;
