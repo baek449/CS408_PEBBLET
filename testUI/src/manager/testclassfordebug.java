@@ -261,7 +261,7 @@ public class testclassfordebug extends JFrame{
 		rm.updateVariableList(dm);
 		
 		
-		panel_inside p=new panel_inside(rm,true,false,true);
+		panel_inside p=new panel_inside(rm,true,false,true,null);
 		p.setNode(r.getRoot().getChildNode(0));
 		p.remove_combo();
 		

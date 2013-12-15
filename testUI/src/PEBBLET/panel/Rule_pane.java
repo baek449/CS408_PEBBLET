@@ -4,13 +4,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import PEBBLET.panel_inside;
 import manager.DefinitionManager;
-import manager.Node;
 import manager.RuleManager;
 
 public class Rule_pane extends JComponent {
@@ -18,6 +16,7 @@ public class Rule_pane extends JComponent {
 	private RuleManager rm;
 	private JPanel rule_pane;
 	private JScrollPane rule_sc;
+	private panel_inside p;
 	
 	public Rule_pane(){
 		rm = new RuleManager();
@@ -28,14 +27,14 @@ public class Rule_pane extends JComponent {
 		rule_sc = new JScrollPane(rule_pane);
 		rule_sc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		rule_sc.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		rule_sc.setPreferredSize(new Dimension(900, 600));
+		rule_sc.setPreferredSize(new Dimension(900, 500));
 		
 		make_action();
 		
 	}
 	
 	public void make_action(){
-		panel_inside p=new panel_inside(rm,true,false,true);
+		p=new panel_inside(rm,true,false,true,this);
 		p.setNode(rm.getRule().getRoot().getChildNode(0));
 		p.remove_combo();
 		
@@ -48,4 +47,18 @@ public class Rule_pane extends JComponent {
 	}
 	
 	
+	public void update_window_size()
+	{
+		set_board_size(new Dimension(p.getSize().width+200,p.getSize().height+100));
+	}
+    
+	
+	private void set_board_size(Dimension d)
+	{
+		System.out.println(d);
+		rule_pane.setPreferredSize(d);
+		rule_pane.revalidate();
+		rule_pane.repaint();
+	}
+
 }

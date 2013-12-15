@@ -7,15 +7,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import PEBBLET.panel.Rule_pane;
 import manager.Node;
 import manager.RuleCase;
 import manager.RuleManager;
@@ -27,12 +26,12 @@ public class panel_inside extends JPanel
 	private JButton add_button;
 	
 	private JTextField text;
-	private ArrayList<JComponent> inside_components;
 	
 	private Node n;
 	private boolean isAddable;
 	
 	private RuleManager rm;
+	private Rule_pane rulepane;
 	
 	public void remove_combo()
 	{
@@ -61,6 +60,7 @@ public class panel_inside extends JPanel
 		}
 		buildup_with_node(n);
 		reset_children_nodes(rm);
+		
 	}
 	
 	public panel_inside() // 직접 부르는건 Discouraged. 여기서 모든 컴포넌트의 크기를 조절함.
@@ -89,10 +89,11 @@ public class panel_inside extends JPanel
 		buildup(false, false, true);
 	}
 	
-	public panel_inside(RuleManager rm_, boolean isVertical, boolean isTextfield, boolean isAddable_)
+	public panel_inside(RuleManager rm_, boolean isVertical, boolean isTextfield, boolean isAddable_, Rule_pane rulepane_)
 	{
 		this();
 		rm=rm_;
+		rulepane=rulepane_;
 		add_button.addActionListener(new ActionListener() {
 
 			@Override
@@ -107,6 +108,7 @@ public class panel_inside extends JPanel
 				// TODO Auto-generated method stub
 				n.setData(text.getText());
 				text.revalidate();
+				rulepane.update_window_size();
 			}});
 		combo.addItemListener(new ItemListener() {
 
@@ -178,7 +180,7 @@ public class panel_inside extends JPanel
 			c.printAll();
 			System.out.println(v);
 			s=rm.isSelection(c);
-			p=new panel_inside(rm, v, !s, rm.isAddAvailable(c));
+			p=new panel_inside(rm, v, !s, rm.isAddAvailable(c),rulepane);
 			p.setNode(c);
 			inside.add(p);
 		}
@@ -196,12 +198,13 @@ public class panel_inside extends JPanel
 		boolean v=false,s;
 		if(r.getData()!=null) v=r.getData().equals(RuleCase.action_multiple) || r.getData().equals(RuleCase.action_act);
 		s=rm.isSelection(r);
-		p=new panel_inside(rm, v, !s, rm.isAddAvailable(r));
+		p=new panel_inside(rm, v, !s, rm.isAddAvailable(r),rulepane);
 		p.setNode(r);
 		inside.add(p);
 		
 		if(isAddable) inside.add(add_button);
 		inside.revalidate();
+		rulepane.update_window_size();
 	}
 
 	private void onSelect(RuleManager rm, int index)
@@ -209,6 +212,7 @@ public class panel_inside extends JPanel
 		Node r=rm.applySelectionCases(n, index);
 		replace(r);
 		inside.revalidate();
+		rulepane.update_window_size();
 	}
 
 }
