@@ -67,21 +67,7 @@ public class RuleManager {
 		varList=dm.getDefinition().getVariableList();
 	}
 	
-	private class NodeTypewithScope
-	{
-		public NodeType nt;
-		public boolean player_scope;
-		public boolean card_scope;
-		public NodeTypewithScope() {}
-		public NodeTypewithScope(NodeType nt_, boolean ps, boolean cs)
-		{
-			nt=nt_;
-			player_scope=ps;
-			card_scope=cs;
-		}
-	}
-	
-	public NodeTypewithScope type_multiple_allowed(RuleCase rc)
+	public static NodeTypewithScope type_multiple_allowed(RuleCase rc)
 	{
 		switch(rc)
 		{
@@ -855,7 +841,7 @@ public class RuleManager {
 		return null;
 	}
 	
-	public boolean isDeletable(Node n)
+	public static boolean isDeletable(Node n)
 	{
 		Node p=n.getParent();
 		if(p==null || p.getData()==null || p.getData().getClass()!=RuleCase.class) return false;
@@ -864,13 +850,13 @@ public class RuleManager {
 		return nts.nt==n.get_node_type();
 	}
 	
-	public boolean isAddAvailable(Node n)
+	public static boolean isAddAvailable(Node n)
 	{
 		if(n.getData()==null || n.getData().getClass()!=RuleCase.class) return false;
 		return (type_multiple_allowed((RuleCase)n.getData()))!=null;
 	}
 	
-	public Node onAddNew(Node n)
+	public static Node onAddNew(Node n)
 	{
 		if(n.getData()==null || n.getData().getClass()!=RuleCase.class) return null;
 		NodeTypewithScope nts=type_multiple_allowed((RuleCase)n.getData());
@@ -880,9 +866,9 @@ public class RuleManager {
 		return result;
 	}
 	
-	public boolean isSelection(Node n)
+	public static boolean isSelection(Node n)
 	{
-		return n.get_node_type()==NodeType.nd_raw;
+		return n.get_node_type()!=NodeType.nd_raw;
 	}
 	
 	public String[] getSelectionCases(Node n)

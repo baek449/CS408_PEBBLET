@@ -9,6 +9,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -113,7 +114,7 @@ public class Rule_pane extends JComponent {
 		final Node action_item_node = rm.onAddNew(action_mul_node);
 		action_mul_node.addChildNode(action_item_node);
 		
-		action_item_pane.setLayout(new BoxLayout(action_item_pane,BoxLayout.LINE_AXIS));
+		//action_item_pane.setLayout(new BoxLayout(action_item_pane,BoxLayout.LINE_AXIS));
 		
 		
 		final JComboBox<String> box_type = new JComboBox<String>();
@@ -207,7 +208,7 @@ public class Rule_pane extends JComponent {
 					
 					action_item_pane.setPreferredSize(new Dimension(150,30));
 					rule_pane.setPreferredSize(new Dimension(900,30));
-					check_and_resize(action_item_pane);
+					//check_and_resize(action_item_pane);
 					System.out.println(action_item_pane.getPreferredSize());
 					System.out.println(action_item_pane.getSize());
 
@@ -217,7 +218,9 @@ public class Rule_pane extends JComponent {
 		
 		
 		action_item_pane.setBounds(50,endof_rule_pane, 900+xpos, 30);
+		//action_item_pane.setSize(new Dimension(150,30));
 		action_item_pane.add(box_type);
+		//action_item_pane.add(Box.createHorizontalGlue());
 		
 		rule_pane.add(action_item_pane);
 		rule_pane.repaint();
