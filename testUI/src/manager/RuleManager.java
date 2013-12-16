@@ -47,6 +47,10 @@ public class RuleManager {
 		rule = new Rule();
 	}
 	
+	public RuleManager(Node rul_root){
+		rule=new Rule(rul_root);
+	}
+	
 	public Node search(int[] location)
 	{
 		Node cur=rule.getRoot();

@@ -6,9 +6,8 @@ public class Rule implements Serializable{
 	private Node root;
 	public Rule()
 	{
-		root=new Node();
-		Node action_mul = new Node(NodeType.nd_action, root);
-		action_mul.setData(RuleCase.action_multiple);
+		root=new Node(NodeType.nd_action, null);
+		root.setData(RuleCase.action_multiple);
 		
 	}
 	public Rule(Node root_)

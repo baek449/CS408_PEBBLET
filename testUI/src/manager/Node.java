@@ -52,6 +52,19 @@ public class Node implements Serializable{
 		}
 	}
 	
+	public Node copy_except_parent(int additional_copy_depth)
+	{
+		Node n=new Node();
+		n.setData(getData());
+		n.set_node_type(get_node_type());
+		n.set_scope_player(get_scope_player());
+		n.set_scope_card(get_scope_card());
+		if(additional_copy_depth==0) return n;
+		for(int i = 0 ; i < numChildren(); i++){
+			n.addChildNode(getChildNode(i).copy_except_parent(additional_copy_depth-1));
+		}
+		return n;
+	}
 	
 	// 원래 변수였으나, 함수로 바꿈.
 	public int numChildren()
@@ -88,6 +101,11 @@ public class Node implements Serializable{
 	public void addChildNode(Node n)
 	{
 		children.add(n);
+		n.parent=this;
+	}
+	public void addChildNode_front(Node n)
+	{
+		children.add(0,n);
 		n.parent=this;
 	}
 	public Node getLastChildNode()
@@ -143,6 +161,11 @@ public class Node implements Serializable{
 			getChildNode(loop).printAll(indent+1,loop);
 		}
 		
+	}
+	public String toString()
+	{
+		if(data==null) return "Null Node";
+		return data.toString();
 	}
 
 	

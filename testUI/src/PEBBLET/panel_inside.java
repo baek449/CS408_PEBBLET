@@ -49,6 +49,8 @@ public class panel_inside extends JPanel
 		}
 		buildup_with_node(n);
 		reset_children_nodes(rm);
+		inside.revalidate();
+		rulepane.update_window_size();
 	}
 	public void setNode(Node n_)
 	{
