@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import PEBBLET.ComponentTableCellEditor;
 import PEBBLET.ComponentTableCellRenderer;
 import PEBBLET.VerticalLayout;
 import PEBBLET.mainUI;
@@ -206,6 +207,7 @@ import PEBBLET.rule_item_panel.rule_action_panel;
 
 
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -222,10 +224,11 @@ import java.awt.event.MouseEvent;
 public class testclassfordebug extends JPanel {
    private boolean DEBUG = false;
 
+   private JTable table;
    public testclassfordebug() {
        super(new GridLayout(1,0));
 
-       JTable table = new JTable(new MyTableModel()) {
+       table = new JTable(new MyTableModel()) {
 		    public TableCellRenderer getCellRenderer(int row, int column)
 		    {
 		        ComponentTableCellRenderer c= new ComponentTableCellRenderer();
@@ -236,7 +239,7 @@ public class testclassfordebug extends JPanel {
        table.setPreferredScrollableViewportSize(new Dimension(500, 70));
        table.setFillsViewportHeight(true);
        table.setRowHeight(100);
-
+	   table.prepareEditor(new ComponentTableCellEditor(new DefinitionManager()), 2,1);
        //Create the scroll pane and add the table to it.
        JScrollPane scrollPane = new JScrollPane(table);
 
@@ -333,6 +336,7 @@ public class testclassfordebug extends JPanel {
        {
     	   super();
     	   data[2][1]=new Rule().getRoot();
+    	   
        }
        public final Object[] longValues = {"Jane", "Kathy",
                                            "None of the above",

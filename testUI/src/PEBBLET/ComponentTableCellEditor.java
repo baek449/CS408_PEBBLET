@@ -3,12 +3,12 @@ package PEBBLET;
 import java.awt.Component;
 import java.util.EventObject;
 
-import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.event.CellEditorListener;
 import javax.swing.table.TableCellEditor;
 
 import PEBBLET.panel.Rule_pane;
+import manager.DefinitionManager;
 import manager.Node;
 import manager.NodeType;
 import manager.RuleCase;
@@ -16,6 +16,15 @@ import manager.RuleCase;
 public class ComponentTableCellEditor implements TableCellEditor {
 	
 	private Node n;
+	private DefinitionManager dm;
+	public ComponentTableCellEditor(DefinitionManager dm_)
+	{
+		setDefinitionManager(dm_);
+	}
+	public void setDefinitionManager(DefinitionManager dm_)
+	{
+		dm=dm_;
+	}
 
 	@Override
 	public void addCellEditorListener(CellEditorListener l) {
@@ -66,7 +75,7 @@ public class ComponentTableCellEditor implements TableCellEditor {
 		Object target = table.getModel().getValueAt(row, column);
 		if(target!=null && target.getClass() == Node.class)
 		{
-			Node n=(Node)target;
+			n=(Node)target;
 			Object tmp = n.getData();
 			if (n.get_node_type()==NodeType.nd_action && (tmp==null || tmp.getClass()==RuleCase.class))
 			{
@@ -75,6 +84,7 @@ public class ComponentTableCellEditor implements TableCellEditor {
 				return rp.get_scpane();
 			}
 		}
-	    return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+		
+	    return null;
 	}
 }

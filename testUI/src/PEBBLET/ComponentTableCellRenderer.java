@@ -17,7 +17,7 @@ import manager.Node;
 import manager.NodeType;
 import manager.RuleCase;
 
-public class ComponentTableCellRenderer extends DefaultTableCellRenderer implements TableCellEditor{
+public class ComponentTableCellRenderer extends DefaultTableCellRenderer{
 	
 	private DefinitionManager dm;
 	public void setDefinitionManager(DefinitionManager dm_)
@@ -40,54 +40,5 @@ public class ComponentTableCellRenderer extends DefaultTableCellRenderer impleme
 			}
 		}
 	    return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-	}
-
-	@Override
-	public void addCellEditorListener(CellEditorListener arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cancelCellEditing() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object getCellEditorValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isCellEditable(EventObject arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void removeCellEditorListener(CellEditorListener arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean shouldSelectCell(EventObject arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean stopCellEditing() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Component getTableCellEditorComponent(JTable table, Object value,
-			boolean isSelected, int row, int column) {
-		// TODO Auto-generated method stub
-		return super.getta
 	}
 }
