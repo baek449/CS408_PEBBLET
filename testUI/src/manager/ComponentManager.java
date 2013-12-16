@@ -32,7 +32,8 @@ public class ComponentManager {
 			d=comp_base.getChildNode(loop);
 			for(int loop2=0;loop2<d.numChildren();loop2++)
 			{
-				typ2=new Node(null,d.getChildNode(loop2));
+				typ1=d.getChildNode(loop2);
+				typ2=new Node();
 				b=null;
 				switch(d.getChildNode(loop2).get_node_type())
 				{
@@ -50,6 +51,7 @@ public class ComponentManager {
 					break;
 				}
 				typ2.setData(b);
+				typ1.addChildNode_front(typ2);
 			}
 			typ1=new Node(NodeType.nd_str,null);
 			typ1.setData("_type");
@@ -73,7 +75,7 @@ public class ComponentManager {
 	{
 		for(int loop=0;loop<comp_base.numChildren();loop++)
 		{
-			if(comp_base.getChildNode(loop).equals(type))
+			if(comp_base.getChildNode(loop).getData().equals(type))
 			{
 				Node result=comp_base.getChildNode(loop).copy_except_parent(-1);
 				result.setData("New "+type+"Card");
@@ -81,8 +83,14 @@ public class ComponentManager {
 				return result;
 			}
 		}
-		System.err.println("make_new_card : Cannot find card type");
+		System.err.println("make_new_card : Cannot find card type - input: "+type);
+		comp_base.printAll();
 		return null;
+	}
+	public void delete_card(Node n)
+	{
+		Node p=n.getParent();
+		if(p!=null) p.deleteChildNode(n);
 	}
 	public Component getComponent()
 	{

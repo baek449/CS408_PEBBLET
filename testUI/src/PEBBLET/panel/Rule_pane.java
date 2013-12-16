@@ -14,9 +14,9 @@ import manager.RuleManager;
 
 public class Rule_pane extends JComponent {
 
-	private RuleManager rm;
-	private JPanel rule_pane;
-	private JScrollPane rule_sc;
+	protected RuleManager rm;
+	protected JPanel rule_pane;
+	protected JScrollPane rule_sc;
 	private panel_inside p;
 	
 	public Rule_pane(){
@@ -86,7 +86,6 @@ public class Rule_pane extends JComponent {
 	
 	private void set_board_size(Dimension d)
 	{
-		System.out.println(d);
 		rule_pane.setPreferredSize(d);
 		rule_pane.revalidate();
 		rule_pane.repaint();
