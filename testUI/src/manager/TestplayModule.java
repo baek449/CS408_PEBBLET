@@ -76,6 +76,7 @@ public class TestplayModule {
 	private Node eventFunc;
 	private boolean logging;
 	private TestLog testlog;
+	private Component c;
 	
 	private Random r;
 	
@@ -92,9 +93,10 @@ public class TestplayModule {
 		cardStack=new Stack<Node>();
 		logging=false;
 	}
-	public TestplayModule(Definition d)
+	public TestplayModule(Definition d, Component c_)
 	{
 		r=new Random(System.currentTimeMillis());
+		c=c_;
 		playerStack=new Stack<Integer>();
 		cardStack=new Stack<Node>();
 		logging=false;
@@ -460,22 +462,12 @@ public class TestplayModule {
 	// 주어진 파일에서 카드를 불러와 deck_raw에 넣는다.
 	public void action_load(String file, Node deck_raw)
 	{
-		// TODO: 현재는 dummy card 10장을 집어넣어 테스트하는 상태
 		Node deck_=deck(deck_raw);
-		Node temp;
-		Node temp2,temp3;
-		for(int loop=0;loop<10;loop++)
+		
+		Node newcards=c.getallcards(file);
+		for(int loop=0;loop<newcards.numChildren();loop++)
 		{
-			temp=new Node(NodeType.nd_card,deck_);
-			temp.setData(String.valueOf(loop));
-			temp2=new Node(NodeType.nd_str,temp);
-			temp2.setData("_type");
-			temp3=new Node(NodeType.nd_raw,temp2);
-			temp3.setData("Dummy");
-			temp2=new Node(NodeType.nd_num,temp);
-			temp2.setData("value");
-			temp3=new Node(NodeType.nd_raw,temp2);
-			temp3.setData(String.valueOf(loop));
+			deck_.addChildNode(newcards.getChildNode(loop));
 		}
 	}
 	
