@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,9 +18,12 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import PEBBLET.panel_inside;
 import manager.ComponentManager;
+import manager.ComponentTablePanel;
 import manager.Definition;
 import manager.DefinitionManager;
 import manager.Node;
@@ -33,13 +37,12 @@ public class Component_pane extends JComponent {
 	
 	private JPanel total, cardview,valueview,typebox,cardlist,buttonbox;
 	private JButton b_card_add, b_card_delete;
-	//private NewTable comp_table;
+	private ComponentTablePanel comp_table;
 	private JScrollPane comp_sc;
 	private JComboBox<String> type_select;
 	private JList<Node> card_list;
 	private DefaultListModel<Node> card_list_model;
 	private JScrollPane card_list_scroller;
-	//private panel_inside p;
 	
 	public Component_pane(){
 		//// Á¤ÀÇ
@@ -86,6 +89,8 @@ public class Component_pane extends JComponent {
 		card_trump_shape_clover.setData("clover");
 		Node card_trump_num=new Node(NodeType.nd_num,card_trump);
 		card_trump_num.setData("num");
+		Node card_trump_act=new Node(NodeType.nd_action,card_trump);
+		card_trump_act.setData("on_first");
 		
 		Definition sample_def = new Definition();
 		sample_def.setRoot(def_root);
@@ -105,7 +110,7 @@ public class Component_pane extends JComponent {
 		total.add(cardview,BorderLayout.WEST);
 
 		valueview=new JPanel();
-		//valueview.setLayout(new BorderLayout());
+		valueview.setLayout(new BoxLayout(valueview,BoxLayout.LINE_AXIS));
 		valueview.setBorder(BorderFactory.createLoweredBevelBorder());
 		valueview.setPreferredSize(new Dimension(790,600));
 		total.add(valueview,BorderLayout.CENTER);
@@ -141,6 +146,15 @@ public class Component_pane extends JComponent {
 		card_list=new JList<Node>(card_list_model);
 		card_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		card_list.setLayoutOrientation(JList.VERTICAL);
+		card_list.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				// TODO Auto-generated method stub
+				setCard(card_list.getSelectedValue());
+			}});
+		
+		
 		//card_list.setVisibleRowCount(-1);
 		card_list_scroller = new JScrollPane(card_list);
 		card_list_scroller.setPreferredSize(new Dimension(180, 470));
@@ -162,7 +176,7 @@ public class Component_pane extends JComponent {
 				new_node.setData("New "+type+" Card");
 				cm.getComponent().getallcards(type).addChildNode(new_node);
 				card_list_model.addElement(new_node);
-				// TODO: Update
+				setCard(new_node);
 			}});
 		buttonbox.add(b_card_add);
 		b_card_delete=new JButton("Delete Card");
@@ -174,21 +188,22 @@ public class Component_pane extends JComponent {
 				String type=(String)type_select.getSelectedItem();
 				Node cur_node=card_list.getSelectedValue();
 				cm.delete_card(cur_node);
-				System.out.println(card_list_model.removeElement(cur_node));
-				// TODO: Update
+				card_list_model.removeElement(cur_node);
+				setCard(null);
 			}});
 		buttonbox.add(b_card_delete);
 		
-		//comp_table=new NewTable();
-		// TODO: Initialize comp_table
-		//comp_sc=new JScrollPane();
-		//comp_sc.add(comp_table);
-		//valueview.add(comp_table);
+		comp_table=new ComponentTablePanel(dm);
+		valueview.add(comp_table);
 		
 		this.setLayout(new BorderLayout());
 		this.add(total);
 		this.revalidate();
 		
+	}
+	
+	public void setCard(Node cardnode){
+		comp_table.reset(cardnode);
 	}
 	
 	public JComponent get_scpane(){

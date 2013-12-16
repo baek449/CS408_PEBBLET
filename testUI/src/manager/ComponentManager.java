@@ -47,7 +47,7 @@ public class ComponentManager {
 					b=RuleCase.action_multiple;
 					typ2.set_node_type(NodeType.nd_action);
 					typ2.set_scope_card(true);
-					typ2.set_scope_player(false);
+					typ2.set_scope_player(true);
 					break;
 				}
 				typ2.setData(b);

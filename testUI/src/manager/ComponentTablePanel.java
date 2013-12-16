@@ -1,12 +1,12 @@
 package manager;
 
-import java.awt.BorderLayout;
 import java.util.EventObject;
 import java.util.Vector;
 
+import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -18,13 +18,12 @@ import javax.swing.table.TableCellEditor;
 
 import PEBBLET.panel.Rule_pane;
 
-public class MainClass extends JFrame {
-	Node c1;
-	public MainClass() {
-		super("Customer Editor Test");
-		setSize(600, 160);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+public class ComponentTablePanel extends JPanel {
+	private Node c1;
+	private JTable jt;
+	public ComponentTablePanel(DefinitionManager dm) {
 
+		/*
 		c1=new Node(NodeType.nd_card,null);
 		c1.setData("Test Card");
 		Node c11=new Node(NodeType.nd_str,c1);
@@ -43,16 +42,16 @@ public class MainClass extends JFrame {
 		c14.setData("action_test");
 		Node c141=new Node(NodeType.nd_action,c14);
 		c141.setData(RuleCase.action_multiple);
-		
-		final ComponentTableModel test = new ComponentTableModel(c1);
-		JTable jt = new JTable(test)
+		*/
+		final ComponentTableModel test = new ComponentTableModel(null);
+		jt = new JTable(test)
         {
             //  Determine editor to be used by row
             public TableCellEditor getCellEditor(int row, int column)
             {
             	int row_=convertRowIndexToModel(row);
             	int column_=convertColumnIndexToModel(column);
-    			if(column_==2 && "Action".equals(test.data[row_][0]))
+    			if(column_==2 && "Action".equals(data[row][0]))
     				return new ComponentTableCellEditor();
                 else
                     return new DefaultCellEditor(new JTextField());
@@ -64,14 +63,14 @@ public class MainClass extends JFrame {
 		
 		jt.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 		ComponentTableCellRenderer ctcr = new ComponentTableCellRenderer();
-		ctcr.setDefinitionManager(new DefinitionManager());
+		ctcr.setDefinitionManager(dm);
 		jt.setDefaultRenderer(Node.class, ctcr);
 		jt.setDefaultEditor(Node.class, new ComponentTableCellEditor());
 		
 		// Row dealing
-		for(int loop=0;loop<test.data.length;loop++)
+		for(int loop=0;loop<data.length;loop++)
 		{
-			if("Action".equals(test.data[loop][0]))
+			if("Action".equals(data[loop][0]))
 			{
 				jt.setRowHeight(loop, 200);
 			}
@@ -81,14 +80,31 @@ public class MainClass extends JFrame {
 			}
 		}
 				
-		
+		setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
 		JScrollPane jsp = new JScrollPane(jt);
-		getContentPane().add(jsp, BorderLayout.CENTER);
+		add(jsp);
 	}
-
-	public static void main(String args[]) {
-		MainClass mt = new MainClass();
-		mt.setVisible(true);
+	
+	public void reset(Node cardnode)
+	{
+		ComponentTableModel test=new ComponentTableModel(cardnode);
+		jt.setModel(test);
+		jt.getColumnModel().getColumn(0).setMaxWidth(100);
+		jt.getColumnModel().getColumn(1).setMaxWidth(100);
+		jt.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		// Row dealing
+		for(int loop=0;loop<data.length;loop++)
+		{
+			if("Action".equals(data[loop][0]))
+			{
+				jt.setRowHeight(loop, 200);
+			}
+			else
+			{
+				jt.setRowHeight(loop,25);
+			}
+		}
+		panes=new java.awt.Component[data.length];
 	}
   
   
@@ -151,7 +167,7 @@ public class MainClass extends JFrame {
 	}
   
   
-	java.awt.Component[] panes = new JComponent[4];
+	java.awt.Component[] panes;
   
 	public class ComponentTableCellRenderer extends DefaultTableCellRenderer{
 		
@@ -182,13 +198,14 @@ public class MainClass extends JFrame {
 	}
 
 
+	Object data[][];
 	class ComponentTableModel extends AbstractTableModel {
 	
 		String headers[] = { "Type", "Name", "Value"};
 	
 		Class columnClasses[] = { String.class, String.class, Node.class};
 	
-		Object data[][];
+
 		
 		public ComponentTableModel(Node card_node)
 		{
@@ -197,6 +214,7 @@ public class MainClass extends JFrame {
 				data=new Object[0][];
 				return;
 			}
+
 			data=new Object[card_node.numChildren()][];
 			int loop;
 			Node c;

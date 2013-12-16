@@ -108,9 +108,9 @@ public class Definition implements Serializable{
 		n=root.getChildNode(3);
 		int looptype;
 		Node n2;
-		for(looptype=0;looptype<n.numChildren();looptype++)
+		for(looptype=0;looptype<1;looptype++) // n.numChildren()
 		{
-			n2=n.getChildNode(looptype);
+			n2=n; // n.getChildNode(looptype)
 			for(loop=0;loop<n2.numChildren();loop++)
 			{
 				switch(n2.getChildNode(loop).get_node_type())
@@ -125,7 +125,8 @@ public class Definition implements Serializable{
 					action_var.add((String)n2.getChildNode(loop).getData());
 					break;
 				default:
-					System.err.println("makeVariableList: Invalid card variable type.");
+					System.err.println("makeVariableList: Invalid card variable type. "+n2.getChildNode(loop).get_node_type());
+					n2.printAll();
 					break;
 				}
 			}

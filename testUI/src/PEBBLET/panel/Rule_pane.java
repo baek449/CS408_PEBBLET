@@ -80,7 +80,7 @@ public class Rule_pane extends JComponent {
 	
 	public void update_window_size()
 	{
-		set_board_size(new Dimension(p.getSize().width*9/5,p.getSize().height*7/5));
+		set_board_size(new Dimension(p.getSize().width+200,p.getSize().height+200));
 	}
     
 	
