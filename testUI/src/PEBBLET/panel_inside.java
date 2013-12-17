@@ -60,8 +60,11 @@ public class panel_inside extends JPanel
 			text.setText((String)n.getData());
 			return;
 		}
+		
 		buildup_with_node(n);
 		reset_children_nodes(rm);
+		System.out.println("Index:"+n.get_selection_value());
+		combo.setSelectedIndex(n.get_selection_value());
 		
 	}
 	
@@ -112,6 +115,7 @@ public class panel_inside extends JPanel
 				text.revalidate();
 				rulepane.update_window_size();
 			}});
+		
 		combo.addItemListener(new ItemListener() {
 
 			@Override

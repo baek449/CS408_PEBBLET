@@ -819,30 +819,42 @@ public class RuleManager {
 	private String[] previous_selection;
 	private Node postSelections(NodeType t, boolean ps, boolean cs, boolean delete, int input)
 	{
-		// TODO
+		Node result=null;
 		switch(t)
 		{
 		case nd_action:
-			return postActionSelection(ps, cs, delete, previous_selection, input);
+			result= postActionSelection(ps, cs, delete, previous_selection, input);
+			break;
 		case nd_player:
-			return postPlayerSelection(ps, cs, delete, previous_selection, input);
+			result= postPlayerSelection(ps, cs, delete, previous_selection, input);
+			break;
 		case nd_deck:
-			return postDeckSelection(ps, cs, delete, previous_selection, input);
+			result= postDeckSelection(ps, cs, delete, previous_selection, input);
+			break;
 		case nd_card:
-			return postCardSelection(ps, cs, delete, previous_selection, input);
+			result= postCardSelection(ps, cs, delete, previous_selection, input);
+			break;
 		case nd_cond:
-			return postCondSelection(ps, cs, delete, previous_selection, input);
+			result= postCondSelection(ps, cs, delete, previous_selection, input);
+			break;
 		case nd_order:
-			return postOrderSelection(ps, cs, delete, previous_selection, input);
+			result= postOrderSelection(ps, cs, delete, previous_selection, input);
+			break;
 		case nd_num:
-			return postNumSelection(ps, cs, delete, previous_selection, input);
+			result= postNumSelection(ps, cs, delete, previous_selection, input);
+			break;
 		case nd_str:
-			return postStringSelection(ps, cs, delete, previous_selection, input);
+			result= postStringSelection(ps, cs, delete, previous_selection, input);
+			break;
 		case nd_namedAction:
-			return postNamedActionSelection(ps, cs, delete, previous_selection, input);
+			result= postNamedActionSelection(ps, cs, delete, previous_selection, input);
+			break;
+		default:
+			System.err.println("postSelection: Invalid node type.");
+			return null;
 		}
-		System.err.println("postSelection: Invalid node type.");
-		return null;
+		if(result!=null) result.set_selection_value(input);
+		return result;
 	}
 	
 	public static boolean isDeletable(Node n)
