@@ -9,6 +9,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -43,10 +45,56 @@ public class tabbedpane extends JPanel{
 	Component_pane comp;
 	Debug_pane debug;
 	
+	public boolean save(ObjectOutputStream out)
+	{
+		if(!dm_master.save(out)) return false;
+		if(!rm_master.save(out)) return false;
+		if(!cm_master.save(out)) return false;
+		return true;
+	}
+	public boolean load(ObjectInputStream in)
+	{
+		if(!dm_master.load(in)) return false;
+		if(!rm_master.load(in)) return false;
+		if(!cm_master.load(in)) return false;
+		
+		System.out.println("Master: ");
+		dm_master.getDefinition().getRoot().printAll();
+		tabpane.removeAll();
+		tabpane = new JTabbedPane();
+		
+		removeAll();
+		def = new Def_pane(dm_master);
+		def.setparent_(this);
+		tabpane.addTab("Definition", null, def.get_scpane(), "make new definition");
+		
+		dbg_def = new Debug_pane();
+		
+
+		tabpane.addTab("Definition debug", null, dbg_def.get_scpane(), "check definition error");
+		
+		rule = new Rule_pane(dm_master, rm_master);
+		tabpane.addTab("Rule", null, rule.get_scpane(), "make rule");
+	
+		comp = new Component_pane(dm_master,cm_master);
+		tabpane.addTab("Component", null, comp.get_scpane(), "make component");
+		
+//		JComponent debug = makePanel();
+		debug = new Debug_pane();
+		tabpane.addTab("Debug", null, debug.get_scpane(), "debugging");
+		
+		tabpane.revalidate();
+		add(tabpane);
+		comp.reset_dm(dm_master);
+		
+		return true;
+	}
+	
+	JTabbedPane tabpane;
 	public tabbedpane(){
 		super(new GridLayout(1, 1));
 	 
-		JTabbedPane tabbedpane = new JTabbedPane();
+		tabpane = new JTabbedPane();
 	
 //		JComponent definition = makeTextPanel("Definition");
 		
@@ -56,25 +104,25 @@ public class tabbedpane extends JPanel{
 		
 		def = new Def_pane(dm_master);
 		def.setparent_(this);
-		tabbedpane.addTab("Definition", null, def.get_scpane(), "make definition");
+		tabpane.addTab("Definition", null, def.get_scpane(), "make definition");
 		
 		dbg_def = new Debug_pane();
 		
 
-		tabbedpane.addTab("Definition debug", null, dbg_def.get_scpane(), "check definition error");
+		tabpane.addTab("Definition debug", null, dbg_def.get_scpane(), "check definition error");
 		
 		rule = new Rule_pane(dm_master, rm_master);
-		tabbedpane.addTab("Rule", null, rule.get_scpane(), "make rule");
+		tabpane.addTab("Rule", null, rule.get_scpane(), "make rule");
 	
 		comp = new Component_pane(dm_master,cm_master);
-		tabbedpane.addTab("Component", null, comp.get_scpane(), "make component");
+		tabpane.addTab("Component", null, comp.get_scpane(), "make component");
 		
 //		JComponent debug = makePanel();
 		debug = new Debug_pane();
-		tabbedpane.addTab("Debug", null, debug.get_scpane(), "debugging");
+		tabpane.addTab("Debug", null, debug.get_scpane(), "debugging");
 		
-		add(tabbedpane);
-		tabbedpane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		add(tabpane);
+		tabpane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
 		
 	

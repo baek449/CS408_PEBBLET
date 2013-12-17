@@ -99,7 +99,7 @@ public class String_box extends JComponent{
 		String_box_pane.add(set_button);
 		String_box_pane.add(title);
 		String_box_pane.add(colon);
-		add_values_box();
+//		add_values_box();
 		
 		
 		
@@ -119,6 +119,19 @@ public class String_box extends JComponent{
 		values.add(new_value); 			//add to list
 		endof_box_pos += 55;
 		
+	}
+	public void add_values_box(String input, Node inputNode){
+		StringTextField new_value = new StringTextField(input, inputNode);
+		
+		int i = values.size();
+		
+		new_value.setBounds(60 + 55*i, 0, 50, 20);
+//		String_box_pane.setLayout(null);
+//		String_box_pane.add(new_value); //add to pane
+		new_value.addtoPanel(String_box_pane, 60+55*i, 0);
+		
+		values.add(new_value); 			//add to list
+		endof_box_pos += 55;
 	}
 	public void remove_value_box(){
 		
@@ -177,7 +190,7 @@ public class String_box extends JComponent{
 		return title.getText();
 	}
 	
-	public void set_Num_NodeData(String _input){
+	public void set_Str_NodeData(String _input){
 		Strbox_node.setData(_input);
 	}
 	
@@ -188,7 +201,9 @@ public class String_box extends JComponent{
 	public Node get_node(){
 		return Strbox_node;
 	}
-	
+	public void set_node(Node input){
+		Strbox_node = input;
+	}
 	public void set_parent(Node node_parent){
 		node_parent.addChildNode(Strbox_node);
 	}

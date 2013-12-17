@@ -59,7 +59,9 @@ public class Player_box extends JComponent {
 	public Node get_node(){
 		return node;
 	}
-	
+	public void set_node(Node input){
+		node = input;
+	}
 	public void set_parent(Node node_parent){
 		node_parent.addChildNode(node);
 	}

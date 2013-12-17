@@ -463,11 +463,25 @@ public class TestplayModule {
 	public void action_load(String file, Node deck_raw)
 	{
 		Node deck_=deck(deck_raw);
-		
+		/*
 		Node newcards=c.getallcards(file).copy_except_parent(-1);
 		for(int loop=0;loop<newcards.numChildren();loop++)
 		{
 			deck_.addChildNode(newcards.getChildNode(loop));
+		}*/
+		Node n,d1,d2;
+		for(int loop=0;loop<10;loop++)
+		{
+			n=new Node(NodeType.nd_card,deck_);
+			n.setData(String.valueOf(loop));
+			d1=new Node(NodeType.nd_str,n);
+			d1.setData("_type");
+			d2=new Node(NodeType.nd_raw,d1);
+			d2.setData("Trump");
+			d1=new Node(NodeType.nd_num,n);
+			d1.setData("number");
+			d2=new Node(NodeType.nd_raw,d1);
+			d2.setData(loop);
 		}
 	}
 	

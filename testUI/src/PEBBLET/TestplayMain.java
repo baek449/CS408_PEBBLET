@@ -47,9 +47,9 @@ public class TestplayMain {
 				Node player_num=new Node(NodeType.nd_num, player_variables);
 				player_num.setData("test_num2");
 				
-				Node card_variables = new Node(NodeType.nd_def_card, def_root);
-				card_variables.setData("Card");
-				Node card_trump = new Node(NodeType.nd_card,card_variables);
+				//Node card_variables = new Node(NodeType.nd_def_card, def_root);
+				//card_variables.setData("Card");
+				Node card_trump = new Node(NodeType.nd_card,def_root);
 				card_trump.setData("Trump");
 				Node card_trump_shape = new Node(NodeType.nd_str,card_trump);
 				card_trump_shape.setData("shape");

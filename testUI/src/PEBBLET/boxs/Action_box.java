@@ -57,6 +57,10 @@ public class Action_box extends JComponent {
 		return node;
 	}
 	
+	public void set_node(Node input){
+		node = input;
+	}
+	
 	public void set_parent(Node node_parent){
 		node_parent.addChildNode(node);
 	}

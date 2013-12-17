@@ -10,6 +10,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.Container;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -19,6 +26,7 @@ import javax.swing.JApplet;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -57,6 +65,8 @@ public class mainUI extends JFrame{
 	private static ArrayList<custominputbox> def_box = new ArrayList<custominputbox>();
 	private static Integer def_root_index = 0;
 	
+	private File f;
+	
 	public mainUI(){		
 //		
 //		JFrame frame = new JFrame("Menu");
@@ -77,11 +87,68 @@ public class mainUI extends JFrame{
 		file_new_MenuItem.setMnemonic(KeyEvent.VK_N);
 		file_new_MenuItem.setToolTipText("New application");
 		
+		final mainUI this_=this;
 		JMenuItem file_load_MenuItem = new JMenuItem("Load");
+		file_load_MenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				JFileChooser fileChooser = new JFileChooser();
+				if (fileChooser.showOpenDialog(this_) == JFileChooser.APPROVE_OPTION) {
+					f = fileChooser.getSelectedFile();
+					// load from file
+					try {
+						FileInputStream fs=new FileInputStream(f);
+						ObjectInputStream in=new ObjectInputStream(fs);
+						get_tabbedpane().load(in);
+						in.close();
+						fs.close();
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}});
 		file_load_MenuItem.setMnemonic(KeyEvent.VK_L);
 		file_load_MenuItem.setToolTipText("Load application");
 		
 		JMenuItem file_save_MenuItem = new JMenuItem("Save");
+		file_save_MenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				if (f==null)
+				{
+					JFileChooser fileChooser = new JFileChooser();
+					if(fileChooser.showSaveDialog(this_) != JFileChooser.APPROVE_OPTION)
+					{
+						return;
+					}
+					f = fileChooser.getSelectedFile();
+				}
+					
+				// save into file
+				try {
+					FileOutputStream fs=new FileOutputStream(f);
+					ObjectOutputStream out=new ObjectOutputStream(fs);
+					get_tabbedpane().save(out);
+					out.close();
+					fs.close();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}});
 		file_save_MenuItem.setMnemonic(KeyEvent.VK_S);
 		file_save_MenuItem.setToolTipText("Save application");
 		
@@ -89,6 +156,35 @@ public class mainUI extends JFrame{
 		file_save_as_MenuItem.setMnemonic(KeyEvent.VK_A);
 		//file_save_as_MenuItem.setMnemonic(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 		//										java.awt.event.InputEvent.CTRL_DOWN_MASK));
+		file_save_MenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				JFileChooser fileChooser = new JFileChooser();
+				if(fileChooser.showSaveDialog(this_) != JFileChooser.APPROVE_OPTION)
+				{
+					return;
+				}
+				f = fileChooser.getSelectedFile();
+					
+				// save into file
+				try {
+					FileOutputStream fs=new FileOutputStream(f);
+					ObjectOutputStream out=new ObjectOutputStream(fs);
+					get_tabbedpane().save(out);
+					out.close();
+					fs.close();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}});
 		file_new_MenuItem.setToolTipText("Save application as different name");
 		
 		
@@ -333,14 +429,18 @@ public class mainUI extends JFrame{
         
 	}
 	
+	private tabbedpane pane;
+	private tabbedpane get_tabbedpane() {return pane;}
+	private void set_tabbedpane(tabbedpane pane_) {pane=pane_;}
+	
 	private static void createAndshowGUI(){
 		mainUI ex = new mainUI();
 		
-		tabbedpane pane = new tabbedpane();
+		ex.set_tabbedpane(new tabbedpane());
 		
 
 		Container contentpane = ex.getContentPane();
-		contentpane.add(pane, BorderLayout.NORTH);
+		contentpane.add(ex.get_tabbedpane(), BorderLayout.NORTH);
 		ex.setVisible(true);
 	}
 	

@@ -104,7 +104,7 @@ public class Number_box extends JComponent {
 		Number_box_pane.add(set_button);
 		Number_box_pane.add(title);
 		Number_box_pane.add(colon);
-		add_values_box();
+//		add_values_box();
 		
 		
 		
@@ -121,6 +121,22 @@ public class Number_box extends JComponent {
 		
 		new_value.addtoPanel(Number_box_pane, 60+55*i, 0);
 		new_value.set_parent(Numbox_node);
+		
+		values.add(new_value); 			//add to list
+		endof_box_pos += 55;
+		
+		
+	}
+	public void add_values_box(String input, Node inputNode){
+		NumTextField new_value = new NumTextField(input, inputNode);
+		
+		int i = values.size();
+		
+		new_value.setBounds(60 + 55*i, 0, 50, 20);
+//		Number_box_pane.setLayout(null);
+//		Number_box_pane.add(new_value); //add to pane
+		
+		new_value.addtoPanel(Number_box_pane, 60+55*i, 0);
 		
 		values.add(new_value); 			//add to list
 		endof_box_pos += 55;
@@ -196,7 +212,9 @@ public class Number_box extends JComponent {
 	public Node get_node(){
 		return Numbox_node;
 	}
-	
+	public void set_node(Node input){
+		Numbox_node = input;
+	}
 	public void set_parent(Node node_parent){
 		node_parent.addChildNode(Numbox_node);
 	}

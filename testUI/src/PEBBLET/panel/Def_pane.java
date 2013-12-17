@@ -20,11 +20,14 @@ import PEBBLET.tabbedpane;
 import PEBBLET.boxs.Deck_box;
 import PEBBLET.boxs.Number_box;
 import PEBBLET.boxs.Player_box;
+import PEBBLET.boxs.StringTextField;
 import PEBBLET.boxs.String_box;
 
 import com.sun.org.apache.xerces.internal.impl.dtd.models.DFAContentModel;
 
 import manager.DefinitionManager;
+import manager.Node;
+import manager.NodeType;
 
 public class Def_pane extends JComponent{
 	
@@ -108,10 +111,11 @@ public class Def_pane extends JComponent{
 			players_pane = new JPanel(true);
 			cards_pane = new JPanel(true);
 			players_num = 0;
-			make_num_players();
-			make_global();	
-			make_players();
+			make_num_players(dm);
+			make_global(dm.search(global_pane_index));	
+			make_players(dm.search(players_pane_index));
 			make_card();
+			dm.getDefinition().getRoot().printAll();
 			
 		}
 	public void make_num_players(){
@@ -119,6 +123,34 @@ public class Def_pane extends JComponent{
 		
 		JLabel title = new JLabel("Number of players :");
 		final JTextField input = new JTextField();
+		JButton comfirm = new JButton("set");
+		comfirm.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int i = Integer.parseInt(input.getText());
+				set_players_num(i);
+				
+			}
+		});
+		
+		//positioning
+		title.setBounds(5, 5, 130, 20);
+		input.setBounds(140, 5, 30, 20);
+		comfirm.setBounds(175, 5, 30, 20);
+		
+		
+		def_pane.add(title);
+		def_pane.add(input);
+		def_pane.add(comfirm);
+	}
+	public void make_num_players(DefinitionManager dm_){
+		def_pane.setLayout(null);
+		
+		JLabel title = new JLabel("Number of players :");
+		int[] location = {0,0};
+		final JTextField input = new JTextField((int)dm_.search(location).getData());
 		JButton comfirm = new JButton("set");
 		comfirm.addActionListener(new ActionListener() {
 			
@@ -167,6 +199,83 @@ public class Def_pane extends JComponent{
 		make_global_item();
 
 		endof_global_pane +=60;
+		
+		global_pane.setSize(new Dimension(890, endof_global_pane));
+
+		add_global.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				global_pane.setLayout(null);
+				endof_global_pane -= 60;
+				make_global_item();
+				add_global.setBounds(50, endof_global_pane + 5, 100,20);
+				endof_global_pane +=30;
+				closeMark.setBounds(5, endof_global_pane + 5, 20, 20);
+				endof_global_pane += 30;
+				global_pane.setSize(new Dimension(890, endof_global_pane));
+				
+				down_players_pane();//추가로 cards
+				down_card_pane();
+				
+				def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
+
+				def_sc.repaint();
+				def_sc.validate();
+				def_pane.repaint();
+				def_pane.validate();
+				dm.getDefinition().getRoot().printAll();//for debugging
+				System.out.println(global_pane.getComponentCount());
+				
+			}
+		});
+		
+
+		
+		def_pane.setLayout(null);
+		def_pane.add(global_pane);	
+
+	}
+	public void make_global(Node input){
+//		global_pane 여기다가 add
+		endof_global_pane = 30;
+		global_pane.setLayout(null);
+		JLabel Global = new JLabel("Global {");
+		Global.setBounds(5, endof_global_pane+5, 100, 20);
+		endof_global_pane += 25;
+		//add button 추후수정 combobox
+		global_pane.add(Global);
+
+		endof_global_pane +=30;
+
+		final JButton add_global = new JButton("add"); //... 버튼 디폴
+		add_global.setBounds(50,endof_global_pane+5,100,20);
+		endof_global_pane += 30;
+		global_pane.add(add_global);
+		closeMark.setBounds(5, endof_global_pane+5, 20, 20);
+		endof_global_pane += 30;
+		global_pane.add(closeMark);
+		endof_global_pane -=90;
+
+		endof_global_pane +=60;
+		
+		for(int j = 0; j<input.numChildren();j++){
+			endof_global_pane -= 60;
+			make_global_item(input.getChildNode(j));
+			add_global.setBounds(50,endof_global_pane +5, 100, 20);
+			endof_global_pane += 30;
+			closeMarkP.setBounds(5, endof_global_pane + 5, 30, 20);
+			endof_global_pane +=30;
+			global_pane.setSize(new Dimension(890, endof_global_pane));
+			def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
+			down_card_pane();
+			down_players_pane();
+			def_sc.repaint();
+			def_sc.validate();
+			def_pane.repaint();
+			def_pane.validate();
+		}
 		
 		global_pane.setSize(new Dimension(890, endof_global_pane));
 
@@ -346,6 +455,180 @@ public class Def_pane extends JComponent{
 			}
 		});	
 	}
+	public void make_global_item(Node input){
+		final JPanel global_item_pane = new JPanel();//item_pane {jcombobox, item_box}
+		global_item_pane.setLayout(null);
+		
+		final JComboBox<String> box_type = new JComboBox<String>();
+		
+		box_type.setBounds(0,0,120,20);
+
+		int i = 1;
+		box_type.addItem("Select type");
+		Deck_box select = new Deck_box();
+//		select.set_parent(dm.search(global_pane_index));
+		while(i <= dm.get_selection_noncard_del().length){
+			box_type.addItem(dm.get_selection_noncard_del()[i-1]);
+			i++;
+		}
+		
+		global_item_pane.add(box_type);
+		
+		global_pane.setLayout(null);
+		global_item_pane.setBounds(50, endof_global_pane+5, 900, 30);
+		endof_global_pane += 30;
+		global_pane.add(global_item_pane);
+		def_pane.repaint();
+		final Deck_box deckbox = new Deck_box();
+		final Number_box numbox = new Number_box();
+		final String_box stringbox = new String_box();
+		final Player_box playerbox = new Player_box();
+		box_type.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				String item = (String)e.getItem();
+				global_item_pane.setLayout(null);
+				if(e.getStateChange() == ItemEvent.SELECTED){
+					
+					int del_box_index = getComponentIndex(global_item_pane)-3;
+					switch (item) {
+						case "(Cancel)":
+							if(preStatus<5)
+								box_type.setSelectedItem(box_type.getItemAt(preStatus));
+							break;
+						case "Deck []":
+							preStatus = 1;
+//							dm.search(global_pane_index).deleteChildNode(deckbox.get_node());
+							dm.search(global_pane_index).deleteChildNode(del_box_index);
+							global_item_pane.removeAll();
+							global_item_pane.setLayout(null);
+							global_item_pane.add(box_type);
+							deckbox.addtoPanel(global_item_pane, 125, 0);
+							def_pane.repaint();
+							deckbox.set_parent(dm.search(global_pane_index));
+							break;
+						case "Number []":
+							preStatus = 2;
+//							dm.search(global_pane_index).deleteChildNode(numbox.get_node());
+							dm.search(global_pane_index).deleteChildNode(del_box_index);
+							global_item_pane.removeAll();
+							global_item_pane.setLayout(null);
+							global_item_pane.add(box_type);
+							numbox.addtoPanel(global_item_pane, 125, 0);
+							def_pane.repaint();
+							numbox.set_parent(dm.search(global_pane_index));
+							break;
+						case "String []":
+							preStatus = 3;
+//							dm.search(global_pane_index).deleteChildNode(stringbox.get_node());
+							dm.search(global_pane_index).deleteChildNode(del_box_index);
+							global_item_pane.removeAll();
+							global_item_pane.setLayout(null);
+							global_item_pane.add(box_type);
+							stringbox.addtoPanel(global_item_pane, 125, 0);
+							def_pane.repaint();
+							stringbox.set_parent(dm.search(global_pane_index));
+							break;
+						case "Player []":
+							preStatus = 4;
+//							dm.search(global_pane_index).deleteChildNode(playerbox.get_node());
+							dm.search(global_pane_index).deleteChildNode(del_box_index);
+							global_item_pane.removeAll();
+							global_item_pane.setLayout(null);
+							global_item_pane.add(box_type);
+							playerbox.addtoPanel(global_item_pane, 125, 0);
+							def_pane.repaint();
+							playerbox.set_parent(dm.search(global_pane_index));
+							break;
+						case "(Delete)":
+							int total = global_pane.getComponentCount();
+							global_pane.remove(global_item_pane);
+							switch(preStatus){
+								case 1:
+									dm.search(global_pane_index).deleteChildNode(deckbox.get_node());
+									break;
+								case 2:
+									dm.search(global_pane_index).deleteChildNode(numbox.get_node());
+									break;
+								case 3:
+									dm.search(global_pane_index).deleteChildNode(stringbox.get_node());
+									break;
+								case 4:
+									dm.search(global_pane_index).deleteChildNode(playerbox.get_node());
+									break;
+								case 0:
+									dm.search(global_pane_index).deleteChildNode(del_box_index);
+									break;
+							}
+
+							global_pane.getComponent(2).setLocation(global_pane.getComponent(2).getX(), global_pane.getComponent(2).getY()-30);
+							global_pane.getComponent(1).setLocation(global_pane.getComponent(1).getX(), global_pane.getComponent(1).getY()-30);
+
+							
+							for(int i = del_box_index+3; i < total-1; i++){
+								global_pane.getComponent(i).setLocation(global_pane.getComponent(i).getX(), global_pane.getComponent(i).getY()-30);
+								def_pane.repaint();
+								def_pane.validate();
+							}
+							endof_global_pane -= 30;
+							global_pane.setSize(new Dimension(890, endof_global_pane + 5));
+							up_players_pane(); //cards 도 똑같
+							up_card_pane();
+							def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
+
+							def_sc.repaint();
+							def_sc.validate();
+							
+							break;
+						default:
+							preStatus = 0;
+							global_item_pane.removeAll();
+							global_item_pane.setLayout(null);
+							global_item_pane.add(box_type);
+							def_pane.repaint();
+							break;
+					};
+					preStatus = 0;
+				}
+			}
+		});	
+		
+		switch(input.get_node_type()){//set selected item menu from node
+		case nd_deck:
+//			box_type.setSelectedIndex(1);
+			//set data from node
+			deckbox.set_Deck_input((String)input.getData());
+			deckbox.set_node(input);
+			deckbox.addtoPanel(global_item_pane, 125, 0);
+			break;
+		case nd_num:
+//			box_type.setSelectedIndex(2);
+			//set data from node
+			for(int j = 0; j < input.numChildren(); j++){
+				numbox.add_values_box(Integer.toString((Integer)input.getChildNode(j).getData()), input.getChildNode(j));
+			}
+			break;
+		case nd_str:
+//			box_type.setSelectedIndex(3);
+			//set data from node
+			stringbox.set_title((String)input.getData());
+			for(int j = 0; j < input.numChildren();j++){
+				stringbox.add_values_box((String)input.getChildNode(j).getData(), input.getChildNode(j));
+			}
+			stringbox.set_node(input);
+			break;
+		case nd_player:
+//			box_type.setSelectedIndex(4);
+			playerbox.set_Player_input((String)input.getData());
+			playerbox.set_node(input);
+			break;
+		default:
+			break;
+	}
+		
+		
+	}
 	
 	public void make_players(){
 		players_pane.setLayout(null);
@@ -364,6 +647,75 @@ public class Def_pane extends JComponent{
 		endof_player_pane -=90;
 		make_players_item();
 		endof_player_pane += 60;
+
+		players_pane.setBounds(0,endof_global_pane,890, endof_player_pane);
+
+		add_players.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				players_pane.setLayout(null);
+				endof_player_pane -= 60;
+				make_players_item();
+				add_players.setBounds(50,endof_player_pane +5, 100, 20);
+				endof_player_pane += 30;
+				closeMarkP.setBounds(5, endof_player_pane + 5, 30, 20);
+				endof_player_pane +=30;
+				players_pane.setSize(new Dimension(890, endof_player_pane));
+				def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
+				down_card_pane();
+				def_sc.repaint();
+				def_sc.validate();
+//add???
+				def_pane.repaint();
+				def_pane.validate();
+				dm.getDefinition().getRoot().printAll();//for debugging
+				System.out.println(players_pane.getComponentCount());				
+				
+				
+			}
+		});
+		
+		def_pane.setLayout(null);
+		def_pane.add(players_pane);
+		
+		
+	}
+	public void make_players(Node input){
+		players_pane.setLayout(null);
+		JLabel Players = new JLabel("Players {");
+		Players.setBounds(5, 5, 100, 20);
+		players_pane.add(Players);
+		endof_player_pane +=30;
+		final JButton add_players = new JButton("add");
+		add_players.setBounds(50, endof_player_pane + 5, 100, 20);
+		endof_player_pane +=30;
+		players_pane.add(add_players);
+		
+		closeMarkP.setBounds(5, endof_player_pane + 5 , 30, 20);
+		endof_player_pane += 30;
+		players_pane.add(closeMarkP);
+		endof_player_pane -=90;
+
+		
+		endof_player_pane += 60;
+		for(int j = 0; j<input.numChildren();j++){
+			endof_player_pane -= 60;
+			make_players_item(j, input.getChildNode(j));
+			add_players.setBounds(50,endof_player_pane +5, 100, 20);
+			endof_player_pane += 30;
+			closeMarkP.setBounds(5, endof_player_pane + 5, 30, 20);
+			endof_player_pane +=30;
+			players_pane.setSize(new Dimension(890, endof_player_pane));
+			def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
+			down_card_pane();
+			def_sc.repaint();
+			def_sc.validate();
+			def_pane.repaint();
+			def_pane.validate();
+		}
+		
 
 		players_pane.setBounds(0,endof_global_pane,890, endof_player_pane);
 
@@ -547,6 +899,186 @@ public class Def_pane extends JComponent{
 		});
 	}
 	
+	public void make_players_item(int intend, Node input){
+		final JPanel players_item_pane = new JPanel();
+		players_item_pane.setLayout(null);
+		
+		final JComboBox<String> box_type = new JComboBox<String>();
+		
+		box_type.setBounds(0, 0 , 120, 20);
+		
+		int i = 1;
+		box_type.addItem("Select type");
+		Deck_box select = new Deck_box();
+//		select.set_parent(dm.search(players_pane_index));
+		while(i<= dm.get_selection_noncard_del().length){
+			box_type.addItem(dm.get_selection_noncard_del()[i-1]);
+			i++;
+		}
+		
+		players_item_pane.add(box_type);
+		
+		players_pane.setLayout(null);
+		players_item_pane.setBounds(50, endof_player_pane +5, 900, 30);
+		endof_player_pane += 30;
+		players_pane.add(players_item_pane);
+		def_pane.repaint();
+		def_pane.validate();
+		final Deck_box deckbox = new Deck_box();
+		final Number_box numbox = new Number_box();
+		final String_box strbox = new String_box();
+		final Player_box playerbox = new Player_box();		
+		box_type.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				String item = (String)e.getItem();
+				players_item_pane.setLayout(null);
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					int del_box_index = getComponentIndex(players_item_pane)-3;
+					switch(item){
+						case "(Cancle)":
+							if(preStatus > 4){
+								box_type.setSelectedItem(box_type.getItemAt(preStatus-4));
+							}
+							break;
+						case "Deck []":
+							preStatus = 5;
+							
+							dm.search(players_pane_index).deleteChildNode(del_box_index);
+							players_item_pane.removeAll();
+							players_item_pane.setLayout(null);
+							players_item_pane.add(box_type);
+							deckbox.addtoPanel(players_item_pane, 125, 0);
+							def_pane.repaint();
+							def_pane.validate();
+							deckbox.set_parent(dm.search(players_pane_index));
+							break;
+
+						case "Number []":
+							preStatus = 6;
+							dm.search(players_pane_index).deleteChildNode(del_box_index);
+							players_item_pane.removeAll();
+							players_item_pane.setLayout(null);
+							players_item_pane.add(box_type);
+							numbox.addtoPanel(players_item_pane, 125, 0);
+							def_pane.repaint();
+							def_pane.validate();
+							numbox.set_parent(dm.search(players_pane_index));
+							break;
+
+						case "String []":
+							preStatus = 7;
+							dm.search(players_pane_index).deleteChildNode(del_box_index);
+							players_item_pane.removeAll();
+							players_item_pane.setLayout(null);
+							players_item_pane.add(box_type);
+							strbox.addtoPanel(players_item_pane, 125, 0);
+							def_pane.repaint();
+							def_pane.validate();
+							strbox.set_parent(dm.search(players_pane_index));
+							break;
+
+						case "Player []":
+							preStatus = 8;
+
+							dm.search(players_pane_index).deleteChildNode(del_box_index);
+							players_item_pane.removeAll();
+							players_item_pane.setLayout(null);
+							players_item_pane.add(box_type);
+							playerbox.addtoPanel(players_item_pane, 125, 0);
+							def_pane.repaint();
+							def_pane.validate();
+							playerbox.set_parent(dm.search(players_pane_index));
+							break;
+
+						case "(Delete)":
+							int total = players_pane.getComponentCount();
+							players_pane.remove(players_item_pane);
+														
+							switch(preStatus){
+								case 5:
+									dm.search(players_pane_index).deleteChildNode(deckbox.get_node());
+									break;
+								case 6:
+									dm.search(players_pane_index).deleteChildNode(numbox.get_node());
+									break;
+								case 7:
+									dm.search(players_pane_index).deleteChildNode(strbox.get_node());
+									break;
+								case 8:
+									dm.search(players_pane_index).deleteChildNode(playerbox.get_node());
+									break;
+								case 0:
+									dm.search(players_pane_index).deleteChildNode(del_box_index);
+									break;
+							}
+							players_pane.getComponent(2).setLocation(players_pane.getComponent(2).getX(), players_pane.getComponent(2).getY()-30);
+							players_pane.getComponent(1).setLocation(players_pane.getComponent(1).getX(), players_pane.getComponent(1).getY()-30);
+							
+							for(int i = del_box_index+3; i < total-1; i++){
+								players_pane.getComponent(i).setLocation(players_pane.getComponent(i).getX(), players_pane.getComponent(i).getY()-30);
+								def_pane.repaint();
+								def_pane.validate();
+							}
+							endof_player_pane -= 30;
+							players_pane.setSize(new Dimension(890, endof_player_pane + 5));
+							def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
+							up_card_pane();
+							def_sc.repaint();
+							def_sc.validate();
+							break;
+
+						default:
+							preStatus=0;
+							players_item_pane.removeAll();
+							players_item_pane.setLayout(null);
+							players_item_pane.add(box_type);
+							def_pane.repaint();
+							def_pane.validate();
+							break;
+
+					}
+					preStatus = 0;
+				}
+				
+			}
+		});
+		
+		switch(input.get_node_type()){//set selected item menu from node
+			case nd_deck:
+//				box_type.setSelectedIndex(1);
+				//set data from node
+				deckbox.set_Deck_input((String)input.getData());
+				deckbox.set_node(input);
+				deckbox.addtoPanel(players_item_pane, 125, 0);
+				break;
+			case nd_num:
+//				box_type.setSelectedIndex(2);
+				//set data from node
+				for(int j = 0; j < input.numChildren(); j++){
+					numbox.add_values_box((String)input.getChildNode(j).getData(), input.getChildNode(j));
+				}
+				break;
+			case nd_str:
+//				box_type.setSelectedIndex(3);
+				//set data from node
+				strbox.set_title((String)input.getData());
+				for(int j = 0; j < input.numChildren();j++){
+					strbox.add_values_box((String)input.getChildNode(j).getData(), input.getChildNode(j));
+				}
+				strbox.set_node(input);
+				break;
+			case nd_player:
+//				box_type.setSelectedIndex(4);
+				playerbox.set_Player_input((String)input.getData());
+				playerbox.set_node(input);
+				break;
+			default:
+				break;
+		}
+	}
 	
 	public void up_players_pane(){
 		
@@ -681,5 +1213,25 @@ public class Def_pane extends JComponent{
 		total_endof = i ;
 	}
 	
+	public void update_def_pane(){
+		closeMark = new JLabel("}");
+		closeMarkP = new JLabel("}");
+
+		def_pane = new JPanel(true);
+//		def_pane.setSize(new Dimension(900, 600));
+		def_pane.setPreferredSize(new Dimension(900, 500));
+		
+		def_sc = new JScrollPane(def_pane);
+		def_sc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		def_sc.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		def_sc.setPreferredSize(new Dimension(900, 600));
+		
+		global_pane = new JPanel(true);
+		players_pane = new JPanel(true);
+		cards_pane = new JPanel(true);
+		players_num = 0;
+		make_num_players(dm);
+		make_players(dm.search(players_pane_index));
+	}
 
 }

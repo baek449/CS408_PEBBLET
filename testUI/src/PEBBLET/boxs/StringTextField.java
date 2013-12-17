@@ -16,6 +16,12 @@ public class StringTextField extends JComponent {
 		node = new Node();
 		node.set_node_type(NodeType.nd_raw);
 	}
+	
+	public StringTextField(String input, Node inputNode){
+		textfield = new JTextField(input);
+		node = inputNode;
+		node.set_node_type(NodeType.nd_raw);
+	}
 
 	public String getText() {
 		// TODO Auto-generated method stub
@@ -42,5 +48,8 @@ public class StringTextField extends JComponent {
 	public Node get_node() {
 		// TODO Auto-generated method stub
 		return node;
+	}
+	public void set_node(Node input){
+		node = input;
 	}
 }

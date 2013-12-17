@@ -16,6 +16,11 @@ public class NumTextField extends JComponent{
 		node = new Node();
 		node.set_node_type(NodeType.nd_raw);
 	}
+	public NumTextField(String input, Node inputNode){
+		textfield = new JTextField(input);
+		node = inputNode;
+		node.set_node_type(NodeType.nd_raw);
+	}
 
 	public int getText() {
 		// TODO Auto-generated method stub
@@ -42,5 +47,8 @@ public class NumTextField extends JComponent{
 	public Node get_node() {
 		// TODO Auto-generated method stub
 		return node;
+	}
+	public void set_node(Node input){
+		node = input;
 	}
 }
