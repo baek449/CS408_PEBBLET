@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import PEBBLET.tabbedpane;
 import PEBBLET.boxs.Deck_box;
 import PEBBLET.boxs.Number_box;
 import PEBBLET.boxs.Player_box;
@@ -56,8 +57,11 @@ public class Def_pane extends JComponent{
 	private JLabel closeMarkP;
 
 
-	
-	
+	private tabbedpane parent_;
+	public void setparent_(tabbedpane parent__)
+	{
+		parent_=parent__;
+	}
 	
 
 	public Def_pane(){
@@ -562,6 +566,14 @@ public class Def_pane extends JComponent{
 		cards_pane.setBounds(5, endof, 890, 400);
 		
 		JButton add_card = new JButton("add_card");
+		add_card.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println("Test" + parent_);
+				parent_.update_manager_status();
+			}});
 		
 		
 		CardPane cardpane = new CardPane(dm, 3, add_card, this);

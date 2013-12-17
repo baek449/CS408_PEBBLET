@@ -87,6 +87,10 @@ public class ComponentTablePanel extends JPanel {
 	
 	public void reset(Node cardnode)
 	{
+		/*
+		System.out.println("Reset!");
+		cardnode.printAll();
+		System.out.println(cardnode.getParent());*/
 		ComponentTableModel test=new ComponentTableModel(cardnode);
 		jt.setModel(test);
 		jt.getColumnModel().getColumn(0).setMaxWidth(100);
