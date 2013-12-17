@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.util.EventObject;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.event.CellEditorListener;
@@ -37,6 +38,13 @@ public class ComponentTableCellRenderer extends DefaultTableCellRenderer{
 				Rule_pane rp = new Rule_pane(n,dm);
 				//rp.setPreferredSize(new Dimension(200,50));
 				return rp.get_scpane();
+//				JPanel temp = new JPanel(true);
+//				temp.setLayout(null);
+//				JButton tempbutton = new JButton("adlskjflkasdf");
+//				tempbutton.setPreferredSize(new Dimension(200,30));
+//				tempbutton.setBounds(5,5, 200, 30);
+//				temp.add(tempbutton);
+//				return temp;
 			}
 		}
 	    return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);

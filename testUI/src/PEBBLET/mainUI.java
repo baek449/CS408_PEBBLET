@@ -2,6 +2,7 @@ package PEBBLET;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,6 +42,7 @@ import manager.NodeType;
 import manager.Rule;
 import manager.RuleCase;
 import manager.RuleManager;
+import manager.TestplayModule;
 import sun.util.EmptyListResourceBundle;
 //import javax.swing.UIManager;
 
@@ -224,6 +226,26 @@ public class mainUI extends JFrame{
         JMenuItem debug_startdebug_MenuItem = new JMenuItem("Start Debug");
         debug_test.add(debug_startdebug_MenuItem);
         JMenuItem debug_starttestplay_MenuItem = new JMenuItem("Start Testplay");
+        debug_starttestplay_MenuItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+//				public static void testplay(){
+//					JFrame tesetplayframe = new JFrame("Test Play");
+//					TestplayModule tpm = new TestplayModule();//insert dm
+//					TestplayUI testplay = new TestplayUI(tpm);
+//					testplay.run_testplay(null);//insert rm
+//				}
+				
+				JFrame frame = new JFrame("Test Play");
+				TestplayModule tpm = new TestplayModule();//insert dm
+				TestplayUI testplay = new TestplayUI(tpm);
+				testplay.run_testplay(null);//insert rm
+				frame.setVisible(true);
+				
+			}
+		});
         debug_test.add(debug_starttestplay_MenuItem);
         JMenuItem debug_startboth_MenuItem = new JMenuItem("Start Both");
         debug_test.add(debug_startboth_MenuItem);
@@ -332,8 +354,6 @@ public class mainUI extends JFrame{
 			i++;
 		}
 	}
-	
-	
 	
 	
 	public static void main(String[] args){
