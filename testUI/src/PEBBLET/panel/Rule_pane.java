@@ -48,6 +48,20 @@ public class Rule_pane extends JComponent {
 		make_action();
 		
 	}
+	public Rule_pane(DefinitionManager dm, RuleManager rm_){
+		rm = rm_;
+		rm.updateVariableList(dm);
+		rule_pane = new JPanel(true);
+		rule_pane.setPreferredSize(new Dimension(900, 500));
+		
+		rule_sc = new JScrollPane(rule_pane);
+		rule_sc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		rule_sc.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		rule_sc.setPreferredSize(new Dimension(900, 500));
+		
+		make_action();
+		
+	}
 
 	public Rule_pane(Node target, DefinitionManager dm){
 		rm = new RuleManager(target);

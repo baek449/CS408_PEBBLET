@@ -464,7 +464,7 @@ public class TestplayModule {
 	{
 		Node deck_=deck(deck_raw);
 		
-		Node newcards=c.getallcards(file);
+		Node newcards=c.getallcards(file).copy_except_parent(-1);
 		for(int loop=0;loop<newcards.numChildren();loop++)
 		{
 			deck_.addChildNode(newcards.getChildNode(loop));

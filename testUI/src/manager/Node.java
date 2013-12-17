@@ -168,6 +168,21 @@ public class Node implements Serializable{
 		return data.toString();
 	}
 
+	public boolean equals_except_parent(Node n)
+	{
+		if(n==null) return false;
+		if(get_node_type()!=n.get_node_type()) return false;
+		if(get_scope_player()!=n.get_scope_player()) return false;
+		if(get_scope_card()!=n.get_scope_card()) return false;
+		if(getData()!=n.getData()) return false;
+		int k=numChildren();
+		if(k!=n.numChildren()) return false;
+		for(int loop=0;loop<k;loop++)
+		{
+			if(!getChildNode(loop).equals_except_parent(n.getChildNode(loop))) return false;
+		}
+		return true;
+	}
 	
 	//// For UI
 	public AreaRange ar_current;

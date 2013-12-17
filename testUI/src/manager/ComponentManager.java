@@ -92,6 +92,95 @@ public class ComponentManager {
 		Node p=n.getParent();
 		if(p!=null) p.deleteChildNode(n);
 	}
+	public void update_dm_and_refresh_cards(DefinitionManager dm)
+	{
+		Node previous_comp_base=comp_base;
+		make_comp_base(dm);
+		int type_loop,search_loop;
+		Node t,new_cb;
+		String tname;
+		Node n__;
+		System.out.println("Before:");
+		component.getRoot().printAll();
+		if(previous_comp_base==null)
+		{
+			System.out.println("previous_comp_base==null");
+			for(type_loop=0;type_loop<comp_base.numChildren();type_loop++)
+			{
+				// 3. 새로 만든 comp_Base를 보고 생성한다.
+				tname=(String)comp_base.getChildNode(type_loop).getData();
+				if(tname==null) continue;
+				n__=new Node(NodeType.nd_def_card,component.getRoot());
+				n__.setData(tname);
+			}
+			System.out.println("After:");
+			component.getRoot().printAll();
+			return;
+		}
+		for(type_loop=0;type_loop<previous_comp_base.numChildren();type_loop++)
+		{
+			tname=(String)previous_comp_base.getChildNode(type_loop).getData();
+			if(tname==null) continue;
+			t=component.getallcards(tname);
+			new_cb=null;
+			for(search_loop=0;search_loop<comp_base.numChildren();search_loop++)
+			{
+				if(tname.equals(comp_base.getChildNode(search_loop).getData().toString()))
+				{
+					new_cb=comp_base.getChildNode(search_loop);
+					break;
+				}
+			}
+			
+			// 이전 comp_base를 보고
+			// 1. 새로 만든 comp_base에 없으면 component에 들어가서 모든 카드를 날리고 해당 type까지 날린다.
+			if(new_cb==null)
+			{
+				t.getParent().deleteChildNode(t);
+				continue;
+			}
+			new_cb.printAll();previous_comp_base.getChildNode(type_loop).printAll();
+			// 2. 새로 만든 comp_base에 있지만 내용이 바뀌었으면 component에 들어가서 모든 카드를 날리고 새로운카드로 대체한다.
+			if(!new_cb.equals_except_parent(previous_comp_base.getChildNode(type_loop)))
+			{
+				String cname;
+				for(search_loop=0;search_loop<t.numChildren();search_loop++)
+				{
+					System.out.println("Replacing");
+					t.getChildNode(search_loop).printAll();
+					cname=(String)t.getChildNode(search_loop).getData();
+					t.getChildNode(search_loop).replace(make_new_card(tname));
+					t.getChildNode(search_loop).setData(cname);
+					System.out.println("to");
+					t.getChildNode(search_loop).printAll();
+				}
+				continue;
+			}
+		}
+		for(type_loop=0;type_loop<comp_base.numChildren();type_loop++)
+		{
+			System.out.println("Making");
+			// 3. 새로 만든 comp_Base를 보고 이전에 없는 것이면 생성한다.
+			tname=(String)comp_base.getChildNode(type_loop).getData();
+			if(tname==null) continue;
+			new_cb=null;
+			for(search_loop=0;search_loop<previous_comp_base.numChildren();search_loop++)
+			{
+				if(tname.equals(previous_comp_base.getChildNode(search_loop).getData().toString()))
+				{
+					new_cb=previous_comp_base.getChildNode(search_loop);
+					break;
+				}
+			}
+			if(new_cb==null)
+			{
+				n__=new Node(NodeType.nd_def_card,component.getRoot());
+				n__.setData(tname);
+			}
+		}
+		System.out.println("After:");
+		component.getRoot().printAll();
+	}
 	public Component getComponent()
 	{
 		return component;

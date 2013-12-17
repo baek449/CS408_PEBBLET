@@ -24,7 +24,7 @@ public class Component implements Serializable{
 	{
 		for(int loop=0;loop<root.numChildren();loop++)
 			if (root.getChildNode(loop).toString().equals(typename))
-				return root.getChildNode(loop).copy_except_parent(-1);
+				return root.getChildNode(loop);
 		System.err.println("Cannot load cards of specific type : "+typename);
 		return new Node();
 	}
