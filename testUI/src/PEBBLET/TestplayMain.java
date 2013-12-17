@@ -2,6 +2,7 @@ package PEBBLET;
 
 import javax.swing.SwingUtilities;
 
+import manager.Component;
 import manager.Definition;
 import manager.DefinitionManager;
 import manager.Node;
@@ -158,7 +159,7 @@ public class TestplayMain {
 				
 				
 				//////////////////
-				TestplayModule tpm=new TestplayModule(sample_def);
+				TestplayModule tpm=new TestplayModule(sample_def,new Component());
 				
 				TestplayUI ex = new TestplayUI(tpm);
 				ex.run_testplay(sample_rul);
