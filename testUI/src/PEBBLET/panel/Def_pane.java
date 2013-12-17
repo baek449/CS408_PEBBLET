@@ -85,6 +85,31 @@ public class Def_pane extends JComponent{
 		make_card();
 		
 	}
+	public Def_pane(DefinitionManager dm_){
+			
+			dm = dm_;
+			closeMark = new JLabel("}");
+			closeMarkP = new JLabel("}");
+	
+			def_pane = new JPanel(true);
+	//		def_pane.setSize(new Dimension(900, 600));
+			def_pane.setPreferredSize(new Dimension(900, 500));
+			
+			def_sc = new JScrollPane(def_pane);
+			def_sc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+			def_sc.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			def_sc.setPreferredSize(new Dimension(900, 600));
+			
+			global_pane = new JPanel(true);
+			players_pane = new JPanel(true);
+			cards_pane = new JPanel(true);
+			players_num = 0;
+			make_num_players();
+			make_global();	
+			make_players();
+			make_card();
+			
+		}
 	public void make_num_players(){
 		def_pane.setLayout(null);
 		

@@ -17,12 +17,20 @@ import javax.swing.ScrollPaneLayout;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
+import manager.ComponentManager;
+import manager.DefinitionManager;
+import manager.RuleManager;
 import PEBBLET.panel.Component_pane;
 import PEBBLET.panel.Debug_pane;
 import PEBBLET.panel.Def_pane;
 import PEBBLET.panel.Rule_pane;
 
 public class tabbedpane extends JPanel{
+	
+	DefinitionManager dm_master;
+	RuleManager rm_master;
+	ComponentManager cm_master;
+	
 	public tabbedpane(){
 		super(new GridLayout(1, 1));
 	 
@@ -30,10 +38,15 @@ public class tabbedpane extends JPanel{
 	
 //		JComponent definition = makeTextPanel("Definition");
 		
+		dm_master = new DefinitionManager();
+		rm_master = new RuleManager();
+		cm_master = new ComponentManager();
 		
-		Def_pane def = new Def_pane();
-		
+		Def_pane def = new Def_pane(dm_master);
 		tabbedpane.addTab("Definition", null, def.get_scpane(), "make definition");
+		
+		Debug_pane dbg_def = new Debug_pane();
+		tabbedpane.addTab("Definition debug", null, dbg_def.get_scpane(), "check definition error");
 		
 		Rule_pane rule = new Rule_pane();
 		tabbedpane.addTab("Rule", null, rule.get_scpane(), "make rule");
@@ -81,6 +94,14 @@ public class tabbedpane extends JPanel{
         frame.pack();
         frame.setVisible(true);
     }
+	
+	public DefinitionManager get_dm(){
+		return dm_master;
+	}
+	
+	public void update_manager_status(){
+		//update managers status
+	}
 	
 	
 
