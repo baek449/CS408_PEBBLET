@@ -38,6 +38,8 @@ public class Number_box extends JComponent {
 		Numbox_node.set_node_type(NodeType.nd_num);
 		Number_box_pane.setLayout(null);
 		
+		Number_box_pane.setSize(900,30);
+		
 
 		
 		values = new ArrayList<NumTextField>();
@@ -51,11 +53,14 @@ public class Number_box extends JComponent {
 		
 		
 		add_button = new JButton("+");
-		add_button.setBounds(endof_box_pos + 60 , 0, 20,20);
+		add_button.setBounds(endof_box_pos + 5 , 0, 20,20);
 		remove_button = new JButton("-");
-		remove_button.setBounds(endof_box_pos + 85, 0, 20, 20);
+		remove_button.setBounds(endof_box_pos + 30, 0, 20, 20);
 		set_button = new JButton("set");
-		set_button.setBounds(endof_box_pos + 110 , 0, 30, 20);
+		set_button.setBounds(endof_box_pos + 55, 0, 30, 20);
+//		Number_box_pane.setSize(endof_box_pos + 165, 20);
+//		System.out.println(Number_box_pane.getSize());
+
 		
 		add_button.addActionListener(new ActionListener() {
 			

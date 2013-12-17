@@ -47,11 +47,11 @@ public class String_box extends JComponent{
 		
 		
 		add_button = new JButton("+");
-		add_button.setBounds(endof_box_pos + 60 , 0, 20,20);
+		add_button.setBounds(endof_box_pos + 5 , 0, 20,20);
 		remove_button = new JButton("-");
-		remove_button.setBounds(endof_box_pos + 85, 0, 20, 20);
+		remove_button.setBounds(endof_box_pos + 30, 0, 20, 20);
 		set_button = new JButton("set");
-		set_button.setBounds(endof_box_pos + 110, 0, 30, 20);
+		set_button.setBounds(endof_box_pos + 55, 0, 30, 20);
 		
 		add_button.addActionListener(new ActionListener() {
 			
