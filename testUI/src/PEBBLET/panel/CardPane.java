@@ -368,7 +368,7 @@ public void add_card_item(final DefinitionManager dm, final JButton add_button, 
 				// TODO Auto-generated method stub
 				String item = (String)e.getItem();
 				card_item_pane.setLayout(null);
-				if(e.getStateChange()==ItemEvent.SELECTED){
+				if(e.getStateChange()==ItemEvent.SELECTED && _this.get_loaded()){
 					int del_box_index = getComponentIndex(card_item_pane)-3;
 					switch(item){
 						case "(Cancle)":
@@ -459,7 +459,7 @@ public void add_card_item(final DefinitionManager dm, final JButton add_button, 
 		switch(input.get_node_type()){//set selected item menu from node
 		
 			case nd_num:
-	//			box_type.setSelectedIndex(2);
+				box_type.setSelectedIndex(1);
 				//set data from node
 				if(!(input.getData() == null))
 						numbox.set_title((String)input.getData());
@@ -474,7 +474,7 @@ public void add_card_item(final DefinitionManager dm, final JButton add_button, 
 				numbox.reset_pos();
 				break;
 			case nd_str:
-	//			box_type.setSelectedIndex(3);
+				box_type.setSelectedIndex(2);
 				//set data from node
 				if(!(input.getData() == null))
 					stringbox.set_title((String)input.getData());
@@ -489,7 +489,7 @@ public void add_card_item(final DefinitionManager dm, final JButton add_button, 
 				stringbox.reset_pos();
 				break;
 			case nd_action:
-	//			box_type.setSelectedIndex(4);
+				box_type.setSelectedIndex(3);
 				if(!(input.getData()==null))
 					actbox.set_Action_input((String)input.getData());
 				actbox.set_node(input);

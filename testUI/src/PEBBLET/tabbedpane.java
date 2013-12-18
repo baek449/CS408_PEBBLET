@@ -24,6 +24,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import manager.ComponentManager;
 import manager.DefinitionManager;
@@ -44,6 +46,9 @@ public class tabbedpane extends JPanel{
 	Rule_pane rule;
 	Component_pane comp;
 	Debug_pane debug;
+	
+	boolean set_first = false;
+	boolean is_first = true;
 	
 	public boolean save(ObjectOutputStream out)
 	{
@@ -115,18 +120,35 @@ public class tabbedpane extends JPanel{
 		tabpane.addTab("Definition debug", null, dbg_def.get_scpane(), "check definition error");
 		
 		rule = new Rule_pane(dm_master, rm_master);
-		tabpane.addTab("Rule", null, rule.get_scpane(), "make rule");
-	
+
 		comp = new Component_pane(dm_master,cm_master);
-		tabpane.addTab("Component", null, comp.get_scpane(), "make component");
-		
-//		JComponent debug = makePanel();
-		debug = new Debug_pane();
-		tabpane.addTab("Debug", null, debug.get_scpane(), "debugging");
+
+		debug = new Debug_pane(dm_master, rm_master, cm_master);
+
 		
 		add(tabpane);
 		tabpane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
+		
+		tabpane.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				// TODO Auto-generated method stub
+				if(dbg_def.get_def_complete()&&is_first){
+//					tabpane.addTab("Rule", null, rule.get_scpane(), "make rule");
+//				
+//					tabpane.addTab("Component", null, comp.get_scpane(), "make component");
+//					
+////					JComponent debug = makePanel();
+//					tabpane.addTab("Debug", null, debug.get_scpane(), "debugging");
+					is_first = false;
+					repaint();
+					validate();
+				}
+				
+			}
+		});
 		
 	
 	}
@@ -173,6 +195,23 @@ public class tabbedpane extends JPanel{
 		
 	}
 	
+	public void set_isfirst(boolean is){
+		is_first = is;
+	}
+	
+	public JTabbedPane get_tabpane(){
+		return tabpane;
+	}
+	
+	public Rule_pane get_rule(){
+		return rule;
+	}
+	public Component_pane get_comp(){
+		return comp;
+	}
+	public Debug_pane get_bug(){
+		return debug;
+	}
 	
 
 }

@@ -45,6 +45,16 @@ public class DebugManager {
 		this.dm = dm;
 		this.rm = rm;
 		this.cm = cm;
+		missing_domain(this.dm, this.rm);
+		invalid_operation(this.rm);
+		condition_op_error(this.rm);
+		NaN_error(this.rm);
+		check_rawContent(this.rm);
+		check_dp_player(this.rm, this.dm);
+		check_cardtype(this.dm, this.rm);
+		check_nested_multiple(this.dm, this.rm);
+		check_multiple(this.dm, this.rm);
+		
 		
 	}
 /*---------------general case------------------------------------------*/	

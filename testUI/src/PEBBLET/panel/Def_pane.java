@@ -58,6 +58,8 @@ public class Def_pane extends JComponent{
 
 	private JLabel closeMark;
 	private JLabel closeMarkP;
+	
+	boolean loaded = false;
 
 
 	private tabbedpane parent_;
@@ -93,6 +95,8 @@ public class Def_pane extends JComponent{
 		
 	}
 	public Def_pane(DefinitionManager dm_){
+		
+		loaded = true;
 			
 			dm = dm_;
 			closeMark = new JLabel("}");
@@ -116,6 +120,8 @@ public class Def_pane extends JComponent{
 			make_players(dm.search(players_pane_index));
 			make_card(dm.search(cards_pane_index), dm);
 			dm.getDefinition().getRoot().printAll();
+			
+			loaded = false;
 			
 		}
 	public void make_num_players(){
@@ -494,8 +500,7 @@ public class Def_pane extends JComponent{
 				// TODO Auto-generated method stub
 				String item = (String)e.getItem();
 				global_item_pane.setLayout(null);
-				if(e.getStateChange() == ItemEvent.SELECTED){
-					
+				if(e.getStateChange() == ItemEvent.SELECTED && !loaded){
 					int del_box_index = getComponentIndex(global_item_pane)-3;
 					switch (item) {
 						case "(Cancel)":
@@ -601,7 +606,7 @@ public class Def_pane extends JComponent{
 		
 		switch(input.get_node_type()){//set selected item menu from node
 			case nd_deck:
-	//			box_type.setSelectedIndex(1);
+				box_type.setSelectedIndex(1);
 				//set data from node
 				if(!(input.getData()==null))
 					deckbox.set_Deck_input((String)input.getData());
@@ -609,7 +614,7 @@ public class Def_pane extends JComponent{
 				deckbox.addtoPanel(global_item_pane, 125, 0);
 				break;
 			case nd_num:
-	//			box_type.setSelectedIndex(2);
+				box_type.setSelectedIndex(2);
 				//set data from node
 				if(!(input.getData()==null))
 					numbox.set_title((String)input.getData());
@@ -624,7 +629,7 @@ public class Def_pane extends JComponent{
 				numbox.reset_pos();
 				break;
 			case nd_str:
-	//			box_type.setSelectedIndex(3);
+				box_type.setSelectedIndex(3);
 				//set data from node
 				if(!(input.getData()==null))
 					stringbox.set_title((String)input.getData());
@@ -639,7 +644,7 @@ public class Def_pane extends JComponent{
 				stringbox.reset_pos();
 				break;
 			case nd_player:
-	//			box_type.setSelectedIndex(4);
+				box_type.setSelectedIndex(4);
 				if(!(input.getData()==null))
 					playerbox.set_Player_input((String)input.getData());
 				playerbox.set_node(input);
@@ -957,7 +962,7 @@ public class Def_pane extends JComponent{
 				// TODO Auto-generated method stub
 				String item = (String)e.getItem();
 				players_item_pane.setLayout(null);
-				if(e.getStateChange()==ItemEvent.SELECTED){
+				if(e.getStateChange()==ItemEvent.SELECTED && !loaded){
 					int del_box_index = getComponentIndex(players_item_pane)-3;
 					switch(item){
 						case "(Cancle)":
@@ -1071,14 +1076,14 @@ public class Def_pane extends JComponent{
 		switch(input.get_node_type()){//set selected item menu from node
 	
 			case nd_deck:
-				//			box_type.setSelectedIndex(1);
+				box_type.setSelectedIndex(1);
 							//set data from node
 				deckbox.set_Deck_input((String)input.getData());
 				deckbox.set_node(input);
 				deckbox.addtoPanel(players_item_pane, 125, 0);
 				break;
 			case nd_num:
-	//			box_type.setSelectedIndex(2);
+				box_type.setSelectedIndex(2);
 				//set data from node
 				if(!(input.getData()==null))
 					numbox.set_title((String)input.getData());
@@ -1093,7 +1098,7 @@ public class Def_pane extends JComponent{
 				numbox.reset_pos();
 				break;
 			case nd_str:
-	//			box_type.setSelectedIndex(3);
+				box_type.setSelectedIndex(3);
 				//set data from node
 				if(!(input.getData() ==null))
 					strbox.set_title((String)input.getData());
@@ -1108,7 +1113,7 @@ public class Def_pane extends JComponent{
 				strbox.reset_pos();
 				break;
 			case nd_player:
-	//			box_type.setSelectedIndex(4);
+				box_type.setSelectedIndex(4);
 				if(!(input.getData()==null))
 					playerbox.set_Player_input((String)input.getData());
 				playerbox.set_node(input);
@@ -1317,6 +1322,10 @@ public class Def_pane extends JComponent{
 		make_players(dm.search(players_pane_index));
 		
 		
+	}
+	
+	public boolean get_loaded(){
+		return loaded;
 	}
 
 }
