@@ -107,17 +107,26 @@ public class Debug_pane extends JComponent{
 				for(int i=0; i< bug_list.size(); i++){
 					make_debug_msg(bug_list.get(i));
 				}
+				
+				if(def_complete){
+					start_testplay = new JButton("Next Step");
+					
+					start_testplay.setBounds(300,400, 200, 30);
+					debug_pane.setLayout(null);
+					debug_pane.add(start_testplay);					
+					
+				}
+				
 			}
 		});
-		start_testplay = new JButton("Start TestPlay");
-		
+//		start_testplay = new JButton("Start TestPlay");
+//		
 		start.setBounds(5, 400, 200,30);
-		start_testplay.setBounds(300,400, 200, 30);
+//		start_testplay.setBounds(300,400, 200, 30);
 		debug_pane.setLayout(null);
 //		debug_pane.add(debug_window_pane);
 		debug_pane.add(dbg_window_sc);
 		debug_pane.add(start);
-		debug_pane.add(start_testplay);
 		
 		
 		
