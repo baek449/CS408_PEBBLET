@@ -216,7 +216,7 @@ public class DebugManager {
 					if(!(dm_.search(card).getChildNode(i).getData()==null)){
 						if(((String)dm_.search(card).getChildNode(i).getData()).equals(check_list.get(j))){
 							//duplication!!
-							String msg = "Duplication Error, in Definition, Card, " + i + ":" + (String)dm_.search(global).getChildNode(i).getData();
+							String msg = "Duplication Error, in Definition, Card, " + i + ":" + (String)dm_.search(card).getChildNode(i).getData();
 							System.out.println(msg);
 							bug_list.add(msg);
 							dp = true;

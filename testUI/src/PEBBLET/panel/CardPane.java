@@ -222,8 +222,8 @@ public class CardPane extends JPanel{
 		box_type.setBounds(0,0,120,20);
 		int i = 1;
 		box_type.addItem("Select type");
-//		Action_box select = new Action_box();
-//		select.set_parent(dm.search(temp));
+		Action_box select = new Action_box();
+		select.set_parent(dm.search(temp));
 		while(i <= dm.get_selection_card_del().length){
 			box_type.addItem(dm.get_selection_card_del()[i-1]);
 			i++;
@@ -346,7 +346,7 @@ public void add_card_item(final DefinitionManager dm, final JButton add_button, 
 		box_type.setBounds(0,0,120,20);
 		int i = 1;
 		box_type.addItem("Select type");
-//		Action_box select = new Action_box();
+		Action_box select = new Action_box();
 		while(i <= dm.get_selection_card_del().length){
 			box_type.addItem(dm.get_selection_card_del()[i-1]);
 			i++;
