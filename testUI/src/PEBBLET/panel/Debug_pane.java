@@ -1,6 +1,9 @@
 package PEBBLET.panel;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -51,7 +54,10 @@ public class Debug_pane extends JComponent{
 		
 		
 	}
-	public Debug_pane(DefinitionManager dm_){
+	
+	private boolean def_complete = false;
+	
+	public Debug_pane(final DefinitionManager dm_){//for def debug
 		debug_pane = new JPanel(true);
 		debug_pane.setPreferredSize(new Dimension(900, 500));
 		
@@ -68,6 +74,25 @@ public class Debug_pane extends JComponent{
 		debug_window_pane.setBounds(50, 50, 500, 300);
 		
 		start = new JButton("Start Debugging");
+		start.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DebugManager ddm = new DebugManager(dm_);
+				
+				ArrayList<String> bug_list = ddm.get_bug_list();
+				
+				if(bug_list.size() == 0 ){
+					make_debug_msg("No Error, No Warning");
+					def_complete = true;
+				}
+				
+				for(int i=0; i< bug_list.size(); i++){
+					make_debug_msg(bug_list.get(i));
+				}
+			}
+		});
 		start_testplay = new JButton("Start TestPlay");
 		start.setBounds(5, 400, 200,30);
 		start_testplay.setBounds(300,400, 200, 30);
@@ -75,6 +100,8 @@ public class Debug_pane extends JComponent{
 		debug_pane.add(debug_window_pane);
 		debug_pane.add(start);
 		debug_pane.add(start_testplay);
+		
+		
 		
 	}
 	
@@ -84,11 +111,19 @@ public class Debug_pane extends JComponent{
 //		msg.setLocation(5, msg_pos);
 		msg.setBounds(5, msg_pos, msg_.length()*15,30);
 		msg_pos+=30;
-		debug_pane.setLayout(null);
-		debug_pane.add(msg);
+		debug_window_pane.setLayout(null);
+		debug_window_pane.add(msg);
 	}
 	
 	public JComponent get_scpane(){
 		return debug_sc;
+	}
+	
+	public void set_def_complete(boolean b){
+		def_complete = b;
+	}
+	
+	public boolean get_def_complete(){
+		return def_complete;
 	}
 }

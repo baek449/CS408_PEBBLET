@@ -330,8 +330,8 @@ public class Def_pane extends JComponent{
 
 		int i = 1;
 		box_type.addItem("Select type");
-		Deck_box select = new Deck_box();
-		select.set_parent(dm.search(global_pane_index));
+//		Deck_box select = new Deck_box();
+//		select.set_parent(dm.search(global_pane_index));
 		while(i <= dm.get_selection_noncard_del().length){
 			box_type.addItem(dm.get_selection_noncard_del()[i-1]);
 			i++;
@@ -469,7 +469,7 @@ public class Def_pane extends JComponent{
 
 		int i = 1;
 		box_type.addItem("Select type");
-		Deck_box select = new Deck_box();
+//		Deck_box select = new Deck_box();
 //		select.set_parent(dm.search(global_pane_index));
 		while(i <= dm.get_selection_noncard_del().length){
 			box_type.addItem(dm.get_selection_noncard_del()[i-1]);
@@ -784,8 +784,8 @@ public class Def_pane extends JComponent{
 		
 		int i = 1;
 		box_type.addItem("Select type");
-		Deck_box select = new Deck_box();
-		select.set_parent(dm.search(players_pane_index));
+//		Deck_box select = new Deck_box();
+//		select.set_parent(dm.search(players_pane_index));
 		while(i<= dm.get_selection_noncard_del().length){
 			box_type.addItem(dm.get_selection_noncard_del()[i-1]);
 			i++;
@@ -931,7 +931,7 @@ public class Def_pane extends JComponent{
 		
 		int i = 1;
 		box_type.addItem("Select type");
-		Deck_box select = new Deck_box();
+//		Deck_box select = new Deck_box();
 //		select.set_parent(dm.search(players_pane_index));
 		while(i<= dm.get_selection_noncard_del().length){
 			box_type.addItem(dm.get_selection_noncard_del()[i-1]);

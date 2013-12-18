@@ -71,7 +71,7 @@ public class tabbedpane extends JPanel{
 		def.setparent_(this);
 		tabpane.addTab("Definition", null, def.get_scpane(), "make new definition");
 		
-		dbg_def = new Debug_pane();
+		dbg_def = new Debug_pane(dm_master);
 		
 
 		tabpane.addTab("Definition debug", null, dbg_def.get_scpane(), "check definition error");
@@ -109,7 +109,7 @@ public class tabbedpane extends JPanel{
 		def.setparent_(this);
 		tabpane.addTab("Definition", null, def.get_scpane(), "make definition");
 		
-		dbg_def = new Debug_pane();
+		dbg_def = new Debug_pane(dm_master);
 		
 
 		tabpane.addTab("Definition debug", null, dbg_def.get_scpane(), "check definition error");

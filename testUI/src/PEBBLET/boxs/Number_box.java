@@ -96,8 +96,12 @@ public class Number_box extends JComponent {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				Numbox_node.setData(title.getText());
+				System.out.println(Numbox_node.getData());
+				System.out.println(Numbox_node);
 				for(int a =0; a<values.size(); a++){
 					values.get(a).get_node().setData(values.get(a).getText());
+					System.out.println(values.get(a).get_node().getData());
+					System.out.println(values.get(a).get_node());
 				}
 				
 			}

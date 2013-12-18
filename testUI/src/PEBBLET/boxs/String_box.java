@@ -87,8 +87,13 @@ public class String_box extends JComponent{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				Strbox_node.setData(title.getText());
+				System.out.println(Strbox_node.getData());
+				System.out.println(Strbox_node);
+
 				for(int a =0; a<values.size(); a++){
 					values.get(a).get_node().setData(values.get(a).getText());
+					System.out.println(values.get(a).get_node().getData());
+					System.out.println(values.get(a).get_node());
 				}
 				
 			}

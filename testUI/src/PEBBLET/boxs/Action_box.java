@@ -25,6 +25,8 @@ public class Action_box extends JComponent {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				set_Action_NodeData(Action_input.getText());
+				System.out.println(node.getData());
+				System.out.println(node);
 			}
 		});
 		node.set_node_type(NodeType.nd_action);

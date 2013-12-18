@@ -26,6 +26,9 @@ public class Player_box extends JComponent {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				set_Player_NodeData(Player_input.getText());
+				System.out.println(node.getData());
+				System.out.println(node);
+
 			}
 		});
 		node.set_node_type(NodeType.nd_player);

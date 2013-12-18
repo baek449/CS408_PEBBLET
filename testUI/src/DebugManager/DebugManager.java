@@ -32,6 +32,12 @@ public class DebugManager {
 	public DebugManager(DefinitionManager dm_){//for def debug
 		dm = dm_;
 		dbg_pane = new Debug_pane(dm);
+		bug_list = new ArrayList<String>();
+		check_null(0, dm_.getDefinition().getRoot(), true, 4);
+		check_positive_players(dm);
+		check_duplication(dm);
+		warning_one_domain(dm);
+		
 		
 	}
 	
@@ -42,35 +48,82 @@ public class DebugManager {
 		
 	}
 /*---------------general case------------------------------------------*/	
-	
-	public void check_null(int indent, int child_index, Node node_input){
+	public void check_null(int indent,  Node node_input, boolean is_def,int index){
 		int loop;
-		
-		if(node_input.get_node_type() == null){
-			
-			for(loop = 0; loop<indent; loop++){//set align
-				System.out.print("\t");
+		if(is_def){
+			if(indent !=0 && node_input.numChildren() !=0 ){
+				if(node_input.get_node_type() == null){
+					for(loop = 0; loop<indent; loop++){//set align
+						System.out.print("\t");
+					}
+					
+					//node type is null
+					String msg = ""+node_input.getParent() +"/" + index + "/ NodeType is null";
+					System.out.println(msg);
+					bug_list.add(msg);
+				}
+				if(node_input.getData() == null){
+					for(loop = 0; loop<indent; loop++){//set align
+						System.out.print("\t");
+					}
+					
+					//node data is null
+					String msg = ""+node_input.getParent() + "/" + index + "/ NodeData is null";
+					System.out.println(msg);
+					bug_list.add(msg);
+				}
+				
+				
+				for(loop= 0 ; loop<node_input.numChildren(); loop++){
+					check_null(indent+1, node_input.getChildNode(loop), is_def, loop);
+				}
+			}
+			else if(indent != 0 && node_input.numChildren() ==0 ){
+				if(node_input.getData() == null){
+					for(loop = 0; loop<indent; loop++){//set align
+						System.out.print("\t");
+					}
+					
+					//node data is null
+					String msg = ""+node_input.getParent() + "/" + index + "/ NodeData is null";
+					System.out.println(msg);
+					bug_list.add(msg);
+				}
+			}
+			else if(indent == 0){
+				for(loop= 0 ; loop<node_input.numChildren(); loop++){
+					check_null(indent+1, node_input.getChildNode(loop), is_def, loop);
+				}
+			}
+		}
+		else{
+			if(node_input.get_node_type() == null){
+				
+				for(loop = 0; loop<indent; loop++){//set align
+					System.out.print("\t");
+				}
+				
+				//node type is null
+				String msg = ""+node_input.getParent() +"/" + index + "/ NodeType is null";
+				System.out.println(msg);
+				bug_list.add(msg);
+			}
+			if(node_input.getData() == null){
+				for(loop = 0; loop<indent; loop++){//set align
+					System.out.print("\t");
+				}
+				
+				//node data is null
+				String msg = ""+node_input.getParent() + "/" + index  + "/ NodeData is null";
+				System.out.println(msg);
+				bug_list.add(msg);
 			}
 			
-			//node type is null
-			String msg = indent +"" + child_index + "/ NodeType is null";
-			System.out.println(msg);
-			bug_list.add(msg);
-		}
-		if(node_input.getData() == null){
-			for(loop = 0; loop<indent; loop++){//set align
-				System.out.print("\t");
+			
+			for(loop= 0 ; loop<node_input.numChildren(); loop++){ // root node!
+				check_null(indent+1, node_input.getChildNode(loop), is_def, loop);
 			}
 			
-			//node data is null
-			String msg = indent + "" + child_index + "/ NodeData is null";
-			System.out.println(msg);
-			bug_list.add(msg);
-		}
-		
-		
-		for(loop= 0 ; loop<node_input.numChildren(); loop++){
-			check_null(indent+1, loop, node_input.getChildNode(loop));
 		}
 	}	
 	
@@ -97,51 +150,83 @@ public class DebugManager {
 		
 		
 		ArrayList<String> check_list = new ArrayList<String>();
-		
+
 		for(int i = 0; i < dm_.search(global).numChildren(); i++){
-			for(int j = 0; j < check_list.size(); j++){
-				if(((String)dm_.search(global).getChildNode(i).getData()).equals(check_list.get(j))){
-					//duplication!!
-					String msg = "Duplication Error, in Definition, Global, " + i + ":" + (String)dm_.search(global).getChildNode(i).getData();
-					System.out.print(msg);
-					bug_list.add(msg);
-					
-				}
-					
-				else{
-					check_list.add((String)dm_.search(global).getChildNode(i).getData());
+			if(check_list.size()==0){
+				if(!(dm_.search(global).getChildNode(0).getData()==null)){
+					check_list.add((String)dm_.search(global).getChildNode(0).getData());
 				}
 			}
-			
+			else{
+				boolean dp = false;
+				for(int j = 0; j < check_list.size(); j++){
+					if(!(dm_.search(global).getChildNode(i).getData()==null)){
+						if(((String)dm_.search(global).getChildNode(i).getData()).equals(check_list.get(j))){
+							//duplication!!
+							String msg = "Duplication Error, in Definition, Global, " + i + ":" + (String)dm_.search(global).getChildNode(i).getData();
+							System.out.println(msg);
+							bug_list.add(msg);
+							dp = true;
+							
+						}
+					}
+				}
+				if(!dp){
+					if(!(dm_.search(global).getChildNode(i).getData()==null))
+						check_list.add((String)dm_.search(global).getChildNode(i).getData());
+				}
+			}
 		}
 		
 		for(int i = 0; i <dm_.search(player).numChildren(); i++){
-			for(int j = 0; j < check_list.size(); j++){
-				if(((String)dm_.search(player).getChildNode(i).getData()).equals(check_list.get(j))){
-					//duplication!!
-					String msg = "Duplication Error, in Definition, Player, " + i + ":" + (String)dm_.search(global).getChildNode(i).getData();
-					System.out.print(msg);
-					bug_list.add(msg);
-					
+			if(check_list.size()==0){
+				if(!(dm_.search(player).getChildNode(0).getData()==null)){
+					check_list.add((String)dm_.search(player).getChildNode(0).getData());
 				}
-					
-				else{
-					check_list.add((String)dm_.search(player).getChildNode(i).getData());
+			}
+			else{
+				boolean dp = false;
+				for(int j = 0; j < check_list.size(); j++){
+					if(!(dm_.search(player).getChildNode(i).getData() == null)){
+						if(((String)dm_.search(player).getChildNode(i).getData()).equals(check_list.get(j))){
+							//duplication!!
+							String msg = "Duplication Error, in Definition, Player, " + i + ":" + (String)dm_.search(global).getChildNode(i).getData();
+							System.out.println(msg);
+							bug_list.add(msg);
+							dp = true;
+							
+						}
+					}
+				}
+				if(!dp){
+					if(!(dm_.search(player).getChildNode(i).getData() ==null))
+						check_list.add((String)dm_.search(player).getChildNode(i).getData());
 				}
 			}
 		}
 		for(int i = 0; i < dm_.search(card).numChildren(); i++){
-			for(int j = 0; j < check_list.size(); j++){
-				if(((String)dm_.search(card).getChildNode(i).getData()).equals(check_list.get(j))){
-					//duplication!!
-					String msg = "Duplication Error, in Definition, Card, " + i + ":" + (String)dm_.search(global).getChildNode(i).getData();
-					System.out.print(msg);
-					bug_list.add(msg);
-					
+			if(check_list.size()==0){
+				if(!(dm_.search(card).getChildNode(0).getData()==null)){
+					check_list.add((String)dm_.search(card).getChildNode(0).getData());
 				}
-					
-				else{
-					check_list.add((String)dm_.search(card).getChildNode(i).getData());
+			}
+			else{
+				boolean dp = false;
+				for(int j = 0; j < check_list.size(); j++){
+					if(!(dm_.search(card).getChildNode(i).getData()==null)){
+						if(((String)dm_.search(card).getChildNode(i).getData()).equals(check_list.get(j))){
+							//duplication!!
+							String msg = "Duplication Error, in Definition, Card, " + i + ":" + (String)dm_.search(global).getChildNode(i).getData();
+							System.out.println(msg);
+							bug_list.add(msg);
+							dp = true;
+						}
+					}
+				}
+				if(!dp){
+					if(!(dm_.search(card).getChildNode(i).getData() == null)){
+						check_list.add((String)dm_.search(card).getChildNode(i).getData());
+					}
 				}
 			}
 		}
