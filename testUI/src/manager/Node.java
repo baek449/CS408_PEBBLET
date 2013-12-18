@@ -11,6 +11,10 @@ public class Node implements Serializable{
 	private ArrayList<Node> children;
 	private boolean scope_player;
 	private boolean scope_card;
+	
+	private int selection_value;
+	public int get_selection_value() {return selection_value;}
+	public void set_selection_value(int selection_value_) {selection_value=selection_value_;}
 
 	public boolean get_scope_player() {
 		return scope_player;
@@ -59,6 +63,7 @@ public class Node implements Serializable{
 		n.set_node_type(get_node_type());
 		n.set_scope_player(get_scope_player());
 		n.set_scope_card(get_scope_card());
+		n.set_selection_value(get_selection_value());
 		if(additional_copy_depth==0) return n;
 		for(int i = 0 ; i < numChildren(); i++){
 			n.addChildNode(getChildNode(i).copy_except_parent(additional_copy_depth-1));
@@ -141,6 +146,7 @@ public class Node implements Serializable{
 		this.set_node_type(_input.get_node_type());
 		this.set_scope_player(_input.get_scope_player());
 		this.set_scope_card(_input.get_scope_card());
+		this.set_selection_value(_input.get_selection_value());
 		this.remove_all_children();
 		for(int i = 0 ; i < _input.numChildren(); i++){
 			this.addChildNode(_input.getChildNode(i));
@@ -155,7 +161,7 @@ public class Node implements Serializable{
 		int loop;
 		for(loop=0;loop<indent;loop++)
 			System.out.print("\t");
-		System.out.println(child_index+" / NodeType "+node_type+" / "+data);
+		System.out.println(child_index+" / NodeType "+node_type+" / "+data + "("+selection_value+")");
 		for(loop=0;loop<numChildren();loop++)
 		{
 			getChildNode(loop).printAll(indent+1,loop);

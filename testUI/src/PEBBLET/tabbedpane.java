@@ -50,6 +50,8 @@ public class tabbedpane extends JPanel{
 		if(!dm_master.save(out)) return false;
 		if(!rm_master.save(out)) return false;
 		if(!cm_master.save(out)) return false;
+		System.out.println("Master: ");
+		rm_master.getRule().getRoot().printAll();
 		return true;
 	}
 	public boolean load(ObjectInputStream in)
@@ -58,8 +60,9 @@ public class tabbedpane extends JPanel{
 		if(!rm_master.load(in)) return false;
 		if(!cm_master.load(in)) return false;
 		
+		
 		System.out.println("Master: ");
-		dm_master.getDefinition().getRoot().printAll();
+		rm_master.getRule().getRoot().printAll();
 		tabpane.removeAll();
 		tabpane = new JTabbedPane();
 		
