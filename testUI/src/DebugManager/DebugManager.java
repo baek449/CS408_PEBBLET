@@ -8,6 +8,7 @@ import manager.Definition;
 import manager.DefinitionManager;
 import manager.Node;
 import manager.NodeType;
+import manager.NodeTypewithScope;
 import manager.RuleCase;
 import manager.RuleManager;
 
@@ -603,19 +604,144 @@ public class DebugManager {
 	}
 	
 	
+	// 카드 타입 입력에 대한 체크.
 	private String card_name;
-	public void check_load(DefinitionManager dm_ ,RuleManager rm_){
+	public void check_cardtype(DefinitionManager dm_ ,RuleManager rm_){
 		int[] location ={3};
 		//get card name from definition manager dm_
 		card_name = (String)(dm_.search(location).getData());
 		
-		check_load_rc(0, rm_.getRule().getRoot());
+		check_cardtype_rc(0, rm_.getRule().getRoot());
 	}
 	
-	public void check_load_rc(int intend, Node input){
-		
+	public void check_cardtype_rc(int intend, Node input){
+		if(input.getData()!=null && input.getData().getClass()==RuleCase.class)
+		{
+			RuleCase rc=(RuleCase)input.getData();
+			if(rc==RuleCase.action_load || rc==RuleCase.cond_istype)
+			{
+				Node n=input.getChildNode(0);
+				if(n.get_node_type()!=NodeType.nd_raw)
+				{
+					String msg = "Node type error, in Rule tab, in Level : " + (intend +1) + ": "+ input.getChildNode(0) +"Should be Raw type";
+					System.out.println(msg);
+					bug_list.add(msg);
+				}
+				else if(!n.getData().equals(card_name))
+				{
+					String msg = "Card type error, in Rule tab, in Level : " + (intend +1) + ": "+ input.getChildNode(0) +"Should be "+card_name;
+					System.out.println(msg);
+					bug_list.add(msg);
+				}
+			}
+		}
+		for(int i = 0; i < input.numChildren();i++){
+			check_cardtype_rc(intend++, input.getChildNode(i));
+		}
 	}
 
+	// multiple 안의 multiple check. action_multiple / player_multiple
+	public void check_nested_multiple(DefinitionManager dm_ ,RuleManager rm_){
+		int[] location ={3};
+		//get card name from definition manager dm_
+		card_name = (String)(dm_.search(location).getData());
+		
+		check_nested_multiple_rc(0, rm_.getRule().getRoot());
+	}
+	
+	public void check_nested_multiple_rc(int intend, Node input){
+		if(input.getData()!=null && input.getData().getClass()==RuleCase.class)
+		{
+			RuleCase rc=(RuleCase)input.getData();
+			int k;
+			Node n;
+			if(rc==RuleCase.action_multiple)
+			{
+				for(k=0;k<input.numChildren();k++)
+				{
+					n=input.getChildNode(0);
+					if(n.getData()==RuleCase.action_multiple)
+					{
+						String msg = "Warning, in Rule tab, in Level : " + (intend +1) + ": "+ input.getChildNode(0) +"Nested 'Multiple Actions'";
+						System.out.println(msg);
+						bug_list.add(msg);
+					}
+				}
+			}
+			if(rc==RuleCase.player_multiple)
+			{
+				for(k=0;k<input.numChildren();k++)
+				{
+					n=input.getChildNode(0);
+					if(n.getData()==RuleCase.player_multiple)
+					{
+						String msg = "Warning, in Rule tab, in Level : " + (intend +1) + ": "+ input.getChildNode(0) +"Nested 'Multiple Players'";
+						System.out.println(msg);
+						bug_list.add(msg);
+					}
+				}
+			}
+		}
+		for(int i = 0; i < input.numChildren();i++){
+			check_nested_multiple_rc(intend++, input.getChildNode(i));
+		}
+	}
+	
+	// 여러 값이 들어갈 수 있는 경우 값이 0개 들어가면 에러. 예외: action_multiple, player_multiple(warning)
+	public void check_multiple(DefinitionManager dm_ ,RuleManager rm_){
+		int[] location ={3};
+		//get card name from definition manager dm_
+		card_name = (String)(dm_.search(location).getData());
+		
+		check_multiple_rc(0, rm_.getRule().getRoot());
+	}
+	
+	public void check_multiple_rc(int intend, Node input){
+		if(input.getData()!=null && input.getData().getClass()==RuleCase.class)
+		{
+			RuleCase rc=(RuleCase)input.getData();
+			int limit=0;
+			int err_level=0;
+			switch(rc)
+			{
+			case action_order:
+			case player_most:
+				limit=1;
+				err_level=2;
+				break;
+			case action_multiple:
+				err_level=0;
+				break;
+			case action_endgame_order:
+			case action_choose:
+			case deck_select:
+			case string_call:
+				err_level=2;
+				break;
+			case player_multiple:
+				err_level=1;
+				break;
+			default:
+				break;
+			}
+			if(err_level==2 && input.numChildren()<=limit)
+			{
+				String msg = "Error, in Rule tab, in Level : " + (intend +1) + ": "+ input.getChildNode(0) +"At least one instance of multiple cases should be provided.";
+				System.out.println(msg);
+				bug_list.add(msg);
+			}
+			if(err_level==1 && input.numChildren()<=limit)
+			{
+				String msg = "Warning, in Rule tab, in Level : " + (intend +1) + ": "+ input.getChildNode(0) +"At least one multiple player cases are recommended to be provided.";
+				System.out.println(msg);
+				bug_list.add(msg);
+			}
+		}
+		
+		for(int i = 0; i < input.numChildren();i++){
+			check_multiple_rc(intend++, input.getChildNode(i));
+		}
+	}
 	public ArrayList<String> get_bug_list(){
 		return bug_list;
 	}
