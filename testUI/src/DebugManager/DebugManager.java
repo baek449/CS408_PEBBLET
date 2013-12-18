@@ -45,6 +45,8 @@ public class DebugManager {
 		this.dm = dm;
 		this.rm = rm;
 		this.cm = cm;
+		dbg_pane = new Debug_pane(dm);
+		bug_list = new ArrayList<String>();
 		missing_domain(this.dm, this.rm);
 		invalid_operation(this.rm);
 		condition_op_error(this.rm);
