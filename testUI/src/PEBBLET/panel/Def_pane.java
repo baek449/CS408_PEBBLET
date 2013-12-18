@@ -1315,6 +1315,8 @@ public class Def_pane extends JComponent{
 		players_num = 0;
 		make_num_players(dm);
 		make_players(dm.search(players_pane_index));
+		
+		
 	}
 
 }
