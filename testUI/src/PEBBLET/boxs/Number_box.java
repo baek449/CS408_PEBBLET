@@ -224,5 +224,12 @@ public class Number_box extends JComponent {
 		node_parent.addChildNode(Numbox_node);
 	}
 	
+	public void reset_pos(){
+		add_button.setBounds(endof_box_pos + 5 , 0, 20,20);
+		remove_button.setBounds(endof_box_pos + 30, 0, 20, 20);
+		set_button.setBounds(endof_box_pos + 55, 0, 30, 20);
+		Number_box_pane.setSize(endof_box_pos + 110, 20);
+	}
+	
 	
 }

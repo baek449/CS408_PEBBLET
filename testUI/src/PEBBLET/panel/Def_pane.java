@@ -114,7 +114,7 @@ public class Def_pane extends JComponent{
 			make_num_players(dm);
 			make_global(dm.search(global_pane_index));	
 			make_players(dm.search(players_pane_index));
-			make_card();
+			make_card(dm.search(cards_pane_index), dm);
 			dm.getDefinition().getRoot().printAll();
 			
 		}
@@ -150,7 +150,11 @@ public class Def_pane extends JComponent{
 		
 		JLabel title = new JLabel("Number of players :");
 		int[] location = {0,0};
-		final JTextField input = new JTextField((int)dm_.search(location).getData());
+		final JTextField input;
+		if(!(dm_.search(location).getData()==null))
+			input = new JTextField(Integer.toString((int)dm_.search(location).getData()));
+		else
+			input = new JTextField();
 		JButton comfirm = new JButton("set");
 		comfirm.addActionListener(new ActionListener() {
 			
@@ -479,6 +483,7 @@ public class Def_pane extends JComponent{
 		endof_global_pane += 30;
 		global_pane.add(global_item_pane);
 		def_pane.repaint();
+		def_pane.validate();
 		final Deck_box deckbox = new Deck_box();
 		final Number_box numbox = new Number_box();
 		final String_box stringbox = new String_box();
@@ -595,36 +600,53 @@ public class Def_pane extends JComponent{
 		});	
 		
 		switch(input.get_node_type()){//set selected item menu from node
-		case nd_deck:
-//			box_type.setSelectedIndex(1);
-			//set data from node
-			deckbox.set_Deck_input((String)input.getData());
-			deckbox.set_node(input);
-			deckbox.addtoPanel(global_item_pane, 125, 0);
-			break;
-		case nd_num:
-//			box_type.setSelectedIndex(2);
-			//set data from node
-			for(int j = 0; j < input.numChildren(); j++){
-				numbox.add_values_box(Integer.toString((Integer)input.getChildNode(j).getData()), input.getChildNode(j));
-			}
-			break;
-		case nd_str:
-//			box_type.setSelectedIndex(3);
-			//set data from node
-			stringbox.set_title((String)input.getData());
-			for(int j = 0; j < input.numChildren();j++){
-				stringbox.add_values_box((String)input.getChildNode(j).getData(), input.getChildNode(j));
-			}
-			stringbox.set_node(input);
-			break;
-		case nd_player:
-//			box_type.setSelectedIndex(4);
-			playerbox.set_Player_input((String)input.getData());
-			playerbox.set_node(input);
-			break;
-		default:
-			break;
+			case nd_deck:
+	//			box_type.setSelectedIndex(1);
+				//set data from node
+				if(!(input.getData()==null))
+					deckbox.set_Deck_input((String)input.getData());
+				deckbox.set_node(input);
+				deckbox.addtoPanel(global_item_pane, 125, 0);
+				break;
+			case nd_num:
+	//			box_type.setSelectedIndex(2);
+				//set data from node
+				if(!(input.getData()==null))
+					numbox.set_title((String)input.getData());
+				for(int j = 0; j < input.numChildren(); j++){
+					if(!(input.getChildNode(j).getData()==null))
+						numbox.add_values_box(Integer.toString((Integer)input.getChildNode(j).getData()), input.getChildNode(j));
+					else
+						numbox.add_values_box("", input.getChildNode(j));
+				}
+				numbox.set_node(input);
+				numbox.addtoPanel(global_item_pane, 125, 0);
+				numbox.reset_pos();
+				break;
+			case nd_str:
+	//			box_type.setSelectedIndex(3);
+				//set data from node
+				if(!(input.getData()==null))
+					stringbox.set_title((String)input.getData());
+				for(int j = 0; j < input.numChildren();j++){
+					if(!(input.getChildNode(j).getData()==null))
+						stringbox.add_values_box((String)input.getChildNode(j).getData(), input.getChildNode(j));
+					else
+						stringbox.add_values_box("", input.getChildNode(j));
+				}
+				stringbox.set_node(input);
+				stringbox.addtoPanel(global_item_pane, 125, 0);
+				stringbox.reset_pos();
+				break;
+			case nd_player:
+	//			box_type.setSelectedIndex(4);
+				if(!(input.getData()==null))
+					playerbox.set_Player_input((String)input.getData());
+				playerbox.set_node(input);
+				playerbox.addtoPanel(global_item_pane, 125, 0);
+				break;
+			default:
+				break;
 	}
 		
 		
@@ -1047,33 +1069,50 @@ public class Def_pane extends JComponent{
 		});
 		
 		switch(input.get_node_type()){//set selected item menu from node
+	
 			case nd_deck:
-//				box_type.setSelectedIndex(1);
-				//set data from node
+				//			box_type.setSelectedIndex(1);
+							//set data from node
 				deckbox.set_Deck_input((String)input.getData());
 				deckbox.set_node(input);
 				deckbox.addtoPanel(players_item_pane, 125, 0);
 				break;
 			case nd_num:
-//				box_type.setSelectedIndex(2);
+	//			box_type.setSelectedIndex(2);
 				//set data from node
+				if(!(input.getData()==null))
+					numbox.set_title((String)input.getData());
 				for(int j = 0; j < input.numChildren(); j++){
-					numbox.add_values_box((String)input.getChildNode(j).getData(), input.getChildNode(j));
+					if(!(input.getChildNode(j).getData()==null))
+						numbox.add_values_box(Integer.toString((Integer)input.getChildNode(j).getData()), input.getChildNode(j));
+					else
+						numbox.add_values_box("", input.getChildNode(j));
 				}
+				numbox.set_node(input);
+				numbox.addtoPanel(players_item_pane, 125, 0);
+				numbox.reset_pos();
 				break;
 			case nd_str:
-//				box_type.setSelectedIndex(3);
+	//			box_type.setSelectedIndex(3);
 				//set data from node
-				strbox.set_title((String)input.getData());
+				if(!(input.getData() ==null))
+					strbox.set_title((String)input.getData());
 				for(int j = 0; j < input.numChildren();j++){
-					strbox.add_values_box((String)input.getChildNode(j).getData(), input.getChildNode(j));
+					if(!(input.getChildNode(j).getData()==null))
+						strbox.add_values_box((String)input.getChildNode(j).getData(), input.getChildNode(j));
+					else
+						strbox.add_values_box("", input.getChildNode(j));
 				}
 				strbox.set_node(input);
+				strbox.addtoPanel(players_item_pane, 125, 0);
+				strbox.reset_pos();
 				break;
 			case nd_player:
-//				box_type.setSelectedIndex(4);
-				playerbox.set_Player_input((String)input.getData());
+	//			box_type.setSelectedIndex(4);
+				if(!(input.getData()==null))
+					playerbox.set_Player_input((String)input.getData());
 				playerbox.set_node(input);
+				playerbox.addtoPanel(players_item_pane, 125, 0);
 				break;
 			default:
 				break;
@@ -1125,6 +1164,50 @@ public class Def_pane extends JComponent{
 		
 		def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
 
+		
+		def_pane.repaint();
+		def_pane.validate();
+		
+	}
+	public void make_card(Node input, DefinitionManager dm_){
+//		Node input = dm_.search(cards_pane_index);
+		int endof = get_total_end();
+		def_pane.setLayout(null);
+		
+		cards_pane.setLayout(null);
+		cards_pane.setBounds(5, endof, 890, 400);
+		
+		JButton add_card = new JButton("add_card");
+		add_card.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println("Test" + parent_);
+				parent_.update_manager_status();
+			}});
+		
+		
+		CardPane cardpane = new CardPane(dm_, add_card, this, input);
+		endof_cards_pane = cardpane.get_endof();
+//		cardpane.add_card_item(dm, 3);
+
+		cardpane.addtoPanel(cards_pane, 0, 0);
+		
+		
+		
+
+		add_card.setBounds(20,cardpane.get_endof(),100,20);
+		
+//		cardpane.reset_pos(add_card, this);
+
+		cards_pane.add(add_card);
+		
+		def_pane.add(cards_pane);
+		
+		def_pane.setPreferredSize(new Dimension(900, get_total_end() + 20));
+		
+		
 		
 		def_pane.repaint();
 		def_pane.validate();

@@ -207,5 +207,11 @@ public class String_box extends JComponent{
 	public void set_parent(Node node_parent){
 		node_parent.addChildNode(Strbox_node);
 	}
+	public void reset_pos(){
+		add_button.setBounds(endof_box_pos + 5 , 0, 20,20);
+		remove_button.setBounds(endof_box_pos + 30, 0, 20, 20);
+		set_button.setBounds(endof_box_pos + 55, 0, 30, 20);
+		String_box_pane.setSize(endof_box_pos + 110, 20);
+	}
 	
 }
