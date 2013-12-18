@@ -463,12 +463,13 @@ public class TestplayModule {
 	public void action_load(String file, Node deck_raw)
 	{
 		Node deck_=deck(deck_raw);
-		/*
+		
 		Node newcards=c.getallcards(file).copy_except_parent(-1);
 		for(int loop=0;loop<newcards.numChildren();loop++)
 		{
 			deck_.addChildNode(newcards.getChildNode(loop));
-		}*/
+		}
+		/*
 		Node n,d1,d2;
 		for(int loop=0;loop<10;loop++)
 		{
@@ -482,7 +483,7 @@ public class TestplayModule {
 			d1.setData("number");
 			d2=new Node(NodeType.nd_raw,d1);
 			d2.setData(loop);
-		}
+		}*/
 	}
 	
 	// deck_raw°¡ ÁöÁ¤ÇÏ´Â µ¦À» ¼¯´Â´Ù.
