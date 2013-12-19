@@ -88,7 +88,7 @@ public class tabbedpane extends JPanel{
 		tabpane.addTab("Component", null, comp.get_scpane(), "make component");
 		
 //		JComponent debug = makePanel();
-		debug = new Debug_pane();
+		debug = new Debug_pane(dm_master, rm_master, cm_master);
 		tabpane.addTab("Debug", null, debug.get_scpane(), "debugging");
 		
 		tabpane.revalidate();

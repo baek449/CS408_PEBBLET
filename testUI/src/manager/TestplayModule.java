@@ -391,6 +391,7 @@ public class TestplayModule {
 	{
 		if(n.getData().getClass()==RuleCase.class)
 		{
+			int i;
 			switch((RuleCase)n.getData())
 			{
 			case num_raw:
@@ -405,9 +406,19 @@ public class TestplayModule {
 				return num_operation(n.getChildNode(0),(String)n.getChildNode(1).getData(),n.getChildNode(2));
 			case num_call:
 				return call_num(n.getChildNode(0),n.getChildNode(1));
+			case num_player:
+				ArrayList<Integer> p=players(n.getChildNode(0));
+				// TODO: Error Checking: p.size() must be 1.
+				Integer owner=p.get(0);
+				return (Integer)player_variable_get((String)n.getChildNode(1).getData(),p.get(0));
+			case num_card:
+				ArrayList<Node> c=cards(n.getChildNode(0));
+				// TODO: Error Checking: p.size() must be 1.
+				//Node c_owner=c.get(0);
+				return (Integer)card_variable_get((String)n.getChildNode(1).getData(),c.get(0));
 			default:
-				Integer i=(Integer)predefined((String)n.getData());
-				if (i!=null) return i;
+				i=(Integer)predefined((String)n.getData());
+				if ((Integer)i!=null) return i;
 				return (Integer)card_predefined((String)n.getData());
 			}
 		}
@@ -427,20 +438,34 @@ public class TestplayModule {
 	{
 		if(n.getData().getClass()==RuleCase.class)
 		{
+			String i;
 			switch((RuleCase)n.getData())
 			{
 			case string_raw:
 				return (String)n.getChildNode(0).getData();
 			case string_call:
 				return call_string(n.getAllNode());
+			case string_player:
+				ArrayList<Integer> p=players(n.getChildNode(0));
+				// TODO: Error Checking: p.size() must be 1.
+				Integer owner=p.get(0);
+				return (String)player_variable_get((String)n.getChildNode(1).getData(),p.get(0));
+			case string_card:
+				ArrayList<Node> c=cards(n.getChildNode(0));
+				// TODO: Error Checking: p.size() must be 1.
+				Node c_owner=c.get(0);
+				return (String)card_variable_get((String)n.getChildNode(1).getData(),c.get(0));
 			default:
-				String i=(String)predefined((String)n.getData());
+				i=(String)predefined((String)n.getData());
 				if (i!=null) return i;
 				return (String)card_predefined((String)n.getData());
 			}
 		}
 		else if (n.getData().getClass()==String.class)
 		{
+			String i=(String)predefined((String)n.getData());
+			if (i!=null) return i;
+			return (String)card_predefined((String)n.getData());
 		}
 		
 		System.out.println("String Error");
@@ -532,8 +557,8 @@ public class TestplayModule {
 		    		// 같으면, 다음 조건에서 비교한다.
 		    		if(a_value==b_value) continue;
 		    		// 크면서 high, 작으면서 low이면 1
-		    		if(a_value>b_value && ((String)crit[loop].getData()).equals("High")) return 1;
-		    		if(a_value<b_value && ((String)crit[loop].getData()).equals("Low")) return 1;
+		    		if(a_value<b_value && (crit[loop].getData()).equals(RuleCase.order_high)) return 1;
+		    		if(a_value>b_value && (crit[loop].getData()).equals(RuleCase.order_low)) return 1;
 		    		return -1;
 		    	}
 		    	// 완전히 같음.
@@ -895,8 +920,8 @@ public class TestplayModule {
 		    		// 같으면, 다음 조건에서 비교한다.
 		    		if(a_value==b_value) continue;
 		    		// 크면서 high, 작으면서 low이면 1
-		    		if(a_value>b_value && ((String)order[loop].getData()).equals("High")) return 1;
-		    		if(a_value<b_value && ((String)order[loop].getData()).equals("Low")) return 1;
+		    		if(a_value<b_value && (order[loop].getData()).equals(RuleCase.order_high)) return 1;
+		    		if(a_value>b_value && (order[loop].getData()).equals(RuleCase.order_low)) return 1;
 		    		return -1;
 		    	}
 		    	// 완전히 같음.

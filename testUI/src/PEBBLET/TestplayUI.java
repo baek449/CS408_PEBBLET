@@ -120,7 +120,7 @@ public class TestplayUI extends JFrame {
 		setTitle("PEBBLET Testplay");
 		setSize(1000,500);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+//		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout(7,7));
 		
 		

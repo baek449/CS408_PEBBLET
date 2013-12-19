@@ -292,6 +292,11 @@ public class DebugManager {
 		
 		boolean flag = false;
 		
+		if(input==null || input.getData()==null){
+			input.printAll();
+			return;
+		}
+		
 		if(input.getData().equals(RuleCase.num_operation)){
 			flag = false;
 			for(int i = 0; i < 7; i++){
@@ -323,6 +328,11 @@ public class DebugManager {
 		
 		boolean flag = false;
 		
+		if(input==null || input.getData()==null){
+			input.printAll();
+			return;
+		}
+		
 		if(input.getData().equals(RuleCase.cond_numcompare)){
 			flag = false;
 			for(int i = 0; i < 6; i++){
@@ -349,6 +359,10 @@ public class DebugManager {
 	
 	public void NaN_error_rc(int intend, Node input){
 	String[] op = {"/", "//", "/^", "%"};
+	if(input==null || input.getData()==null){
+		input.printAll();
+		return;
+	}
 		if(input.getData().equals(RuleCase.num_operation)){	
 			for(int i = 0; i < 4; i++){
 				if( input.getChildNode(1).equals(op[i]) ){
@@ -397,7 +411,9 @@ public class DebugManager {
 	public void missing_domain_rc(int intend, Node input){	
 		if(input==null || input.getData()==null){
 			input.printAll();
+			return;
 		}
+		
 		if(input.getData().equals(RuleCase.action_setint)){
 			boolean flag = true;
 			int j;
@@ -533,6 +549,10 @@ public class DebugManager {
 	}
 	
 	public void check_rawContent_rc(int intend, Node input){
+		if(input==null || input.getData()==null){
+			input.printAll();
+			return;
+		}
 		if(input.getData().equals(RuleCase.num_raw)){
 			if(input.numChildren()!=1){
 				String msg = "Set " + input + "content more than 1";
@@ -595,7 +615,10 @@ public class DebugManager {
 	
 	public void check_dp_player_rc(int intend, Node input){
 		//deck_player or player_player rule should target only one card or player
-		
+		if(input==null || input.getData()==null){
+			input.printAll();
+			return;
+		}
 		if(input.getData().equals(RuleCase.deck_player)||input.getData().equals(RuleCase.player_player)
 				||input.getData().equals(RuleCase.num_player)||input.getData().equals(RuleCase.string_player)){
 			if(!(input.getChildNode(0).get_node_type().equals(NodeType.nd_player))){
@@ -727,6 +750,10 @@ public class DebugManager {
 					System.out.println(msg);
 					bug_list.add(msg);
 				}
+				if(n==null || n.getData()==null){
+					n.printAll();
+					return;
+				}
 				else if(!n.getData().equals(card_name))
 				{
 					String msg = "Card type error, in Rule tab, in Level : " + (intend +1) + ": "+ input.getChildNode(0) +"Should be "+card_name;
@@ -826,6 +853,10 @@ public class DebugManager {
 			}
 			if(err_level==2 && input.numChildren()<=limit)
 			{
+				if(input==null || input.numChildren()==0){
+					input.printAll();
+					return;
+				}
 				String msg = "Error, in Rule tab, in Level : " + (intend +1) + ": "+ input.getChildNode(0) +"At least one instance of multiple cases should be provided.";
 				System.out.println(msg);
 				bug_list.add(msg);

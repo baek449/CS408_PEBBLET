@@ -58,7 +58,8 @@ public class panel_inside extends JPanel
 		n=n_;
 		if(!rm.isSelection(n))
 		{
-			text.setText((String)n.getData());
+			if(n.getData()==null) text.setText("");
+			else text.setText(String.valueOf(n.getData()));
 			return;
 		}
 		
@@ -155,8 +156,8 @@ public class panel_inside extends JPanel
 		}
 		isAddable=isAddable_;
 		
-		if (isVertical) inside.setLayout(new VerticalLayout(5,VerticalLayout.LEFT,VerticalLayout.TOP));
-		else inside.setLayout(new FlowLayout(FlowLayout.LEFT));
+		/*if (isVertical)*/ inside.setLayout(new VerticalLayout(5,VerticalLayout.LEFT,VerticalLayout.TOP));
+		//else inside.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		this.remove(add_button);
 		if(isAddable) this.add(add_button);

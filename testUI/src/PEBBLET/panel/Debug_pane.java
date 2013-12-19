@@ -169,6 +169,9 @@ public class Debug_pane extends JComponent{
 	
 	public Debug_pane(final DefinitionManager dm_, final RuleManager rm_, final ComponentManager cm_){
 		debug_pane = new JPanel(true);
+		System.out.println("LOAD");
+		rm_.getRule().getRoot().printAll();
+		
 		debug_pane.setPreferredSize(new Dimension(900, 500));
 		
 		debug_sc = new JScrollPane(debug_pane);
@@ -197,6 +200,8 @@ public class Debug_pane extends JComponent{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//reset window
+				
+				System.out.println("start debug");
 				debug_window_pane.removeAll();
 				//reset position
 				msg_pos = 20;
@@ -225,13 +230,15 @@ public class Debug_pane extends JComponent{
 				
 				
 				if(def_complete){
-					
+					System.out.println("add listener");
 					start_testplay.addActionListener(new ActionListener() {
 						
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							// TODO Auto-generated method stub
 							JFrame frame = new JFrame("Test Play");
+							dm_.getDefinition().getRoot().printAll();
+							rm_.getRule().getRoot().printAll();
 							TestplayModule tpm = new TestplayModule(dm_.getDefinition(), cm_.getComponent());//insert dm
 							TestplayUI testplay = new TestplayUI(tpm);
 							testplay.run_testplay(rm_.getRule());//insert rm
