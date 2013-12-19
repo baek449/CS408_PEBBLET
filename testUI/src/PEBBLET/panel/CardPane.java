@@ -368,7 +368,7 @@ public void add_card_item(final DefinitionManager dm, final JButton add_button, 
 				// TODO Auto-generated method stub
 				String item = (String)e.getItem();
 				card_item_pane.setLayout(null);
-				if(e.getStateChange()==ItemEvent.SELECTED && _this.get_loaded()){
+				if(e.getStateChange()==ItemEvent.SELECTED && !_this.get_loaded()){
 					int del_box_index = getComponentIndex(card_item_pane)-3;
 					switch(item){
 						case "(Cancle)":

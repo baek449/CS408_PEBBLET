@@ -275,7 +275,7 @@ public class mainUI extends JFrame{
 				// TODO Auto-generated method stub
 				
 			}
-		});;
+		});
         JLabel comment_label = new JLabel();
 //        comment_label.setSize(100, 100);
         comment_frame.getContentPane().add(comment_label, BorderLayout.CENTER);
@@ -327,18 +327,56 @@ public class mainUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-//				public static void testplay(){
-//					JFrame tesetplayframe = new JFrame("Test Play");
-//					TestplayModule tpm = new TestplayModule();//insert dm
-//					TestplayUI testplay = new TestplayUI(tpm);
-//					testplay.run_testplay(null);//insert rm
-//				}
-				
 				JFrame frame = new JFrame("Test Play");
 				TestplayModule tpm = new TestplayModule();//insert dm
 				TestplayUI testplay = new TestplayUI(tpm);
 				testplay.run_testplay(null);//insert rm
 				frame.setVisible(true);
+				frame.addWindowListener(new WindowListener() {
+					
+					@Override
+					public void windowOpened(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowIconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+						view_comment_MenuItem.setState(false);
+						
+					}
+					
+					@Override
+					public void windowClosed(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowActivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
 				
 			}
 		});
