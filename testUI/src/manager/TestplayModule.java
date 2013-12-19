@@ -240,7 +240,7 @@ public class TestplayModule {
 			action_endgame_draw();
 			return;
 		case action_endgame_order:
-			action_endgame_order((Node[])n.getAllNode().toArray());
+			action_endgame_order(n.getAllNode().toArray(new Node[n.getAllNode().size()]));
 			return;
 		case action_show:
 			System.err.println("Unimplemented action_show");
@@ -405,6 +405,10 @@ public class TestplayModule {
 				return num_operation(n.getChildNode(0),(String)n.getChildNode(1).getData(),n.getChildNode(2));
 			case num_call:
 				return call_num(n.getChildNode(0),n.getChildNode(1));
+			default:
+				Integer i=(Integer)predefined((String)n.getData());
+				if (i!=null) return i;
+				return (Integer)card_predefined((String)n.getData());
 			}
 		}
 		else if (n.getData().getClass()==String.class)
@@ -429,13 +433,14 @@ public class TestplayModule {
 				return (String)n.getChildNode(0).getData();
 			case string_call:
 				return call_string(n.getAllNode());
+			default:
+				String i=(String)predefined((String)n.getData());
+				if (i!=null) return i;
+				return (String)card_predefined((String)n.getData());
 			}
 		}
 		else if (n.getData().getClass()==String.class)
 		{
-			String i=(String)predefined((String)n.getData());
-			if (i!=null) return i;
-			return (String)card_predefined((String)n.getData());
 		}
 		
 		System.out.println("String Error");

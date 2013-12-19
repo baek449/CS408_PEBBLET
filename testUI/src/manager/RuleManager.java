@@ -877,8 +877,8 @@ public class RuleManager {
 		if(n.getData()==null || n.getData().getClass()!=RuleCase.class) return null;
 		NodeTypewithScope nts=type_multiple_allowed((RuleCase)n.getData());
 		Node result=new Node(nts.nt,null);
-		result.set_scope_card(nts.card_scope || result.get_scope_card());
-		result.set_scope_player(nts.player_scope || result.get_scope_player());
+		result.set_scope_card(nts.card_scope || n.get_scope_card());
+		result.set_scope_player(nts.player_scope || n.get_scope_player());
 		return result;
 	}
 	

@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 
 import PEBBLET.panel.Rule_pane;
 import manager.Node;
+import manager.NodeType;
 import manager.RuleCase;
 import manager.RuleManager;
 
@@ -112,6 +113,12 @@ public class panel_inside extends JPanel
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				n.setData(text.getText());
+				if(n.getParent()!=null && n.getParent().get_node_type()==NodeType.nd_num)
+				{
+					try {
+						n.setData(Integer.parseInt(text.getText()));
+					} catch(Exception ex) {	}
+				}
 				text.revalidate();
 				rulepane.update_window_size();
 			}});

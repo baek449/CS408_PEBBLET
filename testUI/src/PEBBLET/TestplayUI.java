@@ -615,7 +615,8 @@ public class TestplayUI extends JFrame {
 	private class TPThread extends Thread {
 		public void run() {
 			tpm.makeRun();
-			tpm.action(rul.getRoot().getChildNode(0));
+			//tpm.action(rul.getRoot().getChildNode(0));
+			tpm.action(rul.getRoot());
 			if(!currently_visible.equals(input_board_layouts[3]))
 				set_endgame("The game was ended without explicit termination.");
 		}

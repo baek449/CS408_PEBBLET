@@ -394,7 +394,10 @@ public class DebugManager {
 		
 	}
 	
-	public void missing_domain_rc(int intend, Node input){		
+	public void missing_domain_rc(int intend, Node input){	
+		if(input==null || input.getData()==null){
+			input.printAll();
+		}
 		if(input.getData().equals(RuleCase.action_setint)){
 			boolean flag = true;
 			int j;
@@ -661,7 +664,7 @@ public class DebugManager {
 					||input.getChildNode(0).getData().equals(RuleCase.card_top)
 					||input.getChildNode(0).getData().equals(RuleCase.card_bottom)){
 					
-					if(!(input.getChildNode(0).getChildNode(0).get_node_type().equals(NodeType.nd_raw))){
+					if(!(input.getChildNode(0).getChildNode(0).get_node_type().equals(NodeType.nd_num))){
 						//input.getChildNode(0).getChildNode(0) node type is not number!!
 						String msg = "Node type error, in Rule tab, in Level : " + (intend +2) + ": "+ input.getChildNode(0).getChildNode(0) +"Should be Number type";
 						System.out.println(msg);
